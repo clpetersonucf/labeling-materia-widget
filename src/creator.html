@@ -35,9 +35,7 @@
 
 			<div id='controls'>
 				<table id="background-settings" class="color-picker">
-					<tr>
-						<td colspan="4"><label>Background Settings</label></td>
-					</tr>
+					<label class="label-title">Background Settings</label>
 					<tr>
 						<td>
 							<input type="radio" id="darktone-toggle" name="background-tone" checked>
@@ -58,23 +56,20 @@
 					</tr>
 				</table>
 				<hr>
-				<table id="label-settings">
-					<tr>
-						<td colspan="2"><label>Label Settings</label></td>
-					</tr>
-					<tr>
-						<td><label for="label-settings">Aa</label></td>
-						<td><input id="darktone-toggle" type="radio" name="label-toggle" value="opaque" checked="checked"/></td>
-					</tr>
-					<tr>
-						<td><label for="label-settings">Aa</label></td>
-						<td><input id="midtone-toggle" type="radio" name="label-toggle" value="frosted"/></td>
-					</tr>
-					<tr>
-						<td><label for="label-settings">Aa</label></td>
-						<td><input id="lighttone-toggle" type="radio" name="table-toggle" value="transparent"/></td>
-					</tr>
-				</table>
+				<div id="label-settings">
+					<label class="label-title">Label Settings</label>
+				  
+					<div class="label-options">
+					  <input type="radio" id="darktone-toggle" name="label-toggle" value="opaque" checked>
+					  <label for="darktone" class="label-box">Aa</label>
+				  
+					  <input type="radio" id="midtone-toggle" name="label-toggle" value="frosted">
+					  <label for="midtone" class="label-box">Aa</label>
+				  
+					  <input type="radio" id="lighttone-toggle" name="label-toggle" value="transparent">
+					  <label for="lighttone" class="label-box">Aa</label>
+					</div>
+				</div>
 				<hr>
 				<div class="opacity-toggle">
 					<label for="opacity-slider">Anchor Settings
@@ -91,8 +86,8 @@
 				</div>
 				<hr>
 				<input type='button' value='Choose a different image' data-intro='Choose an image' id='btnChooseImage'>
-				<input type='button' value='' id='btnMoveResize'>
-				<input type='button' value='' id='btnChangeDescription'>
+				<input type='button' id='btnMoveResize'>
+				<input type='button' id='btnChangeDescription'>
 			</div>
 
 			<div id='backgroundcover'></div>
