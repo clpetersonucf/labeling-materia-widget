@@ -20,8 +20,8 @@
 		<script src="creator.js"></script>
 	</head>
 	<body>
-		<div class='sidepanel left'></div>
-		<div class='sidepanel right'></div>
+		<!-- <div class='sidepanel left'></div>
+		<div class='sidepanel right'></div> -->
 
 		<div class='frame' id='frame'>
 			<div id='header'>
@@ -34,27 +34,22 @@
 			<div class="arrow_box hide">Add Image Description</div>
 
 			<div id='controls'>
-				<table id="background-settings" class="color-picker">
+				<div id="background-settings" class="color-picker">
 					<label class="label-title">Background Settings</label>
-					<tr>
-						<td>
-							<input type="radio" id="darktone-toggle" name="background-tone" checked>
-							<label for="darktone-toggle" class="swatch dark1"></label>
-						</td>
-						<td>
-							<input type="radio" id="darktone2-toggle" name="background-tone">
-							<label for="darktone2-toggle" class="swatch dark2"></label>
-						</td>
-						<td>
-							<input type="radio" id="midtone-toggle" name="background-tone">
-							<label for="midtone-toggle" class="swatch mid"></label>
-						</td>
-						<td>
-							<input type="radio" id="lighttone-toggle" name="background-tone">
-							<label for="lighttone-toggle" class="swatch light"></label>
-						</td>
-					</tr>
-				</table>
+					<div class="background-options">
+						<input type="radio" id="darktone-toggle" name="background-tone" checked>
+						<label for="darktone-toggle" class="swatch dark1"></label>
+					
+						<input type="radio" id="darktone2-toggle" name="background-tone">
+						<label for="darktone2-toggle" class="swatch dark2"></label>
+			
+						<input type="radio" id="midtone-toggle" name="background-tone">
+						<label for="midtone-toggle" class="swatch mid"></label>
+				
+						<input type="radio" id="lighttone-toggle" name="background-tone">
+						<label for="lighttone-toggle" class="swatch light"></label>
+					</div>
+				</div>
 				<hr>
 				<div id="label-settings">
 					<label class="label-title">Label Settings</label>

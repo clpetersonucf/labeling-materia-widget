@@ -80,7 +80,7 @@ textarea {
 }
 
 .frame {
-	width: 800px;
+	width: 904px;
 	height: 602px;
 	margin: auto;
 	position: relative;
@@ -235,8 +235,8 @@ textarea {
 	top: 50px;
 	bottom: 0px;
 	right: 0px;
-	padding: 5px;
-	width: 185px;
+	padding: 24px;
+	width: 250px;
 	z-index: 1;
 
 	h1 {
@@ -254,29 +254,18 @@ textarea {
 }
 
 #background-settings {
-	
-	.label-title{
-		padding: 20px;
-	}
-	
-	&.color-picker {
-	  border-collapse: collapse;
+	width: 100%;
 
-
-	  tr{
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		justify-content: center;
-		padding-top: 5px;
-		padding-bottom: 5px;
-	  }
-
-	  td {
+	.label-title {
+		display: block;
+		margin-bottom: 8px;
 		padding: 3px;
-		position: relative; // needed for hidden radio
-		//display: grid;
-		//grid-template-columns: repeat(2, 1fr);
-	  }
+	}	
+	
+	.background-options {
+	  display: grid;
+	  grid-template-columns: repeat(2, 1fr);
+	  gap: 8px;
   
 	  input[type="radio"] {
 		position: absolute;
@@ -286,8 +275,8 @@ textarea {
   
 	  .swatch {
 		display: block;
-		width: 87px;
-		height: 48px;
+		width: auto;
+		height: 56px;
 		border-radius: 6px;
 		cursor: pointer;
 		border: 1px solid transparent;
@@ -492,8 +481,8 @@ h1 {
 	width: 50%;
 	margin-left: -400px;
 	display:block;
-	background: #222;
-	z-index: 100;
+	background: transparent;
+	z-index: -1;
 
 	&.right {
 		right: 0px;
