@@ -58,6 +58,8 @@ Namespace('Labeling').Creator = (function() {
 		// get canvas context
 		_canvas = document.getElementById('canvas');
 		_context = _canvas.getContext('2d');
+		_context.canvas.width = $("#canvas").width()
+		_context.canvas.height = $("#canvas").height()
 
 		_img = new Image();
 
@@ -335,7 +337,7 @@ Namespace('Labeling').Creator = (function() {
 
 				// drawLine handles the curves and such; run it for inner
 				// and outer stroke
-				Labeling.Draw.drawLine(_context, dotx + _offsetX, doty + _offsetY, labelx + _offsetX, labely + _offsetY, 6, '#fff');
+				
 				result.push(Labeling.Draw.drawLine(_context, dotx + _offsetX, doty + _offsetY, labelx + _offsetX, labely + _offsetY, 2, '#000'));
 			}
 			return result;
