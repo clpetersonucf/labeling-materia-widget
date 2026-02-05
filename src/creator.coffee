@@ -35,7 +35,7 @@ Namespace('Labeling').Creator = do ->
 		# make a scaffold qset object
 		_qset = {}
 		_qset.options = {}
-		_qset.options.backgroundTheme = 'themeCorkBoard'
+		_qset.options.backgroundTheme = 'themeGraphPaper'
 		_qset.options.backgroundColor = 2565927
 
 		# set up the creator, shared between new and existing
