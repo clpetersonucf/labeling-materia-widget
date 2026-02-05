@@ -345,7 +345,8 @@ Namespace('Labeling').Creator = (function() {
 	// Add term to the list, called by the click event
 	var _addTerm = function(e) {
 		// draw a dot on the canvas for the question location
-		_makeTerm(e.pageX-document.getElementById('frame').offsetLeft-document.getElementById('board').offsetLeft, e.pageY-50);
+		let topMargin = ($("body").height() - $("#frame").outerHeight()) / 2
+		_makeTerm(e.pageX-document.getElementById('frame').offsetLeft-document.getElementById('board').offsetLeft, e.pageY-50-topMargin);
 
 		$('#help_adding').css('display','none');
 		$('#boardcover').css('display','none');
