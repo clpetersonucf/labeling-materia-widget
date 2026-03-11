@@ -53,23 +53,26 @@
 				<hr>
 				<div id="label-settings">
 					<label class="label-title">Label Settings</label>
+					<label class="label-subtitle">Color Scheme</label>
 				  
 					<div class="label-options">
 					  <input type="radio" id="darktone-toggle" name="label-toggle" value="opaque" checked>
-					  <label for="darktone" class="label-box">Aa</label>
+					  <label for="darktone" class="label-box dark1">Aa</label>
 				  
 					  <input type="radio" id="midtone-toggle" name="label-toggle" value="frosted">
-					  <label for="midtone" class="label-box">Aa</label>
+					  <label for="midtone" class="label-box mid">Aa</label>
 				  
 					  <input type="radio" id="lighttone-toggle" name="label-toggle" value="transparent">
-					  <label for="lighttone" class="label-box">Aa</label>
+					  <label for="lighttone" class="label-box light">Aa</label>
 					</div>
 				</div>
 				<hr>
-				<div class="opacity-toggle">
-					<label for="opacity-slider">Anchor Settings
-						<span id="opacity-value">100%</span>
-					</label>
+				<div id="anchor-settings">
+					<label class="label-title">Anchor Settings</label>
+					<div id="opacity-number">
+						<label class="label-subtitle">Opacity | </label>
+						<span id="opacity-value"> 100%</span>
+					</div>
 					<input
 						type="range"
 						id="opacity-slider"
@@ -80,12 +83,20 @@
 					>
 				</div>
 				<hr>
-				<div class="image-settings">
-					<input type='button' value='Choose a different image' data-intro='Choose an image' id='btnChooseImage'>
-					<input type='button' id='btnMoveResize'>
-					<input type='button' id='btnMoveCrop'>
-					<input type='button' id='btnChangeDescription'>
-				</div>	
+				<div id="image-settings">
+					<label class="label-title">Image Settings</label>
+					<label class="label-subtitle">Edit Image</label>
+					<div id="edit-image">
+						<input type='button' value='Choose a different image' data-intro='Choose an image' id='btnChooseImage'>
+						<input type='button' id='btnMoveResize'>
+						<input type='button' id='btnMoveCrop'>
+					</div>
+					<label class="label-subtitle2">Image Description</label>
+					<div id="image-desc">
+						<p id="imagedescription"></p>
+						<input type='button' id='btnChangeDescription'>
+					</div>		
+				</div>
 			</div>
 
 			<div id='backgroundcover'></div>

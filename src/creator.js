@@ -191,6 +191,7 @@ Namespace('Labeling').Creator = (function() {
 			if (alt == null) { alt = document.getElementById("alttext"); }
 			$('#descriptionchanger').removeClass('show');
 			$('#backgroundcover').removeClass('show');
+			$('#imagedescription').html((alt||'My labeling widget'));
 			return $('#image').attr('alt', alt);
 		};
 
@@ -295,6 +296,7 @@ Namespace('Labeling').Creator = (function() {
 		// set the image alt
 		$('#image').attr('alt', _img.alt);
 		$('#alttxt').val(_img.alt);
+		$('#imagedescription').html(_img.alt);
 
 		// if image has no description, prompt creator make one
 		if (_img.alt === '') {
@@ -338,7 +340,7 @@ Namespace('Labeling').Creator = (function() {
 				// drawLine handles the curves and such; run it for inner
 				// and outer stroke
 				
-				result.push(Labeling.Draw.drawLine(_context, dotx + _offsetX, doty + _offsetY, labelx + _offsetX, labely + _offsetY, 2, '#000'));
+				result.push(Labeling.Draw.drawLine(_context, dotx + _offsetX, doty + _offsetY, labelx + _offsetX, labely + _offsetY, 4, '#fff'));
 			}
 			return result;
 		})();
@@ -372,7 +374,7 @@ Namespace('Labeling').Creator = (function() {
 
 		const term = document.createElement('div');
 		term.id = 'term_' + Math.random(); // fake id for linking with dot
-		term.innerHTML = "<div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'>"+text+"</div><div class='delete'></div><div class='label-input description-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'>"+description+"</div>";
+		term.innerHTML = "<div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'>"+text+"</div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'>" + description + "</div><div class='delete'></div><div class='confirm'></div><div class='expand'></div>";
 		term.className = 'term';
 
 		// if we're generating a generic one, decide on a position
@@ -437,40 +439,41 @@ Namespace('Labeling').Creator = (function() {
 		$('#terms').append(dot);
 
 		// edit on click
-		term.childNodes[0].onclick = function() {
-			term.childNodes[0].focus();
+		console.log(term.childNodes)
+		term.childNodes[1].onclick = function() {
+			term.childNodes[1].focus();
 			return document.execCommand('selectAll',false,null);
 		};
-		term.childNodes[2].onclick = function() {
-			term.childNodes[2].focus();
+		term.childNodes[3].onclick = function() {
+			term.childNodes[3].focus();
 			return document.execCommand('selectAll',false,null);
 		};
 
-		term.childNodes[0].onfocus = () => document.execCommand('selectAll',false,null);
+		term.childNodes[1].onfocus = () => document.execCommand('selectAll',false,null);
 
-		term.childNodes[2].onfocus = () => document.execCommand('selectAll',false,null);
+		term.childNodes[3].onfocus = () => document.execCommand('selectAll',false,null);
 
 		// resize text on change
-		term.childNodes[0].onkeyup = _termKeyUp;
-		term.childNodes[2].onkeyup = _termKeyUp;
+		term.childNodes[1].onkeyup = _termKeyUp;
+		term.childNodes[3].onkeyup = _termKeyUp;
 		// set initial font size
-		term.childNodes[0].onkeyup({target: term.childNodes[0]});
-		term.childNodes[2].onkeyup({target: term.childNodes[2]});
+		term.childNodes[1].onkeyup({target: term.childNodes[1]});
+		term.childNodes[3].onkeyup({target: term.childNodes[3]});
 
 		// enter key press should stop editing
-		term.childNodes[0].onkeydown = _termKeyDown;
-		term.childNodes[2].onkeydown = _termKeyDown;
+		term.childNodes[1].onkeydown = _termKeyDown;
+		term.childNodes[3].onkeydown = _termKeyDown;
 
 		// check if blank when the text is cleared
-		term.childNodes[0].onblur = e => _termBlurred(term.childNodes[0], 0);
-		term.childNodes[2].onblur = e => _termBlurred(term.childNodes[2], 2);
+		term.childNodes[1].onblur = e => _termBlurred(term.childNodes[1], 3);
+		term.childNodes[3].onblur = e => _termBlurred(term.childNodes[1], 3);
 
 		// clean up pasted content to make sure we don't accidentally get invisible html garbage
-		term.childNodes[0].onpaste = _termPaste;
-		term.childNodes[2].onpaste = _termPaste;
+		term.childNodes[1].onpaste = _termPaste;
+		term.childNodes[3].onpaste = _termPaste;
 
 		// make delete button remove it from the list
-		term.childNodes[1].onclick = function() {
+		term.childNodes[4].onclick = function() {
 			term.parentElement.removeChild(term);
 			dot.parentElement.removeChild(dot);
 			return _drawBoard();
@@ -500,7 +503,7 @@ Namespace('Labeling').Creator = (function() {
 			drag: _dotDragged
 		});
 		setTimeout(function() {
-			term.childNodes[0].focus();
+			term.childNodes[3].focus();
 			return document.execCommand('selectAll',false,null);
 		}
 		,10);
