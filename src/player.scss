@@ -35,8 +35,14 @@ html, body {
 	bottom: 0px;
 	#image {
 		position: absolute;
-		top: 0px;
-		left: 0px;
+		// I dont like this either but it matches the creator size exactly
+		width: 605;
+		height: 550;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: auto;
 	}
 }
 
@@ -716,4 +722,3 @@ and (max-device-width : 1024px)  {
 	position: absolute;
 	opacity: 0;
 }
-

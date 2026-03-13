@@ -67,6 +67,9 @@ Namespace('Labeling').Engine = (function() {
 	// getElementById and cache it, for the sake of performance
 	const _g = id => _domCache[id] || (_domCache[id] = document.getElementById(id));
 
+	const _imageXMargin = () => parseInt(window.getComputedStyle(document.getElementById('image')).marginLeft.replace("px",""))
+	const _imageYMargin = () => parseInt(window.getComputedStyle(document.getElementById('image')).marginTop.replace("px",""))
+
 	// Called by Materia.Engine when your widget Engine should start the user experience.
 	const start = function(instance, qset, version) {
 		//document.oncontextmenu = ->	false
@@ -212,6 +215,9 @@ Namespace('Labeling').Engine = (function() {
 		document.addEventListener('touchmove', _mouseMoveEvent, false);
 		document.addEventListener('MSPointerMove', _mouseMoveEvent, false);
 		document.addEventListener('mousemove', _mouseMoveEvent, false);
+
+		console.log(_imageXMargin())
+		console.log(_imageYMargin())
 
 		// once everything is drawn, set the height of the player
 		return Materia.Engine.setHeight();
@@ -463,7 +469,7 @@ Namespace('Labeling').Engine = (function() {
 			const ripple = _g('ripple');
 			ripple.style.transform =
 			(ripple.style.msTransform =
-			(ripple.style.webkitTransform = 'translate(' + (_curMatch.options.endPointX + _offsetX) + 'px,' + (_curMatch.options.endPointY + _offsetY) + 'px)'));
+			(ripple.style.webkitTransform = 'translate(' + (_curMatch.options.endPointX + _offsetX + _imageXMargin()) + 'px,' + (_curMatch.options.endPointY + _offsetY + _imageYMargin()) + 'px)'));
 			ripple.className = '';
 			ripple.className = 'play';
 		}
@@ -507,7 +513,7 @@ Namespace('Labeling').Engine = (function() {
 
 		let x = (e.clientX - 30);
 		if (x < 40) { x = 40; }
-		if (x > window.innerWidth - 135) { x = window.innerWidth- 135; }
+		if (x > window.innerWidth - 135) { x = window.innerWidth - 135; }
 		let y = (e.clientY - 90);
 		if (y < 0) { y = 0; }
 		if (y > window.innerHeight - 90) { y = window.innerHeight - 90; }
@@ -530,7 +536,7 @@ Namespace('Labeling').Engine = (function() {
 		for (let pass = 1; pass <= 2; pass++) {
 			for (question of Array.from(_questions)) {
 				// distance formula
-				var dist = Math.sqrt(Math.pow((e.clientX - question.options.endPointX - _offsetX - 195),2) + Math.pow((e.clientY - question.options.endPointY - _offsetY - 50),2));
+				var dist = Math.sqrt(Math.pow((e.clientX - question.options.endPointX - _offsetX - _imageXMargin() - 195),2) + Math.pow((e.clientY - question.options.endPointY - _offsetY - _imageYMargin() - 50),2));
 
 				// we want the closest one
 				if ((dist < minDist) && (dist < 200)) {
@@ -552,7 +558,7 @@ Namespace('Labeling').Engine = (function() {
 			const ripple = _g('ripple');
 			ripple.style.transform =
 			(ripple.style.msTransform =
-			(ripple.style.webkitTransform = 'translate(' + (_curMatch.options.endPointX + _offsetX) + 'px,' + (_curMatch.options.endPointY + _offsetY) + 'px)'));
+			(ripple.style.webkitTransform = 'translate(' + (_curMatch.options.endPointX + _offsetX + _imageXMargin()) + 'px,' + (_curMatch.options.endPointY + _offsetY + _imageYMargin()) + 'px)'));
 			ripple.className = '';
 			ripple.offsetWidth = ripple.offsetWidth;
 			ripple.className = 'play';
@@ -659,7 +665,7 @@ Namespace('Labeling').Engine = (function() {
 				_curterm.style.webkitTransform =
 				(_curterm.style.msTransform =
 				(_curterm.style.transform =
-					'translate(' + (_curMatch.options.labelBoxX + 210 + _offsetX) + 'px,' + ((_curMatch.options.labelBoxY + _offsetY) - 20) + 'px)'));
+					'translate(' + (_curMatch.options.labelBoxX + 210 + _offsetX + _imageXMargin()) + 'px,' + ((_curMatch.options.labelBoxY + _offsetY + _imageYMargin()) - 20) + 'px)'));
 				_curterm.className = 'term ease placed';
 
 				// identify this element with the question it is answering
@@ -844,7 +850,7 @@ Namespace('Labeling').Engine = (function() {
 						// move the ghost label and make it semi-transparent
 						ghost.style.webkitTransform =
 						(ghost.style.msTransform =
-						(ghost.style.transform = 'translate(' + (question.options.labelBoxX + 210 + _offsetX) + 'px,' + (question.options.labelBoxY + _offsetY + 35) + 'px)'));
+						(ghost.style.transform = 'translate(' + (question.options.labelBoxX + 210 + _offsetX + _imageXMargin()) + 'px,' + (question.options.labelBoxY + _offsetY + _imageYMargin() + 35) + 'px)'));
 						ghost.style.opacity = 0.5;
 						_g('ghost').className = 'term';
 					}

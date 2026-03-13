@@ -17,13 +17,13 @@
 	</head>
 	<body>
 		<div id='assistive-alert' aria-live='assertive'></div>
+		<div id='header'>
+			<div class='logo'></div>
+			<h1 id='title'></h1>
+			<button id='instructionsBtn' aria-label="Instructions; Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To reset a selected label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">Tutorial</button>
+			<button id='checkBtn'>Submit</button>
+		</div>
 		<div role="application" id="game" aria-hidden="true" inert="true">
-			<div id='header'>
-				<div class='logo'></div>
-				<h1 id='title'></h1>
-				<button id='instructionsBtn' aria-label="Instructions; Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To reset a selected label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">Tutorial</button>
-				<button id='checkBtn'>Submit</button>
-			</div>
 			<h1 id="unplaced-header">Unplaced Labels</h1>
 			<div id='unplaced-terms'>
 				<div id='prevbtn' class='arrow icon-arrow-up2'></div>
@@ -32,7 +32,7 @@
 				<div class='block top' id='blocktop'></div>
 			</div>
 			<div id="board" class="screen board">
-				<canvas id='image' width=800 height=800></canvas>
+				<canvas id='image' width="605" height="550"></canvas>
 				<div id='ripple'></div>
 			</div>
 			<h1 id="placed-header" aria-label="Placed labels. There are no placed labels">Placed Labels</h1>
