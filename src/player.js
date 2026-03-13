@@ -665,7 +665,7 @@ Namespace('Labeling').Engine = (function() {
 				_curterm.style.webkitTransform =
 				(_curterm.style.msTransform =
 				(_curterm.style.transform =
-					'translate(' + (_curMatch.options.labelBoxX + 210 + _offsetX + _imageXMargin()) + 'px,' + ((_curMatch.options.labelBoxY + _offsetY + _imageYMargin()) - 20) + 'px)'));
+					'translate(' + (_curMatch.options.labelBoxX + 205 + _offsetX + _imageXMargin()) + 'px,' + ((_curMatch.options.labelBoxY + _offsetY + _imageYMargin()) - 20) + 'px)'));
 				_curterm.className = 'term ease placed';
 
 				// identify this element with the question it is answering
@@ -850,7 +850,7 @@ Namespace('Labeling').Engine = (function() {
 						// move the ghost label and make it semi-transparent
 						ghost.style.webkitTransform =
 						(ghost.style.msTransform =
-						(ghost.style.transform = 'translate(' + (question.options.labelBoxX + 210 + _offsetX + _imageXMargin()) + 'px,' + (question.options.labelBoxY + _offsetY + _imageYMargin() + 35) + 'px)'));
+						(ghost.style.transform = 'translate(' + (question.options.labelBoxX + 205 + _offsetX + _imageXMargin()) + 'px,' + (question.options.labelBoxY + _offsetY + _imageYMargin() + 35) + 'px)'));
 						ghost.style.opacity = 0.5;
 						_g('ghost').className = 'term';
 					}
