@@ -507,10 +507,10 @@ Namespace('Labeling').Engine = (function() {
 
 		let x = (e.clientX - 30);
 		if (x < 40) { x = 40; }
-		if (x > 670) { x = 670; }
+		if (x > window.innerWidth - 135) { x = window.innerWidth- 135; }
 		let y = (e.clientY - 90);
 		if (y < 0) { y = 0; }
-		if (y > 500) { y = 500; }
+		if (y > window.innerHeight - 90) { y = window.innerHeight - 90; }
 
 		// move the current term
 		_curterm.style.transform =
@@ -936,4 +936,3 @@ Namespace('Labeling').Engine = (function() {
 		start
 	};
 })();
-
