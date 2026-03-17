@@ -216,6 +216,16 @@ Namespace('Labeling').Engine = (function() {
 		document.addEventListener('MSPointerMove', _mouseMoveEvent, false);
 		document.addEventListener('mousemove', _mouseMoveEvent, false);
 
+		// handle rescaling term positions
+		window.addEventListener('resize', (e) => {
+			const placed = document.getElementById("placed-terms")
+
+			// set each term offset to the current margin + magic number
+			for (const child of placed.children) {
+				child.style.left = (-28 + _imageXMargin())+"px"
+			}
+		})
+
 		console.log(_imageXMargin())
 		console.log(_imageYMargin())
 
@@ -519,6 +529,7 @@ Namespace('Labeling').Engine = (function() {
 		if (y > window.innerHeight - 90) { y = window.innerHeight - 90; }
 
 		// move the current term
+		_curterm.style.left = "-28px" // reset margin positioning
 		_curterm.style.transform =
 		(_curterm.style.msTransform =
 		(_curterm.style.webkitTransform = 'translate(' + x + 'px,' + y + 'px)'));
@@ -665,7 +676,12 @@ Namespace('Labeling').Engine = (function() {
 				_curterm.style.webkitTransform =
 				(_curterm.style.msTransform =
 				(_curterm.style.transform =
-					'translate(' + (_curMatch.options.labelBoxX + 205 + _offsetX + _imageXMargin()) + 'px,' + ((_curMatch.options.labelBoxY + _offsetY + _imageYMargin()) - 20) + 'px)'));
+					'translate(' + (_curMatch.options.labelBoxX + 205 + _offsetX) + 'px,' + ((_curMatch.options.labelBoxY + _offsetY + _imageYMargin()) - 20) + 'px)'));
+				
+				// workaround to allow us to scale margin
+				// independently from the label's position on the canvas
+				_curterm.style.left = (-28 + _imageXMargin())+"px"
+				
 				_curterm.className = 'term ease placed';
 
 				// identify this element with the question it is answering
