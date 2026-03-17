@@ -693,6 +693,7 @@ Namespace('Labeling').Engine = (function() {
 			_curterm.removeAttribute('data-placed');
 			_curterm.setAttribute('aria-label', "Now on label " + _curterm.innerText + ", currently unplaced");
 			_curterm.className = 'term ease unplaced';
+			_curterm.style.left = "-28px"
 			if (_wasPlaced) {
 				_curtermCopy = _curterm;
 				_curterm.remove();
