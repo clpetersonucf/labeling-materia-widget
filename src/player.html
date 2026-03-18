@@ -26,14 +26,12 @@
 		<div role="application" id="game" aria-hidden="true" inert="true">
 			<h1 id="unplaced-header">Unplaced Labels</h1>
 			<div id='unplaced-terms'>
-				<div id='prevbtn' class='arrow icon-arrow-up2'></div>
-				<div id='nextbtn' class='arrow icon-arrow-down2'></div>
-				<div class='block bottom' id='blockbottom'></div>
-				<div class='block top' id='blocktop'></div>
 			</div>
 			<div id="board" class="screen board">
-				<canvas id='image' width="605" height="550"></canvas>
 				<div id='ripple'></div>
+				<div id="image">
+					<img id="imgsrc"/>
+				</div>
 			</div>
 			<h1 id="placed-header" aria-label="Placed labels. There are no placed labels">Placed Labels</h1>
 			<div id='placed-terms'>
@@ -49,21 +47,6 @@
 			<h2 id="instructions-header">How to Play</h2>
 			<p id="instructions">Drag labels to their corresponding destinations.</p>
 			<div class="instructions-content">
-				<div class='board' aria-hidden="true">
-					<div class='terms'>
-						<div class='term first'></div>
-						<div class='term second'></div>
-						<div class='term third'></div>
-					</div>
-					<canvas id='previewimg0' class='previewimg' width=300 height=150></canvas>
-					<canvas id='previewimg1' class='previewimg' width=300 height=150></canvas>
-					<canvas id='previewimg2' class='previewimg' width=300 height=150></canvas>
-					<canvas id='previewimg3' class='previewimg' width=300 height=150></canvas>
-					<div class='img'></div>
-					<div class='cursor'>
-						<img src='assets/cursor.svg'>
-					</div>
-				</div>
 				<figure id="keyboard_instructions">
 					<figcaption id="controls_header">Keyboard Controls</figcaption>
 					<table>
