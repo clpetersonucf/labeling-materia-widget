@@ -18,19 +18,33 @@
 	<body>
 		<div id='assistive-alert' aria-live='assertive'></div>
 		<div id='header'>
-			<div class='logo'></div>
-			<h1 id='title'></h1>
-			<button id='instructionsBtn' aria-label="Instructions; Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To reset a selected label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">Tutorial</button>
-			<button id='checkBtn'>Submit</button>
+			<div id="title-cont">
+				<div class='logo'></div>
+				<h1 id='title'></h1>
+			</div>
+			<div id="button-cont">
+				<button id='instructionsBtn' aria-label="Instructions; Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To reset a selected label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">Tutorial</button>
+				<button id='checkBtn'>Submit</button>
+			</div>
 		</div>
 		<div role="application" id="game" aria-hidden="true" inert="true">
 			<h1 id="unplaced-header">Unplaced Labels</h1>
 			<div id='unplaced-terms'>
+				<h2 class="unplaced-instructions">Drag and drop the labels to their correct anchor.</h2>
+				<hr class="unplaced-instructions"/>
 			</div>
 			<div id="board" class="screen board">
 				<div id='ripple'></div>
 				<div id="image">
-					<img id="imgsrc"/>
+					<img id="imgsrc" draggable="false"/>
+					<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">
+						<defs id="defs">
+							<linearGradient id="core-gradient">
+								<stop class="stop1" offset="0%" />
+								<stop class="stop2" offset="100%" />
+							</linearGradient>
+						</defs>
+					</svg>
 				</div>
 			</div>
 			<h1 id="placed-header" aria-label="Placed labels. There are no placed labels">Placed Labels</h1>

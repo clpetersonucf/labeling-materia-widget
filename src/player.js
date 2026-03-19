@@ -20,6 +20,8 @@ Namespace('Labeling').Engine = (function() {
 	// reference to canvas drawing board
 	let _canvas = null;
 	let _context = null;
+	let _svg = null;
+	let _defs = null;
 
 	// the current dragging term
 	let _curterm = null;
@@ -47,6 +49,7 @@ Namespace('Labeling').Engine = (function() {
 
 	// the current match the term is in proximity of
 	let _curMatch = null;
+	let _finals = []
 
 	// the current 'page', i.e. the scrolling on the terms
 	let _curPage = 0;
@@ -116,6 +119,8 @@ Namespace('Labeling').Engine = (function() {
 				background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
 		}
 
+		background = "#294A42"
+
 		// set background and header title
 		_g('board').style.background = background;
 		if ((instance.name === undefined) || null) {
@@ -143,6 +148,11 @@ Namespace('Labeling').Engine = (function() {
 		_g('backgroundcover').classList.add('show');
 		_g('gotitbtn').addEventListener('click', _hideDialogs);
 		
+		document.getElementById("board").addEventListener("dragover", (e)=>e.preventDefault())
+		document.getElementById("unplaced-terms").addEventListener("dragover", (e)=>e.preventDefault())
+
+		_svg = document.getElementById("svglayer")
+		_defs = document.getElementById("defs")
 		// load the image asset
 		// when done, render the board
 		_img = document.getElementById("imgsrc")
@@ -152,6 +162,11 @@ Namespace('Labeling').Engine = (function() {
 			_qset.options.image ? _qset.options.image.id : _qset.assets[0]));
 		_img.alt = _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.";
 		// _canvas.setAttribute('aria-label', _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.");
+		
+		// do the shuffle
+		_labels = _questions;
+		_questions = _shuffle(_questions);
+		_labels = _shuffle(_labels);
 
 		// create term divs
 		for (var question of Array.from(_questions)) {
@@ -171,6 +186,12 @@ Namespace('Labeling').Engine = (function() {
 			// term.addEventListener('MSPointerDown', _mouseDownEvent, false);
 			// term.addEventListener('focus', _selectTerm, false);
 			// term.addEventListener('blur', _deselectTerm, false);
+			term.addEventListener("dragstart", (e) => {
+				setTimeout(()=>e.target.classList.add("empty"), 10)
+				
+			})
+			term.addEventListener("drag", _dragWhileHandler)
+			term.addEventListener("dragend", _dragEndHandler)
 			term.setAttribute('draggable', true)
 			term.setAttribute("tabindex", 0);
 
@@ -178,19 +199,82 @@ Namespace('Labeling').Engine = (function() {
 			if (fontSize < 12) { fontSize = 12; }
 			term.style.fontSize = fontSize + 'px';
 
+			_g('unplaced-terms').appendChild(term);
+
 			// Some legacy qsets store these as strings, which we certainly don't want
 			question.options.endPointX = parseInt(question.options.endPointX);
 			question.options.endPointY = parseInt(question.options.endPointY);
 			question.options.labelBoxX = parseInt(question.options.labelBoxX);
 			question.options.labelBoxY = parseInt(question.options.labelBoxY);
 
-			_g('unplaced-terms').appendChild(term);
+			let ghost = document.createElement('div');
+			ghost.id = "ghost_"+question.mask
+			ghost.className = 'term final ghost'
+			ghost.style.left = question.options.labelBoxX+"px"
+			ghost.style.top = question.options.labelBoxY+"px"
+			ghost.setAttribute("data-q_id", question.id)
+			ghost.setAttribute('draggable', false)
+			ghost.addEventListener("drag", _dragWhileHandler)
+			ghost.addEventListener("dragend", _dragEndHandler)
+
+			document.getElementById('image').appendChild(ghost)
+
+			// <linearGradient id="line-g">
+			// 	<stop class="stop1" offset="0%" />
+			// 	<stop class="stop2" offset="100%" />
+			// </linearGradient>
+
+			let x1 = question.options.endPointX
+			let y1 = question.options.endPointY
+			let x2 = question.options.labelBoxX + 95
+			let y2 = question.options.labelBoxY + 15
+
+			let dist = _distance(x1, y1, x2, y2)
+
+			let grad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient")
+			grad.id = "grad_"+question.mask
+			grad.setAttribute("x1", x1 < x2 ? 0 : Math.abs(x1-x2)/dist)
+			grad.setAttribute("y1", y1 < y2 ? 0 : Math.abs(y1-y2)/dist)
+			grad.setAttribute("x2", x2 < x1 ? 0 : Math.abs(x1-x2)/dist)
+			grad.setAttribute("y2", y2 < y1 ? 0 : Math.abs(y1-y2)/dist)
+			grad.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
+			grad.setAttribute("href", "#core-gradient")
+
+			_defs.appendChild(grad)
+
+			let line = document.createElementNS("http://www.w3.org/2000/svg", "line")
+			line.id = "line_"+question.mask
+			line.setAttribute("x1", x1)
+			line.setAttribute("y1", y1 - 8)
+			line.setAttribute("x2", x2)
+			line.setAttribute("y2", y2)
+			line.setAttribute("stroke", `url(#${grad.id})`)
+
+			_svg.appendChild(line)
+
+			
+			let bullet = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+			bullet.id = "bullet_"+question.mask
+			bullet.classList.add("bullet")
+			bullet.setAttribute("cx", x1)
+			bullet.setAttribute("cy", y1 - 8)
+			bullet.setAttribute("r", 8)
+
+			_svg.appendChild(bullet)
+
+			let core = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+			core.id = "core_"+question.mask
+			core.classList.add("core")
+			core.style.display = "none"
+			core.setAttribute("cx", x1)
+			core.setAttribute("cy", y1 - 8)
+			core.setAttribute("r", 5)
+
+			_svg.appendChild(core)
 		}
 
-		// do the shuffle
-		_labels = _questions;
-		_questions = _shuffle(_questions);
-		_labels = _shuffle(_labels);
+		_finals = Array.from(document.getElementsByClassName("final"))
+		console.log(_finals)
 
 		// // defer such that it is run once the labels are ready in the DOM
 		// setTimeout(function() {
@@ -238,6 +322,111 @@ Namespace('Labeling').Engine = (function() {
 
 		return array;
 	};
+
+	const _distance = (x1, y1, x2, y2) => {
+		return Math.sqrt(((x1-x2)**2) + ((y1-y2)**2))
+	}
+
+	const _dragWhileHandler = (e) => {
+		let minDist = 200
+		let found = null
+
+		_finals.forEach((v)=>{
+			const rect = v.getBoundingClientRect()
+			const dist = _distance(e.clientX, e.clientY, rect.left + 95, rect.top + 15)
+			
+			if(dist < minDist) {
+				found = v
+				minDist = dist
+			}
+		})
+
+		if(_curMatch) {
+			_curMatch.classList.remove("target")
+			document.getElementById(_curMatch.id.replace("ghost", "line")).classList.remove("target")
+			_curMatch = null
+		}
+
+		if(found) {
+			found.classList.add("target")
+			document.getElementById(found.id.replace("ghost", "line")).classList.add("target")
+			_curMatch = found
+		}
+
+	}
+
+	const _dragEndHandler = (e) => {
+		if(_curMatch)
+		{
+			e.preventDefault()
+
+			_curMatch.classList.remove("target")
+			document.getElementById(_curMatch.id.replace("ghost", "line")).classList.remove("target")
+
+			if(_curMatch.innerHTML == e.target.innerHTML) return
+
+			if (_curMatch.getAttribute("data-label_id")) {
+				document.getElementById(_curMatch.getAttribute("data-label_id")).classList.remove("empty")
+				document.getElementById(_curMatch.getAttribute("data-label_id")).setAttribute("draggable", true)
+				document.getElementById(_curMatch.id.replace("ghost","core")).style.display = "none"
+				document.getElementById(_curMatch.id.replace("ghost", "line")).classList.remove("placed")
+			}
+
+			_curMatch.innerHTML = e.target.innerHTML
+
+			let labelId = e.target.id
+
+			if(e.target.className.includes("final")) {
+				e.target.classList.remove("placed")
+				e.target.classList.add("ghost")
+				e.target.setAttribute("draggable", false)
+				document.getElementById(e.target.id.replace("ghost","core")).style.display = "none"
+				document.getElementById(e.target.id.replace("ghost", "line")).classList.remove("placed")
+				e.target.innerHTML = ""
+
+				labelId = e.target.getAttribute("data-label_id")
+
+				e.target.setAttribute("data-label_id", "")
+			} else {
+				e.target.classList.add("empty")
+				e.target.setAttribute("draggable", false)
+			}
+			
+			_labelTextsByQuestionId[_curMatch.getAttribute("data-q_id")] =  _curMatch.innerHTML
+			
+			if(_curMatch.innerHTML == "") return
+
+			_curMatch.setAttribute("data-label_id", labelId)
+
+			_curMatch.classList.remove("ghost")
+			_curMatch.classList.add("placed")
+
+			_curMatch.setAttribute("draggable", true)
+
+			document.getElementById(_curMatch.id.replace("ghost","core")).style.display = "block"
+			document.getElementById(_curMatch.id.replace("ghost", "line")).classList.add("placed")
+
+			_curMatch = null
+		} else {
+			e.target.classList.remove("empty")
+			if(e.target.className.includes("final")) {
+				if (e.target.getAttribute("data-label_id")) {
+					document.getElementById(e.target.getAttribute("data-label_id")).classList.remove("empty")
+					document.getElementById(e.target.getAttribute("data-label_id")).setAttribute("draggable", true)
+					document.getElementById(e.target.id.replace("ghost","core")).style.display = "none"
+					document.getElementById(e.target.id.replace("ghost", "line")).classList.remove("placed")
+					e.target.classList.remove("placed")
+					e.target.classList.add("ghost")
+					e.target.setAttribute("draggable", false)
+					e.target.innerHTML = ""
+					e.target.setAttribute("data-label_id", "")
+				}
+			}
+
+		}
+		
+	}
+
 
 	// // arrange the items in the left list
 	// var _arrangeList = function() {
