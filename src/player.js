@@ -362,8 +362,8 @@ Namespace('Labeling').Engine = (function() {
 			_resetGhost(s)
 		} else {
 			// hide source unplaced label
-			e.target.classList.add("empty")
-			e.target.setAttribute("draggable", false)
+			s.classList.add("empty")
+			s.setAttribute("draggable", false)
 		}
 
 		// set data of ghost 
@@ -374,80 +374,35 @@ Namespace('Labeling').Engine = (function() {
 		v.classList.remove("ghost")
 		v.classList.add("placed")
 		v.setAttribute("draggable", true)
+		v.setAttribute("data-label_id", sourceId)
 
 		// set svg graphic state
 		document.getElementById(v.id.replace("ghost","core")).style.display = "block"
 		document.getElementById(v.id.replace("ghost","line")).classList.add("placed")
 	}
-
+	
 	const _dragEndHandler = (e) => {
 		if(_curMatch)
 		{
 			e.preventDefault()
-
+			
+			// remove targeting effects
 			_curMatch.classList.remove("target")
 			document.getElementById(_curMatch.id.replace("ghost", "line")).classList.remove("target")
 
+			// do nothing if you're dragging a label onto itself
 			if(_curMatch.innerHTML == e.target.innerHTML) return
 
-			if (_curMatch.getAttribute("data-label_id")) {
-				document.getElementById(_curMatch.getAttribute("data-label_id")).classList.remove("empty")
-				document.getElementById(_curMatch.getAttribute("data-label_id")).setAttribute("draggable", true)
-				document.getElementById(_curMatch.id.replace("ghost","core")).style.display = "none"
-				document.getElementById(_curMatch.id.replace("ghost", "line")).classList.remove("placed")
-			}
-
-			_curMatch.innerHTML = e.target.innerHTML
-
-			let labelId = e.target.id
-
-			if(e.target.className.includes("final")) {
-				e.target.classList.remove("placed")
-				e.target.classList.add("ghost")
-				e.target.setAttribute("draggable", false)
-				document.getElementById(e.target.id.replace("ghost","core")).style.display = "none"
-				document.getElementById(e.target.id.replace("ghost", "line")).classList.remove("placed")
-				e.target.innerHTML = ""
-
-				labelId = e.target.getAttribute("data-label_id")
-
-				e.target.setAttribute("data-label_id", "")
-			} else {
-				e.target.classList.add("empty")
-				e.target.setAttribute("draggable", false)
-			}
-			
-			_labelTextsByQuestionId[_curMatch.getAttribute("data-q_id")] =  _curMatch.innerHTML
-			
-			if(_curMatch.innerHTML == "") return
-
-			_curMatch.setAttribute("data-label_id", labelId)
-
-			_curMatch.classList.remove("ghost")
-			_curMatch.classList.add("placed")
-
-			_curMatch.setAttribute("draggable", true)
-
-			document.getElementById(_curMatch.id.replace("ghost","core")).style.display = "block"
-			document.getElementById(_curMatch.id.replace("ghost", "line")).classList.add("placed")
+			// perform the place
+			_placeIntoGhost(e.target, _curMatch)
 
 			_curMatch = null
 		} else {
-			e.target.classList.remove("empty")
 			if(e.target.className.includes("final")) {
-				if (e.target.getAttribute("data-label_id")) {
-					document.getElementById(e.target.getAttribute("data-label_id")).classList.remove("empty")
-					document.getElementById(e.target.getAttribute("data-label_id")).setAttribute("draggable", true)
-					document.getElementById(e.target.id.replace("ghost","core")).style.display = "none"
-					document.getElementById(e.target.id.replace("ghost", "line")).classList.remove("placed")
-					e.target.classList.remove("placed")
-					e.target.classList.add("ghost")
-					e.target.setAttribute("draggable", false)
-					e.target.innerHTML = ""
-					e.target.setAttribute("data-label_id", "")
-				}
+				_resetGhost(e.target)
+			} else {
+				_resetUnplaced(e.target)
 			}
-
 		}
 		
 		_isDragging = false
