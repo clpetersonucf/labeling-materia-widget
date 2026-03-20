@@ -208,8 +208,13 @@ Namespace('Labeling').Engine = (function() {
 			ghost.style.top = question.options.labelBoxY+"px"
 			ghost.setAttribute("data-q_id", question.id)
 			ghost.setAttribute('draggable', false)
+			ghost.addEventListener("dragstart", (e) => {
+				_isDragging = true
+				// setTimeout(()=>e.target.classList.add("empty"), 10)
+			})
 			ghost.addEventListener("drag", _dragWhileHandler)
 			ghost.addEventListener("dragend", _dragEndHandler)
+			ghost.addEventListener("mouseup", _mouseUpEvent)
 
 			document.getElementById('image').appendChild(ghost)
 
@@ -360,11 +365,10 @@ Namespace('Labeling').Engine = (function() {
 			// save data and reset source ghost
 			sourceId = s.getAttribute("data-label_id")
 			_resetGhost(s)
-		} else {
-			// hide source unplaced label
-			s.classList.add("empty")
-			s.setAttribute("draggable", false)
 		}
+		// hide source unplaced label
+		document.getElementById(sourceId).classList.add("empty")
+		document.getElementById(sourceId).setAttribute("draggable", false)
 
 		// set data of ghost 
 		v.innerHTML = data
@@ -382,6 +386,8 @@ Namespace('Labeling').Engine = (function() {
 	}
 	
 	const _dragEndHandler = (e) => {
+		_isDragging = false
+
 		if(_curMatch)
 		{
 			e.preventDefault()
@@ -404,8 +410,6 @@ Namespace('Labeling').Engine = (function() {
 				_resetUnplaced(e.target)
 			}
 		}
-		
-		_isDragging = false
 	}
 
 	const _keyboardEvent = function(e) {
@@ -444,8 +448,12 @@ Namespace('Labeling').Engine = (function() {
 	// this will handle non drag events
 	const _mouseUpEvent = (e) => {
 		if(_isDragging) return
-
 		
+		const v = e.target
+
+		if(v.className.includes("final")) {
+			_resetGhost(v)
+		}
 	}
 
 	// // find next label to focus
