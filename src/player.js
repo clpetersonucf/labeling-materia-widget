@@ -130,19 +130,11 @@ Namespace('Labeling').Engine = (function() {
 		_g('title').style['font-size'] = ((20 - (instance.name.length / 30)) + 'px');
 		_g('instructions-header').setAttribute('aria-label',  "Welcome to " + instance.name + ", a labeling game! How to play: ");
 
-		// set events
-		// _g('nextbtn').addEventListener('mousedown', function() {
-		// 	_curPage++;
-		// 	return _arrangeList();
-		// });
-		// _g('prevbtn').addEventListener('mousedown', function() {
-		// 	_curPage--;
-		// 	return _arrangeList();
-		// });
 		_g('checkBtn').addEventListener('click', () => _submitAnswers());
 		_g('cancelbtn').addEventListener('click', _hideDialogs);
 		_g('backgroundcover').addEventListener('click', _hideDialogs);
 		_g('instructionsBtn').addEventListener('click', _showInstructions);
+		document.getElementById("reset").addEventListener("click", (e) => _resetAllLabels())
 		document.addEventListener('keydown', _keyboardEvent);
 
 		_g('backgroundcover').classList.add('show');
@@ -186,9 +178,11 @@ Namespace('Labeling').Engine = (function() {
 			// term.addEventListener('MSPointerDown', _mouseDownEvent, false);
 			// term.addEventListener('focus', _selectTerm, false);
 			// term.addEventListener('blur', _deselectTerm, false);
+			term.addEventListener("mouseup", _mouseUpEvent)
+			term.addEventListener("touchstart", _mouseUpEvent)
 			term.addEventListener("dragstart", (e) => {
+				_isDragging = true
 				setTimeout(()=>e.target.classList.add("empty"), 10)
-				
 			})
 			term.addEventListener("drag", _dragWhileHandler)
 			term.addEventListener("dragend", _dragEndHandler)
@@ -218,11 +212,6 @@ Namespace('Labeling').Engine = (function() {
 			ghost.addEventListener("dragend", _dragEndHandler)
 
 			document.getElementById('image').appendChild(ghost)
-
-			// <linearGradient id="line-g">
-			// 	<stop class="stop1" offset="0%" />
-			// 	<stop class="stop2" offset="100%" />
-			// </linearGradient>
 
 			let x1 = question.options.endPointX
 			let y1 = question.options.endPointY
@@ -274,36 +263,6 @@ Namespace('Labeling').Engine = (function() {
 		}
 
 		_finals = Array.from(document.getElementsByClassName("final"))
-		console.log(_finals)
-
-		// // defer such that it is run once the labels are ready in the DOM
-		// setTimeout(function() {
-		// 	_arrangeList();
-		// 	return Array.from(document.getElementsByClassName('term')).map((node) =>
-		// 		node.classList.add('ease'));
-		// }
-		// , 0);
-
-		// attach document listeners
-		// document.addEventListener('touchend', _mouseUpEvent, false);
-		// document.addEventListener('mouseup', _mouseUpEvent, false);
-		// document.addEventListener('MSPointerUp', _mouseUpEvent, false);
-		// document.addEventListener('touchmove', _mouseMoveEvent, false);
-		// document.addEventListener('MSPointerMove', _mouseMoveEvent, false);
-		// document.addEventListener('mousemove', _mouseMoveEvent, false);
-
-		// handle rescaling term positions
-		// window.addEventListener('resize', (e) => {
-		// 	const placed = document.getElementById("placed-terms")
-
-		// 	// set each term offset to the current margin + magic number
-		// 	for (const child of placed.children) {
-		// 		child.style.left = (-28 + _imageXMargin())+"px"
-		// 	}
-		// })
-
-		// once everything is drawn, set the height of the player
-		// return Materia.Engine.setHeight();
 	};
 
 	// https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
@@ -353,6 +312,72 @@ Namespace('Labeling').Engine = (function() {
 			_curMatch = found
 		}
 
+	}
+
+	// v: unplaced term
+	const _resetUnplaced = (v) => {
+		v.classList.remove("empty")
+		v.setAttribute("draggable", true)
+	}
+
+	// v: ghost term
+	const _resetGhost = (v) => {
+		if (v.getAttribute("data-label_id")) {
+			// reset source label
+			_resetUnplaced(document.getElementById(v.getAttribute("data-label_id")))
+
+			// reset svg graphics for label being placed
+			document.getElementById(v.id.replace("ghost","core")).style.display = "none"
+			document.getElementById(v.id.replace("ghost", "line")).classList.remove("placed")
+
+			// reset state of ghost label itself
+			v.classList.remove("placed")
+			v.classList.add("ghost")
+			v.setAttribute("draggable", false)
+
+			// reset data inside label
+			v.innerHTML = ""
+			v.setAttribute("data-label_id", "")
+
+			// reset scoring attached to label
+			_labelTextsByQuestionId[v.getAttribute("data-q_id")] = ""
+		}
+	}
+
+	// s: source term
+	// v: ghost/target term
+	const _placeIntoGhost = (s, v) => {
+		let data = s.innerHTML
+		let sourceId = s.id
+
+		// if the target ghost already contains data from a label, reset it
+		if(v.getAttribute("data-label_id")) {
+			_resetGhost(v)
+		}
+
+		// handle if data is coming from unplaced label or other final label
+		if(s.className.includes("final")) {
+			// save data and reset source ghost
+			sourceId = s.getAttribute("data-label_id")
+			_resetGhost(s)
+		} else {
+			// hide source unplaced label
+			e.target.classList.add("empty")
+			e.target.setAttribute("draggable", false)
+		}
+
+		// set data of ghost 
+		v.innerHTML = data
+		_labelTextsByQuestionId[v.getAttribute("data-q_id")] = data
+
+		// set ghost state
+		v.classList.remove("ghost")
+		v.classList.add("placed")
+		v.setAttribute("draggable", true)
+
+		// set svg graphic state
+		document.getElementById(v.id.replace("ghost","core")).style.display = "block"
+		document.getElementById(v.id.replace("ghost","line")).classList.add("placed")
 	}
 
 	const _dragEndHandler = (e) => {
@@ -425,126 +450,8 @@ Namespace('Labeling').Engine = (function() {
 
 		}
 		
+		_isDragging = false
 	}
-
-
-	// // arrange the items in the left list
-	// var _arrangeList = function() {
-	// 	// the maximum height the terms can pass before we overflow onto another page
-	// 	let offScreen;
-	// 	const MAX_HEIGHT = 490;
-
-	// 	// if we went too far back, go to the 0th page
-	// 	if (_curPage < 0) { _curPage = 0; }
-
-	// 	// position of the terms
-	// 	let y = 10 + (-440 * _curPage);
-
-	// 	// state sentinels
-	// 	let maxY = 0;
-	// 	let found = false;
-
-	// 	// move all the unplaced terms to the left list
-	// 	const unplacedTerms = document.querySelectorAll('.unplaced');
-	// 	for (var node of Array.from(unplacedTerms)) {
-	// 		node.style.transform =
-	// 		(node.style.msTransform =
-	// 		(node.style.webkitTransform = 'translate(50px,'+y+'px)'));
-
-	// 		// too high up, put it on the previous page
-	// 		if (y < 10) {
-	// 			node.style.zIndex = -1;
-	// 			offScreen = true;
-	// 		// too far down, put it on the next page
-	// 		} else if (y >= MAX_HEIGHT) {
-	// 			node.style.zIndex = -1;
-	// 		// just right goldilocks
-	// 		} else {
-	// 			node.style.zIndex = '';
-	// 			node.style.opacity = 1;
-	// 			found = true;
-	// 		}
-
-	// 		maxY = y;
-	// 		y += node.getBoundingClientRect().height + 10;
-	// 	}
-
-	// 	// hide buttons if they should not be visible
-	// 	_g('nextbtn').style.opacity = maxY >= MAX_HEIGHT ? 1 : 0;
-	// 	_g('prevbtn').style.opacity = offScreen ? 1 : 0;
-	// 	_g('prevbtn').style['z-index'] = offScreen ? '9999' : '0';
-
-	// 	// these covers provide padding to the terms during tweening
-	// 	if (maxY >= MAX_HEIGHT) {
-	// 		_g('blockbottom').classList.remove('hide');
-	// 	} else {
-	// 		_g('blockbottom').classList.add('hide');
-	// 	}
-	// 	if (offScreen) {
-	// 		_g('blocktop').classList.remove('hide');
-	// 	} else {
-	// 		_g('blocktop').classList.add('hide');
-	// 	}
-
-	// 	// if nothing was found, the page is empty and we should go back automagically
-	// 	if (!found && (_curPage > 0)) {
-	// 		_curPage--;
-	// 		return _arrangeList();
-	// 	} else {
-	// 		// no more terms, we're done!
-	// 		if (!found && (_curPage === 0)) {
-	// 			_g('donearrow').style.display = 'block';
-	// 			_g('checkBtn').classList.add('done');
-	// 			return _isPuzzleComplete = true;
-	// 		// jk, reset the state
-	// 		} else {
-	// 			_g('donearrow').style.display = 'none';
-	// 			_g('checkBtn').classList.remove('done');
-	// 			return _isPuzzleComplete = false;
-	// 		}
-	// 	}
-	// };
-
-	// when a term is mouse downed
-	// var _mouseDownEvent = function(e) {
-	// 	if ((e == null)) { e = window.event; }
-
-	// 	_isDragging = true;
-
-	// 	// show ghost term (but keep the opacity at 0)
-	// 	_g('ghost').style.display = 'inline-block';
-
-	// 	// set current dragging term
-	// 	_curterm = e.target;
-	// 	_curterm.style.zIndex = ++_zIndex;
-
-	// 	// disable easing while it drags
-	// 	e.target.className = 'term unplaced moving';
-
-	// 	// if it's been placed, remove that association
-	// 	if (_curterm.getAttribute('data-placed')) {
-	// 		_labelTextsByQuestionId[_curterm.getAttribute('data-placed')] = '';
-	// 		_curterm.removeAttribute('data-placed');
-	// 		_wasPlaced = true;
-	// 	}
-
-	// 	// don't scroll the page on an iPad
-	// 	e.preventDefault();
-	// 	if (e.stopPropagation != null) { return e.stopPropagation(); }
-	// };
-
-	// var _selectTerm = function(e) {
-	// 	_curterm = e.target;
-	// 	return _isDragging = false;
-	// };
-
-	// var _deselectTerm = function(e) {
-	// 	if (_curterm === e.target) {
-	// 		_curterm = null;
-	// 		_curMatch = null;
-	// 		return _drawBoard();
-	// 	}
-	// };
 
 	const _keyboardEvent = function(e) {
 		// if a term has been selected
@@ -554,27 +461,37 @@ Namespace('Labeling').Engine = (function() {
 			} else {
 				_showInstructions();
 			}
-		}
-		if ((e.ctrlKey || e.metaKey) && ((e.key === "R") || (e.key === "r"))) {
-			// reset all labels
-			return _resetAllLabels();
-		} else if ((e.key === "R") || (e.key === "r")) {
-			if (_curterm) { return _removeLabel(); }
-		} else if (_curterm) {
-			// show ghost term (but keep the opacity at 0)
-			_g('ghost').style.display = 'inline-block';
-
-			if ((e.key === "ArrowRight") || (e.key === "ArrowLeft") || (e.key === "a") || (e.key === "A") || (e.key === "d") || (e.key === "d")) {
-				return _cycleDestinations(e);
-			} else if ((e.key === "Enter") || (e.code === "Space")) {
-				if (!_curMatch) {
-					return _cycleDestinations(e);
-				} else {
-					return _mouseUpEvent(e);
-				}
-			}
+		} else if(e.key === "R" || e.key === "r") {
+			_resetAllLabels()
 		}
 	};
+
+	const _resetAllLabels = () => {
+		const sources = Array.from(document.getElementsByClassName("unplaced"))
+		
+		sources.forEach((v)=>{
+			v.classList.remove("empty")
+			v.setAttribute("draggable", true)
+		})
+
+		_finals.forEach((v)=>{
+			v.innerHTML = ""
+			v.className = 'term final ghost'
+			v.setAttribute("draggable", false)
+			document.getElementById(v.id.replace("ghost","core")).style.display = "none"
+			document.getElementById(v.id.replace("ghost", "line")).classList.remove("placed")
+			v.setAttribute("data-label_id", "")
+		})
+
+		_labelTextsByQuestionId = {}
+	}
+
+	// this will handle non drag events
+	const _mouseUpEvent = (e) => {
+		if(_isDragging) return
+
+		
+	}
 
 	// // find next label to focus
 	// // takes in the event.key
