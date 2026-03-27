@@ -54,6 +54,7 @@ Namespace('Labeling').Engine = (function() {
 	// current selection via touch/key navigation
 	let _curSelectSource = null;
 	let _curSelectTarget = null;
+	let _curSelTarIndex = 0; // used to traverse finals list
 
 	// the current 'page', i.e. the scrolling on the terms
 	let _curPage = 0;
@@ -185,7 +186,15 @@ Namespace('Labeling').Engine = (function() {
 			term.addEventListener("keydown", (e) => {
 				switch (e.key) {
 					case "Enter":
-						_curSelectSource = e.target;
+						if (_curSelectSource != e.target) {
+							_curSelectSource = e.target
+							_keySelectTarget(_finals[_curSelTarIndex])
+						} else {
+							_placeIntoGhost(e.target, _finals[_curSelTarIndex])
+							_keyDeselectCurTarget()
+							_curSelectSource = null
+						}
+
 						break;
 				
 					default:
@@ -229,6 +238,24 @@ Namespace('Labeling').Engine = (function() {
 			ghost.addEventListener("drag", _dragWhileHandler)
 			ghost.addEventListener("dragend", _dragEndHandler)
 			ghost.addEventListener("mouseup", _mouseUpEvent)
+			ghost.addEventListener("keydown", (e) => {
+				switch (e.key) {
+					case "Enter":
+						if (_curSelectSource != e.target) {
+							_curSelectSource = e.target
+							_keySelectTarget(_finals[_curSelTarIndex])
+						} else {
+							_placeIntoGhost(e.target, _finals[_curSelTarIndex])
+							_keyDeselectCurTarget()
+							_curSelectSource = null
+						}
+
+						break;
+				
+					default:
+						break;
+				}
+			})
 
 			document.getElementById('image').appendChild(ghost)
 
@@ -333,6 +360,24 @@ Namespace('Labeling').Engine = (function() {
 
 	}
 
+	// t: target
+	// selects the target for use with touch/key controls
+	const _keySelectTarget = (t) => {
+		_keyDeselectCurTarget()
+
+		_curSelectTarget = t
+		_curSelectTarget.classList.add("target")
+		document.getElementById(_curSelectTarget.id.replace("ghost", "line")).classList.add("target")
+	}
+
+	const _keyDeselectCurTarget = () => {
+		if (_curSelectTarget) {
+			_curSelectTarget.classList.remove("target")
+			document.getElementById(_curSelectTarget.id.replace("ghost", "line")).classList.remove("target")
+			_curSelectTarget = null
+		}
+	}
+
 	// v: unplaced term
 	const _resetUnplaced = (v) => {
 		v.classList.remove("empty")
@@ -431,8 +476,17 @@ Namespace('Labeling').Engine = (function() {
 	}
 
 	const _keyboardEvent = function(e) {
-		// if a term has been selected
-		if ((e.key === "H") || (e.key === "h")) {
+		if (_curSelectSource) {
+			if(e.key === "ArrowLeft" || e.key === "ArrowRight") {
+				if(e.key === "ArrowLeft")
+					_curSelTarIndex = _curSelTarIndex - 1 < 0 ? _finals.length - 1 : _curSelTarIndex - 1
+				else if(e.key === "ArrowRight")
+					_curSelTarIndex = _curSelTarIndex + 1 >= _finals.length ? 0 : _curSelTarIndex + 1
+
+				_keySelectTarget(_finals[_curSelTarIndex])
+			}
+		}		
+		else if ((e.key === "H") || (e.key === "h")) {
 			if (_dialogOpen) {
 				_hideDialogs();
 			} else {
