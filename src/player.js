@@ -323,6 +323,7 @@ Namespace('Labeling').Engine = (function() {
 	const _resetUnplaced = (v) => {
 		v.classList.remove("empty")
 		v.setAttribute("draggable", true)
+		v.setAttribute("tabindex", 0)
 	}
 
 	// v: ghost term
@@ -369,6 +370,7 @@ Namespace('Labeling').Engine = (function() {
 		// hide source unplaced label
 		document.getElementById(sourceId).classList.add("empty")
 		document.getElementById(sourceId).setAttribute("draggable", false)
+		document.getElementById(sourceId).setAttribute("tabindex", -1)
 
 		// set data of ghost 
 		v.innerHTML = data
@@ -431,6 +433,7 @@ Namespace('Labeling').Engine = (function() {
 		sources.forEach((v)=>{
 			v.classList.remove("empty")
 			v.setAttribute("draggable", true)
+			v.setAttribute("tabindex", -1)
 		})
 
 		_finals.forEach((v)=>{
