@@ -183,24 +183,7 @@ Namespace('Labeling').Engine = (function() {
 			// term.addEventListener('MSPointerDown', _mouseDownEvent, false);
 			// term.addEventListener('focus', _selectTerm, false);
 			// term.addEventListener('blur', _deselectTerm, false);
-			term.addEventListener("keydown", (e) => {
-				switch (e.key) {
-					case "Enter":
-						if (_curSelectSource != e.target) {
-							_curSelectSource = e.target
-							_keySelectTarget(_finals[_curSelTarIndex])
-						} else {
-							_placeIntoGhost(e.target, _finals[_curSelTarIndex])
-							_keyDeselectCurTarget()
-							_curSelectSource = null
-						}
-
-						break;
-				
-					default:
-						break;
-				}
-			})
+			term.addEventListener("keydown", _termKeyHandler)
 			term.addEventListener("mouseup", _mouseUpEvent)
 			term.addEventListener("touchstart", _mouseUpEvent)
 			term.addEventListener("dragstart", (e) => {
@@ -238,24 +221,7 @@ Namespace('Labeling').Engine = (function() {
 			ghost.addEventListener("drag", _dragWhileHandler)
 			ghost.addEventListener("dragend", _dragEndHandler)
 			ghost.addEventListener("mouseup", _mouseUpEvent)
-			ghost.addEventListener("keydown", (e) => {
-				switch (e.key) {
-					case "Enter":
-						if (_curSelectSource != e.target) {
-							_curSelectSource = e.target
-							_keySelectTarget(_finals[_curSelTarIndex])
-						} else {
-							_placeIntoGhost(e.target, _finals[_curSelTarIndex])
-							_keyDeselectCurTarget()
-							_curSelectSource = null
-						}
-
-						break;
-				
-					default:
-						break;
-				}
-			})
+			ghost.addEventListener("keydown", _termKeyHandler)
 
 			document.getElementById('image').appendChild(ghost)
 
@@ -358,6 +324,25 @@ Namespace('Labeling').Engine = (function() {
 			_curMatch = found
 		}
 
+	}
+
+	const _termKeyHandler = (e) => {
+		switch (e.key) {
+			case "Enter":
+				if (_curSelectSource != e.target) {
+					_curSelectSource = e.target
+					_keySelectTarget(_finals[_curSelTarIndex])
+				} else {
+					_placeIntoGhost(e.target, _finals[_curSelTarIndex])
+					_keyDeselectCurTarget()
+					_curSelectSource = null
+				}
+
+				break;
+		
+			default:
+				break;
+		}
 	}
 
 	// t: target
