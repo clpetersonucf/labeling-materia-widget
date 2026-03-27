@@ -433,7 +433,7 @@ Namespace('Labeling').Engine = (function() {
 		sources.forEach((v)=>{
 			v.classList.remove("empty")
 			v.setAttribute("draggable", true)
-			v.setAttribute("tabindex", -1)
+			v.setAttribute("tabindex", 0)
 		})
 
 		_finals.forEach((v)=>{
