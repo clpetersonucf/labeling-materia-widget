@@ -51,6 +51,10 @@ Namespace('Labeling').Engine = (function() {
 	let _curMatch = null;
 	let _finals = []
 
+	// current selection via touch/key navigation
+	let _curSelectSource = null;
+	let _curSelectTarget = null;
+
 	// the current 'page', i.e. the scrolling on the terms
 	let _curPage = 0;
 
@@ -178,6 +182,16 @@ Namespace('Labeling').Engine = (function() {
 			// term.addEventListener('MSPointerDown', _mouseDownEvent, false);
 			// term.addEventListener('focus', _selectTerm, false);
 			// term.addEventListener('blur', _deselectTerm, false);
+			term.addEventListener("keydown", (e) => {
+				switch (e.key) {
+					case "Enter":
+						_curSelectSource = e.target;
+						break;
+				
+					default:
+						break;
+				}
+			})
 			term.addEventListener("mouseup", _mouseUpEvent)
 			term.addEventListener("touchstart", _mouseUpEvent)
 			term.addEventListener("dragstart", (e) => {
@@ -340,6 +354,7 @@ Namespace('Labeling').Engine = (function() {
 			v.classList.remove("placed")
 			v.classList.add("ghost")
 			v.setAttribute("draggable", false)
+			v.setAttribute("tabindex", -1)
 
 			// reset data inside label
 			v.innerHTML = ""
@@ -381,6 +396,7 @@ Namespace('Labeling').Engine = (function() {
 		v.classList.add("placed")
 		v.setAttribute("draggable", true)
 		v.setAttribute("data-label_id", sourceId)
+		v.setAttribute("tabindex", 0)
 
 		// set svg graphic state
 		document.getElementById(v.id.replace("ghost","core")).style.display = "block"
@@ -440,6 +456,7 @@ Namespace('Labeling').Engine = (function() {
 			v.innerHTML = ""
 			v.className = 'term final ghost'
 			v.setAttribute("draggable", false)
+			v.setAttribute("tabindex", -1)
 			document.getElementById(v.id.replace("ghost","core")).style.display = "none"
 			document.getElementById(v.id.replace("ghost", "line")).classList.remove("placed")
 			v.setAttribute("data-label_id", "")
