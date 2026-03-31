@@ -885,14 +885,9 @@ div.arrow {
 		position: absolute;
 	}
 
-	// div.term {
-	// 	&.unplaced {
-	// 		scale: 0.6
-	// 	}
-
-	// 	&.unplaced:hover, &.unplaced:focus-visible {
-	// 		box-shadow: 0px 4px 4px 0px #294A4240;
-	// 		scale: 0.7;
-	// 	}
-	// }
+	div.term {
+		&.empty {
+			display: none;
+		}
+	}
 }
