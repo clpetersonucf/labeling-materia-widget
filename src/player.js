@@ -274,7 +274,7 @@ Namespace('Labeling').Engine = (function() {
 
 		// shuffle these separately
 		addTerms = _shuffle(addTerms)
-		addTerms.forEach((v)=>_g('unplaced-terms').appendChild(v))
+		addTerms.forEach((v)=>_g('unplaced-cont').appendChild(v))
 
 		_finals = Array.from(document.getElementsByClassName("final"))
 		_unplaced = Array.from(document.getElementsByClassName("unplaced"))
