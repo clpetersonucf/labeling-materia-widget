@@ -55,8 +55,8 @@ html, body {
 		#imgsrc {
 			display: flex;
 			flex-grow: 1;
-			max-width: 93%;
-			max-height: 93%;
+			max-width: calc(605px * 0.93);
+			max-height: calc(550px * 0.93);
 			margin: auto;
 			box-shadow: #33333366 0px 0px 4px 4px;
 		}
@@ -247,9 +247,6 @@ div.term {
 
 	max-height: 100px;
 
-	overflow-x: hidden;
-	overflow-y: auto;
-
 	cursor: pointer;
 
 	transition: scale 200ms ease;
@@ -284,9 +281,19 @@ div.term {
 	}
 	&.target {
 		background: #E7E7E766;
-		border: 1px solid #00000040;
+		outline: 1px solid #00000040;
 		opacity: 0.5;
-		// outline: 2px solid black;
+		cursor: pointer;
+		
+		&.final:hover {
+			scale: 1.1;
+		}
+
+		&.unplaced:hover {
+			scale: 1;
+			box-shadow: none;
+			cursor: default;
+		}
 	}
 	&.empty, &.empty:hover {
 		background: #E7E7E766;
@@ -297,7 +304,7 @@ div.term {
 		transition: scale 0ms linear;
 	}
 
-	&:focus-visible {
+	&:focus-visible, &.clickfocus {
 		outline: 2px solid rgb(85, 214, 206);
 	}
 }
@@ -855,4 +862,37 @@ div.arrow {
 		display: flex;
 		flex-direction: column;
 	}
+
+	#unplaced-terms {
+		width: 100%;
+		height: 200px;
+		overflow-y: scroll;
+		// display: grid;
+		// grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	#board {
+		padding-top: 0px;
+		// min-width: 605px;
+	}
+
+	#image {
+		scale: 0.6;
+		transform-origin: top left;
+	}
+
+	#board #image {
+		position: absolute;
+	}
+
+	// div.term {
+	// 	&.unplaced {
+	// 		scale: 0.6
+	// 	}
+
+	// 	&.unplaced:hover, &.unplaced:focus-visible {
+	// 		box-shadow: 0px 4px 4px 0px #294A4240;
+	// 		scale: 0.7;
+	// 	}
+	// }
 }

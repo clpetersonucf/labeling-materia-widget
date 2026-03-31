@@ -49,7 +49,8 @@ Namespace('Labeling').Engine = (function() {
 
 	// the current match the term is in proximity of
 	let _curMatch = null;
-	let _finals = []
+	let _finals = [] // destination terms
+	let _unplaced = [] // source terms
 
 	// current selection via touch/key navigation
 	let _curSelectSource = null;
@@ -183,7 +184,6 @@ Namespace('Labeling').Engine = (function() {
 			// term.addEventListener('blur', _deselectTerm, false);
 			term.addEventListener("keydown", _termKeyHandler)
 			term.addEventListener("mouseup", _mouseUpEvent)
-			term.addEventListener("touchstart", _mouseUpEvent)
 			term.addEventListener("dragstart", (e) => {
 				_isDragging = true
 				setTimeout(()=>e.target.classList.add("empty"), 10)
@@ -277,6 +277,7 @@ Namespace('Labeling').Engine = (function() {
 		addTerms.forEach((v)=>_g('unplaced-terms').appendChild(v))
 
 		_finals = Array.from(document.getElementsByClassName("final"))
+		_unplaced = Array.from(document.getElementsByClassName("unplaced"))
 	};
 
 	// https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
@@ -513,9 +514,50 @@ Namespace('Labeling').Engine = (function() {
 		
 		const v = e.target
 
-		if(v.className.includes("final")) {
-			_resetGhost(v)
+		if(!_curSelectSource) {
+			if(v.className.includes("empty")) return
+
+			if(v.className.includes("final")) {
+				_resetGhost(v)
+			} else {
+				_unplaced.forEach((u)=>!u.className.includes("empty") && u.classList.add("target"))
+
+				_curSelectSource = v
+				_curSelectSource.classList.remove("target")
+				_curSelectSource.classList.add("clickfocus")
+
+				_finals.forEach((f)=>{
+					f.classList.add("target")
+					document.getElementById(f.id.replace("ghost", "line")).classList.add("target")
+				})
+			}
+		} else {
+			if(v == _curSelectSource) {
+				_curSelectSource.classList.remove("clickfocus")
+				_curSelectSource = null
+
+				_unplaced.forEach((u)=>u.classList.remove("target"))
+
+				_finals.forEach((f)=>{
+					f.classList.remove("target")
+					document.getElementById(f.id.replace("ghost", "line")).classList.remove("target")
+				})
+			} else if(v.className.includes("final")) {
+				_placeIntoGhost(_curSelectSource, v)
+
+				_curSelectSource.classList.remove("clickfocus")
+				_curSelectSource = null
+
+				_unplaced.forEach((u)=>u.classList.remove("target"))
+
+				_finals.forEach((f)=>{
+					f.classList.remove("target")
+					document.getElementById(f.id.replace("ghost", "line")).classList.remove("target")
+				})
+			}
 		}
+
+		
 	}
 
 	// // find next label to focus
