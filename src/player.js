@@ -160,11 +160,9 @@ Namespace('Labeling').Engine = (function() {
 		_img.alt = _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.";
 		// _canvas.setAttribute('aria-label', _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.");
 		
-		// do the shuffle
-		_labels = _questions;
-		_questions = _shuffle(_questions);
-		_labels = _shuffle(_labels);
-
+		// store sidebar terms to be added later
+		let addTerms = []
+	
 		// create term divs
 		for (var question of Array.from(_questions)) {
 			if (!question.id) {
@@ -199,7 +197,7 @@ Namespace('Labeling').Engine = (function() {
 			if (fontSize < 12) { fontSize = 12; }
 			term.style.fontSize = fontSize + 'px';
 
-			_g('unplaced-terms').appendChild(term);
+			addTerms.push(term)
 
 			// Some legacy qsets store these as strings, which we certainly don't want
 			question.options.endPointX = parseInt(question.options.endPointX);
@@ -274,6 +272,10 @@ Namespace('Labeling').Engine = (function() {
 			_svg.appendChild(core)
 		}
 
+		// shuffle these separately
+		addTerms = _shuffle(addTerms)
+		addTerms.forEach((v)=>_g('unplaced-terms').appendChild(v))
+
 		_finals = Array.from(document.getElementsByClassName("final"))
 	};
 
@@ -335,6 +337,7 @@ Namespace('Labeling').Engine = (function() {
 				} else {
 					_placeIntoGhost(e.target, _finals[_curSelTarIndex])
 					_keyDeselectCurTarget()
+					_curSelectSource.blur()
 					_curSelectSource = null
 				}
 
