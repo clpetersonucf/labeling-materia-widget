@@ -915,7 +915,7 @@ div.arrow {
 
 	#image {
 		// SCSS thinks vw and px are incompatible which is wrong
-		scale: unquote("min(calc(min(100vw, 80vh) / 605px), 1)");
+		scale: unquote("calc(min(100vw, 80vh) / 605px)");
 		transform-origin: top left;
 	}
 
