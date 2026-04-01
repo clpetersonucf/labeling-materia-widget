@@ -218,11 +218,16 @@ html, body {
 }
 
 #unplaced-cont {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 8px;
 	padding: 0px 24px 16px 24px;
+}
+
+#empty-notice {
+	display: none;
 }
 
 .unplaced-instructions {
@@ -980,6 +985,21 @@ div.arrow {
 		flex-shrink: 0;
 		&.empty {
 			display: none;
+		}
+	}
+
+	#empty-notice {
+		&.visible {
+			display: block;
+			position: absolute;
+			width: 100%;
+			text-align: center;
+			top: 20px;
+			left: 0px;
+			z-index: 20;
+			font-weight: 500;
+			color: #ccc;
+			pointer-events: none;
 		}
 	}
 }

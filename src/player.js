@@ -569,8 +569,13 @@ Namespace('Labeling').Engine = (function() {
 		_finals.forEach((v) => {
 			if(v.className.includes("ghost")) flag = false;
 		})
-
+		
 		_isPuzzleComplete = flag;
+		if(_isPuzzleComplete)
+			document.getElementById("empty-notice").classList.add("visible")
+		else
+			document.getElementById("empty-notice").classList.remove("visible")
+		
 	}
 
 	// // find next label to focus
