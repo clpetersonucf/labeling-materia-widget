@@ -344,7 +344,7 @@ div.term {
 		background: #5fac4b;
 		color: #fff;
 	}
-	&:hover, &:focus {
+	&:hover, &:focus-visible {
 		background: #5fbc4b;
 		color: #fff;
 	}
@@ -450,7 +450,7 @@ input {
 	-webkit-appearance: none;
 	cursor: pointer;
 
-	&.green:hover, &.green:focus{
+	&.green:hover, &.green:focus-visible{
 		background: #78DD5E;
 		color: #fff;
 		border: 1px solid #78DD5E;
@@ -466,7 +466,7 @@ input {
 }
 
 #cancelbtn {
-	&:focus, &:hover {
+	&:focus-visible, &:hover {
 
 		background: #78DD5E;
 		color: #000;
@@ -896,7 +896,7 @@ div.arrow {
 			content: "";
 		}
 
-		&:hover {
+		&:hover, &:focus-visible {
 			&:after {
 				background-color: #fff;
 			}
@@ -916,7 +916,7 @@ div.arrow {
 			content: "";
 		}
 
-		&:hover {
+		&:hover, &:focus-visible {
 			&:after {
 				background-color: #fff;
 			}
