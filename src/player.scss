@@ -883,6 +883,46 @@ div.arrow {
 		overflow: hidden;
 	}
 
+	#checkBtn {
+		font-size: 0px;
+		padding: 0px;
+		&:after {
+			padding: 4px 8px 4px 8px;
+			width: 20px;
+			height: 20px;
+			background-color: #294a42;
+			mask: url("assets/send.svg") no-repeat center / 20px;
+			display: block;
+			content: "";
+		}
+
+		&:hover {
+			&:after {
+				background-color: #fff;
+			}
+		}
+	}
+
+	#instructionsBtn {
+		font-size: 0px;
+		padding: 0px;
+		&:after {
+			padding: 4px 8px 4px 8px;
+			width: 20px;
+			height: 20px;
+			background-color: #ccc;
+			mask: url("assets/circle-question-mark.svg") no-repeat center / 20px;
+			display: block;
+			content: "";
+		}
+
+		&:hover {
+			&:after {
+				background-color: #fff;
+			}
+		}
+	}
+
 	#unplaced-cont {
 		display: flex;
 		width: 100%;
