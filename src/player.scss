@@ -1,4 +1,4 @@
-$mobile_w_px: 576px;
+$mobile_w_px: 840px;
 
 /* Standardize padding in all browsers */
 * {
@@ -47,6 +47,7 @@ html, body {
 	#image {
 		position: relative;
 		display: flex;
+		scale: unquote("min(calc(min(100vw, 80vh) / 605px), 1)");
 		// background-color: #5fbc4b;
 		// I dont like this either but it matches the creator size exactly
 		width: 605px;
@@ -186,7 +187,7 @@ html, body {
 	position: absolute;
 	top: 56px;
 	bottom: 0px;
-	padding: 5px;
+	padding: 0px;
 }
 
 #unplaced-terms {
@@ -208,7 +209,6 @@ html, body {
 	align-items: center;
 	gap: 8px;
 	//50+32
-	padding: 16px 24px 16px 24px;
 	margin-top: 56px;
 }
 
@@ -217,6 +217,7 @@ html, body {
 	flex-direction: column;
 	align-items: center;
 	gap: 8px;
+	padding: 0px 24px 16px 24px;
 }
 
 .unplaced-instructions {
@@ -230,6 +231,11 @@ html, body {
 	margin-bottom: 8px;
 	text-align: left;
 	word-wrap: break-word;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 16px 24px 16px 24px;
+	padding-bottom: 0px;
 }
 
 div.term {
@@ -874,22 +880,32 @@ div.arrow {
 	#unplaced-terms {
 		width: 100%;
 		height: fit-content;
-		padding: 12px;
-		overflow-y: auto;
+		overflow: hidden;
 	}
 
 	#unplaced-cont {
 		display: flex;
 		width: 100%;
 		height: 100px;
-		overflow-y: scroll;
+		overflow-x: scroll;
+		overflow-y: hidden;
 		flex-direction: row;
-		// column-gap: 200px;
+		padding: 4px 8px 4px 8px;
+		box-sizing: border-box;
+		box-shadow: inset 0 2px 4px 0 #00000020;
 	}
 
 	.unplaced-instructions {
 		width: 100%;
 		text-align: center;
+		margin-bottom: 0px;
+		padding: 12px;
+		padding-bottom: 0px;
+		box-sizing: border-box;
+
+		hr {
+			display: none;
+		}
 	}
 
 	#board {
@@ -898,7 +914,8 @@ div.arrow {
 	}
 
 	#image {
-		scale: 0.6;
+		// SCSS thinks vw and px are incompatible which is wrong
+		scale: unquote("min(calc(min(100vw, 80vh) / 605px), 1)");
 		transform-origin: top left;
 	}
 
@@ -907,9 +924,38 @@ div.arrow {
 	}
 
 	div.term {
+		width: 150px;
 		flex-shrink: 0;
 		&.empty {
 			display: none;
+		}
+	}
+}
+
+// the scaling method i used for the image works in every single browser but firefox
+// do this as a fallback to retain mobile compatibility
+@-moz-document url-prefix() {
+	@media (width < $mobile_w_px) {
+		#image {
+			scale: 0.8;
+		}
+	}
+	
+	@media (width < 576px) {
+		#image {
+			scale: 0.6;
+		}
+	}
+
+	@media (width < 450px) {
+		#image {
+			scale: 0.5;
+		}
+	}
+
+	@media (height < 500px) {
+		#image {
+			scale: 0.5;
 		}
 	}
 }
