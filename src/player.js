@@ -396,6 +396,8 @@ Namespace('Labeling').Engine = (function() {
 
 			// reset scoring attached to label
 			_labelTextsByQuestionId[v.getAttribute("data-q_id")] = ""
+
+			_checkIfComplete()
 		}
 	}
 
@@ -435,6 +437,8 @@ Namespace('Labeling').Engine = (function() {
 		// set svg graphic state
 		document.getElementById(v.id.replace("ghost","core")).style.display = "block"
 		document.getElementById(v.id.replace("ghost","line")).classList.add("placed")
+
+		_checkIfComplete()
 	}
 	
 	const _dragEndHandler = (e) => {
@@ -505,6 +509,7 @@ Namespace('Labeling').Engine = (function() {
 			v.setAttribute("data-label_id", "")
 		})
 
+		_isPuzzleComplete = false;
 		_labelTextsByQuestionId = {}
 	}
 
@@ -556,8 +561,16 @@ Namespace('Labeling').Engine = (function() {
 				})
 			}
 		}
+	}
 
-		
+	const _checkIfComplete = () => {
+		let flag = true
+
+		_finals.forEach((v) => {
+			if(v.className.includes("ghost")) flag = false;
+		})
+
+		_isPuzzleComplete = flag;
 	}
 
 	// // find next label to focus
