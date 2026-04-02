@@ -53,6 +53,7 @@ Namespace('Labeling').Engine = (function() {
 	let _unplaced = [] // source terms
 
 	// current selection via touch/key navigation
+	let _curFocus = null;
 	let _curSelectSource = null;
 	let _curSelectTarget = null;
 	let _curSelTarIndex = 0; // used to traverse finals list
@@ -73,6 +74,9 @@ Namespace('Labeling').Engine = (function() {
 	// zIndex of the terms, incremented so that the dragged term is always on top
 	let _zIndex = 11000;
 
+	// mobile breakpoint pxs
+	const _mobilePx = 840
+	
 	// getElementById and cache it, for the sake of performance
 	const _g = id => _domCache[id] || (_domCache[id] = document.getElementById(id));
 
@@ -177,11 +181,8 @@ Namespace('Labeling').Engine = (function() {
 			term.className = 'term unplaced';
 			term.innerHTML = question.questions[0].text;
 			term.setAttribute('aria-label', "Now on label: " + question.questions[0].text + ", currently unplaced");
-			// term.addEventListener('mousedown', _mouseDownEvent, false);
-			// term.addEventListener('touchstart', _mouseDownEvent, false);
-			// term.addEventListener('MSPointerDown', _mouseDownEvent, false);
-			// term.addEventListener('focus', _selectTerm, false);
-			// term.addEventListener('blur', _deselectTerm, false);
+			term.addEventListener('focus', (e) => _curFocus = e.target);
+			term.addEventListener('blur', (e) => _curFocus = null);
 			term.addEventListener("keydown", _termKeyHandler)
 			term.addEventListener("mouseup", _mouseUpEvent)
 			term.addEventListener("dragstart", (e) => {
@@ -220,6 +221,8 @@ Namespace('Labeling').Engine = (function() {
 			ghost.addEventListener("dragend", _dragEndHandler)
 			ghost.addEventListener("mouseup", _mouseUpEvent)
 			ghost.addEventListener("keydown", _termKeyHandler)
+			ghost.addEventListener('focus', (e) => _curFocus = e.target);
+			ghost.addEventListener('blur', (e) => _curFocus = null);
 
 			document.getElementById('image').appendChild(ghost)
 
@@ -473,6 +476,13 @@ Namespace('Labeling').Engine = (function() {
 	}
 
 	const _keyboardEvent = function(e) {
+		if (_curFocus) {
+			if (e.key === "R" || e.key === "r") {
+				if(_curFocus.className.includes("final")) {
+					_animateResetGhost(_curFocus)
+				}
+			}
+		}
 		if (_curSelectSource) {
 			if(e.key === "ArrowLeft" || e.key === "ArrowRight") {
 				if(e.key === "ArrowLeft")
@@ -483,38 +493,31 @@ Namespace('Labeling').Engine = (function() {
 				_keySelectTarget(_finals[_curSelTarIndex])
 			}
 		}		
-		else if ((e.key === "H") || (e.key === "h")) {
+		if ((e.key === "H") || (e.key === "h")) {
 			if (_dialogOpen) {
 				_hideDialogs();
 			} else {
 				_showInstructions();
 			}
-		} else if(e.key === "R" || e.key === "r") {
+		}
+		if(e.ctrlKey && (e.key === "R" || e.key === "r")) {
 			_resetAllLabels()
 		}
 	};
 
 	const _resetAllLabels = () => {
-		const sources = Array.from(document.getElementsByClassName("unplaced"))
-		
-		sources.forEach((v)=>{
-			v.classList.remove("empty")
-			v.setAttribute("draggable", true)
-			v.setAttribute("tabindex", 0)
-		})
+		// tracks number of labels to reset for anim
+		let count = 0
 
 		_finals.forEach((v)=>{
-			v.innerHTML = ""
-			v.className = 'term final ghost'
-			v.setAttribute("draggable", false)
-			v.setAttribute("tabindex", -1)
-			document.getElementById(v.id.replace("ghost","core")).style.display = "none"
-			document.getElementById(v.id.replace("ghost", "line")).classList.remove("placed")
-			v.setAttribute("data-label_id", "")
+			if (window.innerWidth < _mobilePx) {
+				_resetGhost(v)
+			} else if(v.className.includes("placed")) {
+				// offsets each reset by 50ms
+				setTimeout(()=>requestAnimationFrame(()=>_animateResetGhost(v)), count*75)
+				count++
+			}
 		})
-
-		_isPuzzleComplete = false;
-		_labelTextsByQuestionId = {}
 	}
 
 	// this will handle non drag events
@@ -603,7 +606,7 @@ Namespace('Labeling').Engine = (function() {
 			const posT = document.getElementById(labelId).getBoundingClientRect()
 
 			// disable animations on mobile
-			const delay = window.innerWidth < 840 ? 0 : 600
+			const delay = window.innerWidth < _mobilePx ? 0 : 600
 
 			let anim = document.createElement("div")
 			anim.className = "term animated"
