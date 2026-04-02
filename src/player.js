@@ -599,6 +599,9 @@ Namespace('Labeling').Engine = (function() {
 			const posS = v.getBoundingClientRect()
 			const posT = document.getElementById(labelId).getBoundingClientRect()
 
+			// disable animations on mobile
+			const delay = window.innerWidth < 840 ? 0 : 600
+
 			let anim = document.createElement("div")
 			anim.className = "term animated"
 			anim.innerHTML = v.innerHTML
@@ -616,7 +619,7 @@ Namespace('Labeling').Engine = (function() {
 
 			// ending position
 			setTimeout(()=>anim.style.transform = `translate(${posT.left}px, ${posT.top}px)`, 0)
-			_resetGhost(v, 600) // this should match sum length of transitions in css
+			_resetGhost(v, delay) // this should match sum length of transitions in css
 		}	
 	}
 

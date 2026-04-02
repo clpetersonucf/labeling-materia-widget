@@ -995,7 +995,7 @@ div.arrow {
 	div.term {
 		width: 150px;
 		flex-shrink: 0;
-		&.empty {
+		&.empty, &.animated {
 			display: none;
 		}
 	}
