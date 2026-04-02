@@ -181,8 +181,8 @@ Namespace('Labeling').Engine = (function() {
 			term.className = 'term unplaced';
 			term.innerHTML = question.questions[0].text;
 			term.setAttribute('aria-label', "Now on label: " + question.questions[0].text + ", currently unplaced");
-			term.addEventListener('focus', (e) => _curFocus = e.target);
-			term.addEventListener('blur', (e) => _curFocus = null);
+			term.addEventListener('focus', _termFocus);
+			term.addEventListener('blur', _termBlur);
 			term.addEventListener("keydown", _termKeyHandler)
 			term.addEventListener("mouseup", _mouseUpEvent)
 			term.addEventListener("dragstart", (e) => {
@@ -221,8 +221,8 @@ Namespace('Labeling').Engine = (function() {
 			ghost.addEventListener("dragend", _dragEndHandler)
 			ghost.addEventListener("mouseup", _mouseUpEvent)
 			ghost.addEventListener("keydown", _termKeyHandler)
-			ghost.addEventListener('focus', (e) => _curFocus = e.target);
-			ghost.addEventListener('blur', (e) => _curFocus = null);
+			ghost.addEventListener('focus', (e) => _termFocus);
+			ghost.addEventListener('blur', (e) => _termBlur);
 
 			document.getElementById('image').appendChild(ghost)
 
@@ -332,24 +332,64 @@ Namespace('Labeling').Engine = (function() {
 
 	}
 
+	const _termFocus = (e) => {
+		_curFocus = e.target
+	}
+
+	const _termBlur = (e) => {
+		_curFocus = null
+	}
+
 	const _termKeyHandler = (e) => {
 		switch (e.key) {
 			case "Enter":
 				if (_curSelectSource != e.target) {
-					_curSelectSource = e.target
+					_keySelectSource(e.target)
 					_keySelectTarget(_finals[_curSelTarIndex])
 				} else {
 					_placeIntoGhost(e.target, _finals[_curSelTarIndex])
 					_keyDeselectCurTarget()
-					_curSelectSource.blur()
-					_curSelectSource = null
+					_keyDeselectCurSource()
 				}
 
 				break;
-		
+			case "Tab":
+				_keyDeselectCurSource()
+				_keyDeselectCurTarget()
+				break;
 			default:
 				break;
 		}
+	}
+
+	// s: source
+	// selects the source for use with touch/key controls
+	const _keySelectSource = (s) => {
+		_unplaced.forEach((u)=>{
+			if(!u.className.includes("empty")) {
+				u.classList.add("target")
+				u.setAttribute("draggable", false)
+			}
+		})
+
+		_curSelectSource = s
+		_curSelectSource.classList.remove("target")
+		_curSelectSource.classList.add("clickfocus")
+	}
+
+	const _keyDeselectCurSource = () => {
+		if (!_curSelectSource) return
+
+		_unplaced.forEach((u)=>{
+			u.classList.remove("target")
+			if(!u.className.includes("empty")) {
+				u.setAttribute("draggable", true)
+			}
+		})
+
+		_curSelectSource.classList.remove("clickfocus")
+		_curSelectSource.blur()
+		_curSelectSource = null
 	}
 
 	// t: target
@@ -363,11 +403,11 @@ Namespace('Labeling').Engine = (function() {
 	}
 
 	const _keyDeselectCurTarget = () => {
-		if (_curSelectTarget) {
-			_curSelectTarget.classList.remove("target")
-			document.getElementById(_curSelectTarget.id.replace("ghost", "line")).classList.remove("target")
-			_curSelectTarget = null
-		}
+		if (!_curSelectTarget) return
+
+		_curSelectTarget.classList.remove("target")
+		document.getElementById(_curSelectTarget.id.replace("ghost", "line")).classList.remove("target")
+		_curSelectTarget = null
 	}
 
 	// v: unplaced term
@@ -532,16 +572,8 @@ Namespace('Labeling').Engine = (function() {
 			if(v.className.includes("final")) {
 				_animateResetGhost(v)
 			} else {
-				_unplaced.forEach((u)=>{
-					if(!u.className.includes("empty")) {
-						u.classList.add("target")
-						u.setAttribute("draggable", false)
-					}
-				})
-
-				_curSelectSource = v
-				_curSelectSource.classList.remove("target")
-				_curSelectSource.classList.add("clickfocus")
+				
+				_keySelectSource(v)
 
 				_finals.forEach((f)=>{
 					f.classList.add("target")
@@ -550,13 +582,7 @@ Namespace('Labeling').Engine = (function() {
 			}
 		} else {
 			if(v == _curSelectSource) {
-				_curSelectSource.classList.remove("clickfocus")
-				_curSelectSource = null
-
-				_unplaced.forEach((u)=>{
-					u.classList.remove("target")
-					if(!u.className.includes("empty")) u.setAttribute("draggable", true)
-				})
+				_keyDeselectCurSource()
 
 				_finals.forEach((f)=>{
 					f.classList.remove("target")
@@ -564,14 +590,7 @@ Namespace('Labeling').Engine = (function() {
 				})
 			} else if(v.className.includes("final")) {
 				_placeIntoGhost(_curSelectSource, v)
-
-				_curSelectSource.classList.remove("clickfocus")
-				_curSelectSource = null
-
-				_unplaced.forEach((u)=>{
-					u.classList.remove("target")
-					if(!u.className.includes("empty")) u.setAttribute("draggable", true)
-				})
+				_keyDeselectCurSource()
 
 				_finals.forEach((f)=>{
 					f.classList.remove("target")
