@@ -398,7 +398,10 @@ Namespace('Labeling').Engine = (function() {
 			_checkIfComplete()
 
 			// reset source label
-			setTimeout(()=>_resetUnplaced(document.getElementById(labelId)), delay ?? 0)
+			if(!delay)
+				_resetUnplaced(document.getElementById(labelId))
+			else
+				setTimeout(()=>_resetUnplaced(document.getElementById(labelId)), delay ?? 0)
 		}
 	}
 
@@ -410,7 +413,7 @@ Namespace('Labeling').Engine = (function() {
 
 		// if the target ghost already contains data from a label, reset it
 		if(v.getAttribute("data-label_id")) {
-			_resetGhost(v)
+			_animateResetGhost(v)
 		}
 
 		// handle if data is coming from unplaced label or other final label
