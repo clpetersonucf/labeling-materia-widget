@@ -375,11 +375,9 @@ Namespace('Labeling').Engine = (function() {
 	}
 
 	// v: ghost term
-	const _resetGhost = (v) => {
-		if (v.getAttribute("data-label_id")) {
-			// reset source label
-			_resetUnplaced(document.getElementById(v.getAttribute("data-label_id")))
-
+	const _resetGhost = (v, delay) => {
+		const labelId = v.getAttribute("data-label_id")
+		if (labelId) {
 			// reset svg graphics for label being placed
 			document.getElementById(v.id.replace("ghost","core")).style.display = "none"
 			document.getElementById(v.id.replace("ghost", "line")).classList.remove("placed")
@@ -398,6 +396,9 @@ Namespace('Labeling').Engine = (function() {
 			_labelTextsByQuestionId[v.getAttribute("data-q_id")] = ""
 
 			_checkIfComplete()
+
+			// reset source label
+			setTimeout(()=>_resetUnplaced(document.getElementById(labelId)), delay ?? 0)
 		}
 	}
 
@@ -523,9 +524,14 @@ Namespace('Labeling').Engine = (function() {
 			if(v.className.includes("empty")) return
 
 			if(v.className.includes("final")) {
-				_resetGhost(v)
+				_animateResetGhost(v)
 			} else {
-				_unplaced.forEach((u)=>!u.className.includes("empty") && u.classList.add("target"))
+				_unplaced.forEach((u)=>{
+					if(!u.className.includes("empty")) {
+						u.classList.add("target")
+						u.setAttribute("draggable", false)
+					}
+				})
 
 				_curSelectSource = v
 				_curSelectSource.classList.remove("target")
@@ -541,7 +547,10 @@ Namespace('Labeling').Engine = (function() {
 				_curSelectSource.classList.remove("clickfocus")
 				_curSelectSource = null
 
-				_unplaced.forEach((u)=>u.classList.remove("target"))
+				_unplaced.forEach((u)=>{
+					u.classList.remove("target")
+					if(!u.className.includes("empty")) u.setAttribute("draggable", true)
+				})
 
 				_finals.forEach((f)=>{
 					f.classList.remove("target")
@@ -553,7 +562,10 @@ Namespace('Labeling').Engine = (function() {
 				_curSelectSource.classList.remove("clickfocus")
 				_curSelectSource = null
 
-				_unplaced.forEach((u)=>u.classList.remove("target"))
+				_unplaced.forEach((u)=>{
+					u.classList.remove("target")
+					if(!u.className.includes("empty")) u.setAttribute("draggable", true)
+				})
 
 				_finals.forEach((f)=>{
 					f.classList.remove("target")
@@ -576,6 +588,36 @@ Namespace('Labeling').Engine = (function() {
 		else
 			document.getElementById("empty-notice").classList.remove("visible")
 		
+	}
+
+	// v: ghost term
+	// this is a wrapper for reset ghost that performs a return animation
+	const _animateResetGhost = (v) => {
+		const labelId = v.getAttribute("data-label_id")
+		if (labelId) {
+			const game = document.getElementById("game")
+			const posS = v.getBoundingClientRect()
+			const posT = document.getElementById(labelId).getBoundingClientRect()
+
+			let anim = document.createElement("div")
+			anim.className = "term animated"
+			anim.innerHTML = v.innerHTML
+
+			// starting position
+			anim.style.transform = `translate(${posS.left}px, ${posS.top}px)`
+			anim.addEventListener("transitionend", (e)=>{
+				if(e.propertyName == "opacity")
+					e.target.remove()
+				else if(e.propertyName == "transform")
+					e.target.style.opacity = 1
+			})
+			
+			game.appendChild(anim)
+
+			// ending position
+			setTimeout(()=>anim.style.transform = `translate(${posT.left}px, ${posT.top}px)`, 0)
+			_resetGhost(v, 600) // this should match sum length of transitions in css
+		}	
 	}
 
 	// // find next label to focus

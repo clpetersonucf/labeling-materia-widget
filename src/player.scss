@@ -34,6 +34,7 @@ html, body {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
+	position: relative;
 }
 
 #board {
@@ -330,6 +331,17 @@ div.term {
 
 	&:focus-visible, &.clickfocus {
 		outline: 2px solid rgb(85, 214, 206);
+	}
+
+	&.animated {
+		position: absolute;
+		top: 0;
+		left: 0;
+		transition: transform 500ms ease, opacity 100ms linear;
+		pointer-events: none;
+		cursor: default;
+		opacity: 0.5;
+		z-index: 100;
 	}
 }
 
