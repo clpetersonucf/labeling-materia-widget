@@ -356,6 +356,11 @@ Namespace('Labeling').Engine = (function() {
 			case "Tab":
 				_keyDeselectCurSource()
 				_keyDeselectCurTarget()
+
+				_finals.forEach((v)=>{
+					v.classList.remove("target")
+					document.getElementById(v.id.replace("ghost", "line")).classList.remove("target")
+				})
 				break;
 			default:
 				break;
@@ -550,6 +555,9 @@ Namespace('Labeling').Engine = (function() {
 		let count = 0
 
 		_finals.forEach((v)=>{
+			v.classList.remove("target")
+			document.getElementById(v.id.replace("ghost", "line")).classList.remove("target")
+
 			if (window.innerWidth < _mobilePx) {
 				_resetGhost(v)
 			} else if(v.className.includes("placed")) {
