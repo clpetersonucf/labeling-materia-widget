@@ -893,7 +893,8 @@ div.arrow {
 	position: absolute;
 	opacity: 0;
 	z-index: -1;
-	width: 650px;
+	max-width: 650px;
+	width: auto;
 	margin: auto;
 	left: 0;
 	right: 0;
@@ -1045,6 +1046,27 @@ div.arrow {
 			color: #ccc;
 			pointer-events: none;
 		}
+	}
+
+	#pointer_instructions {
+		hr {
+			display: none;
+		}
+
+		.instruction-row {
+			flex-direction: column;
+			gap: 16px;
+
+			&.pointer {
+				display: none;
+			}
+		}
+	}
+
+	.preview {
+		// display: none;
+		max-height: 90vh;
+		overflow-y: scroll;
 	}
 }
 
