@@ -67,39 +67,64 @@
 			<input id='cancelbtn' type='button' value='Let me finish!'>
 			<input id='confirmbtn' class='green' type='button' value='Submit Anyway'>
 		</div>
-		<div class='box preview show' id='previewbox' aria-hidden="false" role="alertdialog" aria-describedby="controls_header">
+		<div class='box preview show fade' id='previewbox' aria-hidden="false" role="alertdialog" aria-describedby="controls_header">
 			<h2 id="instructions-header">How to Play</h2>
-			<p id="instructions">Drag labels to their corresponding destinations.</p>
+			<div id="instructions-selector-box">
+				<button id="pointer-sel" type="button" class="selected">Pointer Controls</button>
+				<button id="keyboard-sel" type="button">Keyboard Controls</button>
+			</div>
 			<div class="instructions-content">
-				<figure id="keyboard_instructions">
-					<figcaption id="controls_header">Keyboard Controls</figcaption>
+				<figure id="pointer_instructions">
+					<div class="instruction-row">
+						<div style="width: 200px; height: 125px; flex-shrink: 0; background: #bbb;"></div>	
+						<div class="row-label">
+							<h3>Drag and Drop</h3>
+							<p>Drag and drop labels onto their destinations.</p>
+							<p>Return a label to the bank by clicking it, or by dragging it back to the bank.</p>
+						</div>
+					</div>
+					<hr/>
+					<div class="instruction-row">
+						<div style="width: 200px; height: 125px; flex-shrink: 0; background: #444;"></div>	
+						<div class="row-label">
+							<h3>Tap / Click</h3>
+							<p>Tap / click a label <i>once</i> to select it / return it to the bank.</p>
+							<p>When a label is selected, tap / click <i>again</i> to place it into its destination.</p>
+						</div>
+					</div>
+					
+				</figure>
+				<figure id="keyboard_instructions" class="hidden">
 					<table>
 						<tr>
-						  <th>Shortcut</th>
+						  <th class="shortcut">Shortcut</th>
 						  <th>Description</th>
 						</tr>
 						<tr>
-						  <td><strong>Tab</strong></td>
-						  <td>Use the 'Tab' key to navigate to labels.</td>
+						  <td class="shortcut"><strong class="key">Tab</strong></td>
+						  <td>Navigate between labels on the screen.</td>
 						</tr>
 						<tr>
-						  <td><strong>Arrow keys</strong></td>
+							<td class="shortcut"><strong class="key">Enter</strong></td>
+							<td>
+							  Press <i>once</i> to select a source label.<br/>
+							  Press <i>again</i> to place it into its destination.
+							</td>
+						  </tr>
+						<tr>
+						  <td class="shortcut"><strong><span class="key">←</span> / <span class="key">→</span></strong></td>
 						  <td>With a label selected, use the arrow keys to cycle through destinations.</td>
 						</tr>
 						<tr>
-						  <td><strong>Enter/Space</strong></td>
-						  <td>Select a destination</td>
-						</tr>
-						<tr>
-						  <td><strong>H</strong></td>
+						  <td class="shortcut"><strong class="key">H</strong></td>
 						  <td>Open or close instructions.</td>
 						</tr>
 						<tr>
-						  <td><strong>R</strong></td>
+						  <td class="shortcut"><strong class="key">R</strong></td>
 						  <td>Reset selected label.</td>
 						</tr>
 						<tr>
-						  <td><strong>Ctrl+R</strong></td>
+						  <td class="shortcut"><strong><span class="key">Ctrl</span> + <span class="key">R</span></strong></td>
 						  <td>Reset all labels.</td>
 						</tr>
 					  </table>

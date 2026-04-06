@@ -153,6 +153,22 @@ Namespace('Labeling').Engine = (function() {
 		document.getElementById("board").addEventListener("dragover", (e)=>e.preventDefault())
 		document.getElementById("unplaced-terms").addEventListener("dragover", (e)=>e.preventDefault())
 
+		_g('keyboard-sel').addEventListener("click", (e) => {
+			e.target.classList.add("selected")
+			_g('pointer-sel').classList.remove("selected")
+
+			_g('pointer_instructions').classList.add("hidden")
+			_g('keyboard_instructions').classList.remove("hidden")
+		})
+
+		_g('pointer-sel').addEventListener("click", (e) => {
+			e.target.classList.add("selected")
+			_g('keyboard-sel').classList.remove("selected")
+
+			_g('keyboard_instructions').classList.add("hidden")
+			_g('pointer_instructions').classList.remove("hidden")
+		})
+
 		_svg = document.getElementById("svglayer")
 		_defs = document.getElementById("defs")
 		// load the image asset
@@ -221,8 +237,8 @@ Namespace('Labeling').Engine = (function() {
 			ghost.addEventListener("dragend", _dragEndHandler)
 			ghost.addEventListener("mouseup", _mouseUpEvent)
 			ghost.addEventListener("keydown", _termKeyHandler)
-			ghost.addEventListener('focus', (e) => _termFocus);
-			ghost.addEventListener('blur', (e) => _termBlur);
+			ghost.addEventListener('focus', _termFocus);
+			ghost.addEventListener('blur', _termBlur);
 
 			document.getElementById('image').appendChild(ghost)
 
@@ -1162,12 +1178,13 @@ Namespace('Labeling').Engine = (function() {
 
 	const _showInstructions = function() {
 		_prevFocus = document.activeElement;
+		_g('game').setAttribute("aria-hidden", true);
+		_g('game').setAttribute("inert", true);
 		_g('previewbox').classList.add('show');
 		_g('previewbox').removeAttribute("inert");
 		_g('previewbox').setAttribute("aria-hidden", false);
+		_g('backgroundcover').classList.add('show');
 		_g('gotitbtn').focus();
-		_g('game').setAttribute("aria-hidden", true);
-		_g('game').setAttribute("inert", true);
 		return _dialogOpen = true;
 	};
 
