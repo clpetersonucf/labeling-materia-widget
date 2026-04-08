@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
 Namespace('Labeling').Engine = (function() {
 	let _qset = null;
 	let _questions = null;
@@ -728,12 +720,12 @@ Namespace('Labeling').Engine = (function() {
 		_g('confirmbtn').removeEventListener('click', _submitButtonConfirm);
 		_g('confirmbtn').addEventListener('click', _submitButtonConfirm);
 		_g('cancelbtn').focus();
-		return _dialogOpen = true;
+		_dialogOpen = true;
 	};
 
 	const _submitButtonConfirm = function() {
 		_hideDialogs();
-		return _submitAnswersToMateria();
+		_submitAnswersToMateria();
 	};
 
 	// hide all  dialogs
@@ -752,9 +744,9 @@ Namespace('Labeling').Engine = (function() {
 		_dialogOpen = false;
 
 		if (_prevFocus) {
-			return _prevFocus.focus();
+			_prevFocus.focus();
 		} else {
-			return _g('instructionsBtn').focus();
+			_g('instructionsBtn').focus();
 		}
 	};
 
@@ -767,7 +759,7 @@ Namespace('Labeling').Engine = (function() {
 		_g('previewbox').setAttribute("aria-hidden", false);
 		_g('backgroundcover').classList.add('show');
 		_g('gotitbtn').focus();
-		return _dialogOpen = true;
+		_dialogOpen = true;
 	};
 
 	const _assistiveAlert = msg => _g('assistive-alert').innerHTML = msg;
@@ -775,9 +767,9 @@ Namespace('Labeling').Engine = (function() {
 	// submit questions to Materia. Ask first if they aren't done$
 	const _submitAnswers = function() {
 		if (!_isPuzzleComplete) {
-			return _showAlert();
+			_showAlert();
 		} else {
-			return _submitAnswersToMateria();
+			_submitAnswersToMateria();
 		}
 	};
 
@@ -786,7 +778,7 @@ Namespace('Labeling').Engine = (function() {
 		for (var question of Array.from(_questions)) {
 			Materia.Score.submitQuestionForScoring(question.id, _labelTextsByQuestionId[question.id]);
 		}
-		return Materia.Engine.end();
+		Materia.Engine.end();
 	};
 
 	//public
