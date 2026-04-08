@@ -76,6 +76,17 @@ Namespace('Labeling').Engine = (function() {
 
 	// mobile breakpoint pxs
 	const _mobilePx = 840
+
+	let _nextAlert = ""
+
+	const _pushAlert = (a) => {
+		_nextAlert = a
+	}
+
+	const _popAlert = () => {
+		_assistiveAlert(_nextAlert)
+		_nextAlert = ""
+	}
 	
 	// getElementById and cache it, for the sake of performance
 	const _g = id => _domCache[id] || (_domCache[id] = document.getElementById(id));
@@ -185,10 +196,13 @@ Namespace('Labeling').Engine = (function() {
 		let addTerms = []
 	
 		// create term divs
+		let termNum = 0
 		for (var question of Array.from(_questions)) {
 			if (!question.id) {
 				question.id = 'q'+Math.random();
 			}
+
+			termNum++;
 
 			question.mask = 'm'+Math.random();
 
@@ -229,6 +243,8 @@ Namespace('Labeling').Engine = (function() {
 			ghost.style.top = question.options.labelBoxY+"px"
 			ghost.setAttribute("data-q_id", question.id)
 			ghost.setAttribute('draggable', false)
+			ghost.setAttribute('alt', question.options.description)
+			ghost.setAttribute('data-i', termNum)
 			ghost.addEventListener("dragstart", (e) => {
 				_isDragging = true
 				// setTimeout(()=>e.target.classList.add("empty"), 10)
@@ -396,6 +412,9 @@ Namespace('Labeling').Engine = (function() {
 		_curSelectSource = s
 		_curSelectSource.classList.remove("target")
 		_curSelectSource.classList.add("clickfocus")
+
+		// let labelStatus = _curSelectSource.className.includes("final") ? "placed" : "unplaced"
+		// _curSelectSource.setAttribute("aria-label", `Selected ${labelStatus} label: ${_curSelectSource.innerHTML}. You may now select a destination.`)
 	}
 
 	const _keyDeselectCurSource = () => {
@@ -421,6 +440,12 @@ Namespace('Labeling').Engine = (function() {
 		_curSelectTarget = t
 		_curSelectTarget.classList.add("target")
 		document.getElementById(_curSelectTarget.id.replace("ghost", "line")).classList.add("target")
+
+		let ariaString = `Placing: Destination ${_curSelectTarget.getAttribute("data-i")} is currently empty. Description: ${_curSelectTarget.getAttribute("alt")}`
+		if(_curSelectTarget.innerHTML != "")
+			ariaString = `Placing: Destination ${_curSelectTarget.getAttribute("data-i")} currently contains: ${_curSelectTarget.innerHTML}. Description: ${_curSelectTarget.getAttribute("alt")}`
+		
+		_assistiveAlert(ariaString)
 	}
 
 	const _keyDeselectCurTarget = () => {
@@ -455,6 +480,7 @@ Namespace('Labeling').Engine = (function() {
 			// reset data inside label
 			v.innerHTML = ""
 			v.setAttribute("data-label_id", "")
+			v.setAttribute("aria-label", "")
 
 			// reset scoring attached to label
 			_labelTextsByQuestionId[v.getAttribute("data-q_id")] = ""
@@ -494,6 +520,7 @@ Namespace('Labeling').Engine = (function() {
 		// set data of ghost 
 		v.innerHTML = data
 		_labelTextsByQuestionId[v.getAttribute("data-q_id")] = data
+		v.setAttribute("aria-label", `Now on label: ${data}. Placed at destination ${v.getAttribute("data-i")}.`)
 
 		// set ghost state
 		v.classList.remove("ghost")
@@ -505,6 +532,8 @@ Namespace('Labeling').Engine = (function() {
 		// set svg graphic state
 		document.getElementById(v.id.replace("ghost","core")).style.display = "block"
 		document.getElementById(v.id.replace("ghost","line")).classList.add("placed")
+
+		_pushAlert(`Label "${data}" has been placed at destination ${v.getAttribute("data-i")}.`)
 
 		_checkIfComplete()
 	}
@@ -540,7 +569,10 @@ Namespace('Labeling').Engine = (function() {
 		if (_curFocus) {
 			if (e.key === "R" || e.key === "r") {
 				if(_curFocus.className.includes("final")) {
+					_pushAlert(`Reset label "${_curFocus.innerHTML}".`)
 					_animateResetGhost(_curFocus)
+					// update term headers
+					
 				}
 			}
 		}
@@ -577,11 +609,13 @@ Namespace('Labeling').Engine = (function() {
 			if (window.innerWidth < _mobilePx) {
 				_resetGhost(v)
 			} else if(v.className.includes("placed")) {
-				// offsets each reset by 50ms
+				// offsets each reset by 75ms
 				setTimeout(()=>requestAnimationFrame(()=>_animateResetGhost(v)), count*75)
 				count++
 			}
 		})
+
+		_assistiveAlert("All labels have been reset.")
 	}
 
 	// this will handle non drag events
@@ -636,7 +670,17 @@ Namespace('Labeling').Engine = (function() {
 			document.getElementById("empty-notice").classList.add("visible")
 		else
 			document.getElementById("empty-notice").classList.remove("visible")
-		
+
+		const numFilled = document.querySelectorAll('.term.final.placed').length;
+		if (numFilled === _questions.length) {
+			_g('unplaced-header').setAttribute('aria-label', "No unplaced labels. All labels have been placed.");
+			_pushAlert("Placed all labels. Submit your answers to see your score.");
+		} else if (numFilled > 0) {
+			_g('placed-header').setAttribute('aria-label', "Placed labels. There are " + numFilled + " labels placed.");
+			_g('unplaced-header').setAttribute('aria-label', "Unplaced labels. There are " + (_questions.length - numFilled) + " labels remaining.");
+		}
+
+		_popAlert()
 	}
 
 	// v: ghost term
