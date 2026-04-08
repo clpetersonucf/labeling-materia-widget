@@ -62,9 +62,13 @@
 		</div>
 		<div id='backgroundcover' class='fade'></div>
 		<div id='alertbox' class='box fade' aria-describedby="alertcaption" aria-role="alertdialog" inert="true" aria-hidden="true" role="dialog">
-			<span id='alertcaption'>You haven't placed all the labels yet! Are you sure you want to submit?</span><br>
-			<input id='cancelbtn' type='button' value='Let me finish!'>
-			<input id='confirmbtn' class='green' type='button' value='Submit Anyway'>
+			<h2>Woah!</h2>
+			<p id='alertcaption'>You haven't placed all the labels yet! Are you sure you want to submit?</p>
+			<div class="btn-row">
+				<button id='cancelbtn' type='button' class="green">Let me finish!</button>
+				<button id='confirmbtn' class='green important' type='button'>Submit Anyway</button>
+			</div>
+			
 		</div>
 		<div class='box preview show fade' id='previewbox' aria-hidden="false" role="alertdialog" aria-describedby="controls_header">
 			<h2 id="instructions-header">How to Play</h2>
@@ -129,7 +133,7 @@
 					  </table>
 				</figure>
 			</div>
-			<input class='green' type='button' id='gotitbtn' value='Got it!' aria-label="Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To remove a label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">
+			<button class='green important' type='button' id='gotitbtn' aria-label="Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To remove a label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">Got it!</button>
 		</div>
 		<div aria-hidden="true" id='ghost' class='term' style='opacity:0'>&nbsp;</div>
 		<div id='donearrow' aria-hidden="true"><b>Click to finish</b></div>

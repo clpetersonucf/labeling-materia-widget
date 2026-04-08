@@ -165,6 +165,13 @@ html, body {
 		flex-direction: row;
 		padding: 4px 2px;
 		gap: 8px;
+
+		button {
+			&:focus-visible {
+				outline-offset: 4px;
+				outline: 2px solid rgb(85, 214, 206);
+			}
+		}
 	}
 
 	.logo {
@@ -480,18 +487,24 @@ div.term {
 }
 
 .box {
-	width: 300px;
+	width: 350px;
 	left: 50%;
 	top: 49%;
-	margin-left: -150px;
+	margin-left: -175px;
 	margin-top: -50px;
-	padding: 15px;
+	padding: 32px 64px;
 	position: absolute;
 	background: #fff;
 	border: solid 1px #777;
 	z-index: -1;
 	opacity: 0;
 	-webkit-transition: all 0.5s ease;
+
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	border-radius: 8px;
 
 	&.show {
 		z-index: 19000;
@@ -503,22 +516,36 @@ div.term {
 
 	color: #000000;
 
-	input {
+	button {
 		font-family: 'Anybody';
-		font-size: 16px;
+		font-size: 14px;
 		color: #000000;
-		background: #FFE597;
-		margin: 16px 6px 4px 6px;
+		background: #E2E2E2;
 		transition: all 0.1s ease;
 		position: relative;
-		padding: 8px 24px;
+		padding: 12px 24px;
 		width: fit-content;
 		border: none;
 		border-radius: 4px;
 
-		&:hover {
-			border: none;
+		&.important {
+			background-color: #FFE597;
 		}
+	}
+
+	.btn-row {
+		display: flex;
+		flex-direction: row;
+		gap: 16px;
+		justify-content: space-between;
+	}
+}
+
+#alertbox {
+	h2 {
+		font-weight: 500;
+		font-style: italic;
+		font-size: 32px;
 	}
 }
 
@@ -526,14 +553,20 @@ div.term {
 	transition: opacity 0.2s ease;
 }
 
-input {
-	-webkit-appearance: none;
+button {
 	cursor: pointer;
+	border: none;
 
 	&.green:hover, &.green:focus-visible{
 		background: #FFE597;
-		color: #fff;
-		outline: 1px solid #FFE597;
+		transition: scale 100ms ease;
+		scale: 1.1;
+		box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+
+		&:focus-visible {
+			outline-offset: 4px;
+			outline: 2px solid rgb(85, 214, 206);
+		}
 	}
 }
 
@@ -854,6 +887,7 @@ div.arrow {
 
 	button {
 		font-family: "Anybody";
+		font-size: 13px;
 		color: #333;
 		border: none;
 		background-color: #E2E2E2;
