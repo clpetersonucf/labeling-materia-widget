@@ -487,13 +487,16 @@ div.term {
 }
 
 .box {
-	width: 350px;
-	left: 50%;
-	top: 49%;
-	margin-left: -175px;
-	margin-top: -50px;
+	width: auto;
+	max-width: 350px;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	height: fit-content;
 	padding: 32px 64px;
 	position: absolute;
+	margin: auto;
 	background: #fff;
 	border: solid 1px #777;
 	z-index: -1;
@@ -1101,6 +1104,11 @@ div.arrow {
 		// display: none;
 		max-height: 90vh;
 		overflow-y: auto;
+	}
+
+	.box {
+		width: 90vw;
+		padding: 16px;
 	}
 }
 
