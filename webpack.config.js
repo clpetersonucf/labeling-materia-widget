@@ -27,6 +27,11 @@ const entries = {
 		path.join(srcPath, 'player.scss'),
 		path.join(srcPath, 'draw.js'),
 		path.join(srcPath, 'player.js'),
+	],
+	'scoreScreen': [
+		path.join(srcPath, 'scorescreen.html'),
+		path.join(srcPath, 'scorescreen.js'),
+		path.join(srcPath, 'scorescreen.scss')
 	]
 }
 
