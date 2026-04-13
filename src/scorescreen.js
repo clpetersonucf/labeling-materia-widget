@@ -106,7 +106,7 @@ Namespace('Labeling').ScoreCore = (function() {
 			ghost.setAttribute('alt', question.options.description)
 			ghost.setAttribute('data-i', `#${i+1}`)
 			ghost.setAttribute('tabIndex', 0)
-			ghost.setAttribute("aria-label", `Question ${i+1}: ${correct ? "Correct" : "Incorrect"}. You chose ${scoreEntry.data[0]}.${!correct ? ` Answer was ${scoreEntry.data[1]}.` : ""} Description: ${question.options.description}`)
+			ghost.setAttribute("aria-label", `Question ${i+1}: ${correct ? "Correct" : "Incorrect"}. You chose ${isPlaced ? scoreEntry.data[0] : "no option"}.${!correct ? ` Answer was ${scoreEntry.data[1]}.` : ""} Description: ${question.options.description}`)
 			
 			document.getElementById('image').appendChild(ghost)
 
