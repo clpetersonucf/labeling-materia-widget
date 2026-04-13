@@ -151,8 +151,17 @@ div.term {
 
 		&::before {
 			content: attr(data-i);
-			margin-right: 4px;
+			position: absolute;
+			left: -8px;
+			top: -8px;
 			font-weight: bold;
+			background-color: white;
+			padding: 2px;
+			padding-top: 8px;
+			height: 18px;
+			width: 24px;
+			border-radius: 100%;
+			color: #294A42;
 		}	
 	}
 	
