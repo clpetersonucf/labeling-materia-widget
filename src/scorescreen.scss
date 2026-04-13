@@ -140,9 +140,8 @@ div.term {
 		background: #EFDED0;
 		box-shadow: 0px 4px 4px 0px #294A4240;
 		border: none;
-		cursor: pointer;
 
-		&:hover, &:focus-visible{
+		&:focus-visible{
 			// background-color:#5fac4b;
 			// color:white;
 			box-shadow: 0px 4px 4px 0px #294A4240;
