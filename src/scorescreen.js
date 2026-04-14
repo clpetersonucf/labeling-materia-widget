@@ -83,6 +83,11 @@ Namespace('Labeling').ScoreCore = (function() {
 		_img.src = Materia.ScoreCore.getMediaUrl((
 			_qset.options.image ? _qset.options.image.id : _qset.assets[0]));
 		_img.alt = _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.";
+		
+		_img.style.marginLeft = _qset.options.imageX+"px"
+		_img.style.marginTop = _qset.options.imageY+"px"
+		_img.style.width = (605 * _qset.options.imageScale) + "px"
+		_img.style.height = (550 * _qset.options.imageScale) + "px"
 
 		for (let i = 0; i < _questions.length; i++) {
 			let question = _questions[i]
@@ -142,7 +147,7 @@ Namespace('Labeling').ScoreCore = (function() {
 			line.classList.add("placed")
 			line.classList.add("final")
 			line.setAttribute("x1", x1)
-			line.setAttribute("y1", y1 - 8)
+			line.setAttribute("y1", y1)
 			line.setAttribute("x2", x2)
 			line.setAttribute("y2", y2)
 			line.setAttribute("stroke", `url(#${grad.id})`)
@@ -157,7 +162,7 @@ Namespace('Labeling').ScoreCore = (function() {
 			if(correct) bullet.classList.add("correct")
 			else bullet.classList.add("wrong")
 			bullet.setAttribute("cx", x1)
-			bullet.setAttribute("cy", y1 - 8)
+			bullet.setAttribute("cy", y1)
 			bullet.setAttribute("r", 10)
 
 			_svg.appendChild(bullet)
@@ -168,7 +173,7 @@ Namespace('Labeling').ScoreCore = (function() {
 			core.classList.add("final")
 			core.style.display = "block"
 			core.setAttribute("x", x1 - 8)
-			core.setAttribute("y", y1 - 16)
+			core.setAttribute("y", y1 - 8)
 			core.setAttribute("width", 16)
 			core.setAttribute("height", 16)
 			core.setAttribute("href", correct ? "assets/check.svg" : "assets/x.svg")
