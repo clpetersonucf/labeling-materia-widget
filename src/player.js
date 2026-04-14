@@ -182,6 +182,11 @@ Namespace('Labeling').Engine = (function() {
 		_img.src = Materia.Engine.getImageAssetUrl((
 			_qset.options.image ? _qset.options.image.id : _qset.assets[0]));
 		_img.alt = _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.";
+		
+		_img.style.marginLeft = _qset.options.imageX+"px"
+		_img.style.marginTop = _qset.options.imageY+"px"
+		_img.style.width = (605 * _qset.options.imageScale) + "px"
+		_img.style.height = (550 * _qset.options.imageScale) + "px"
 		// _canvas.setAttribute('aria-label', _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.");
 		
 		// store sidebar terms to be added later
@@ -271,7 +276,7 @@ Namespace('Labeling').Engine = (function() {
 			let line = document.createElementNS("http://www.w3.org/2000/svg", "line")
 			line.id = "line_"+question.mask
 			line.setAttribute("x1", x1)
-			line.setAttribute("y1", y1 - 8)
+			line.setAttribute("y1", y1)
 			line.setAttribute("x2", x2)
 			line.setAttribute("y2", y2)
 			line.setAttribute("stroke", `url(#${grad.id})`)
@@ -283,7 +288,7 @@ Namespace('Labeling').Engine = (function() {
 			bullet.id = "bullet_"+question.mask
 			bullet.classList.add("bullet")
 			bullet.setAttribute("cx", x1)
-			bullet.setAttribute("cy", y1 - 8)
+			bullet.setAttribute("cy", y1)
 			bullet.setAttribute("r", 8)
 
 			_svg.appendChild(bullet)
@@ -293,7 +298,7 @@ Namespace('Labeling').Engine = (function() {
 			core.classList.add("core")
 			core.style.display = "none"
 			core.setAttribute("cx", x1)
-			core.setAttribute("cy", y1 - 8)
+			core.setAttribute("cy", y1)
 			core.setAttribute("r", 5)
 
 			_svg.appendChild(core)
