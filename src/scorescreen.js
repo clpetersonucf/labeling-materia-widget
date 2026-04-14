@@ -27,6 +27,10 @@ Namespace('Labeling').ScoreCore = (function() {
 	}
 
 	const start = (instance, qset, scoreTable, isPreview, qsetVersion) => {
+		update(qset, scoreTable)
+	}
+
+	const update = (qset, scoreTable) => {
 		_qset = qset
 		_questions = _qset.items;
 		_qDiv = document.getElementById("questions")
@@ -179,10 +183,6 @@ Namespace('Labeling').ScoreCore = (function() {
 		}
 
 		Materia.ScoreCore.setHeight(_getRenderedHeight());
-	}
-
-	const update = (qset, scoreTable) => {
-	
 	}
 
 	return {
