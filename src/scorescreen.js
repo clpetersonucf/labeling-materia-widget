@@ -31,14 +31,18 @@ Namespace('Labeling').ScoreCore = (function() {
 	}
 
 	const update = (qset, scoreTable) => {
+		if(_qDiv) {
+			_qDiv.innerHTML = ""
+			document.querySelectorAll(".final").forEach((v)=>v.remove())
+		} else {
+			_pairTemp = document.importNode(document.getElementById("template-pair").content, true)
+		}
+
 		_qset = qset
 		_questions = _qset.items;
 		_qDiv = document.getElementById("questions")
-		_pairTemp = document.getElementById("template-pair")
 
 		window.addEventListener("resize", ()=>Materia.ScoreCore.setHeight(_getRenderedHeight()))
-
-		console.log(_questions)
 
 		// deal with some legacy qset things
 		if (_qset.options.version === 2) {
@@ -123,6 +127,7 @@ Namespace('Labeling').ScoreCore = (function() {
 
 			let grad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient")
 			grad.id = "grad_"+question.mask
+			grad.classList.add("final")
 			grad.setAttribute("x1", x1 < x2 ? 0 : Math.abs(x1-x2)/dist)
 			grad.setAttribute("y1", y1 < y2 ? 0 : Math.abs(y1-y2)/dist)
 			grad.setAttribute("x2", x2 < x1 ? 0 : Math.abs(x1-x2)/dist)
@@ -135,6 +140,7 @@ Namespace('Labeling').ScoreCore = (function() {
 			let line = document.createElementNS("http://www.w3.org/2000/svg", "line")
 			line.id = "line_"+question.mask
 			line.classList.add("placed")
+			line.classList.add("final")
 			line.setAttribute("x1", x1)
 			line.setAttribute("y1", y1 - 8)
 			line.setAttribute("x2", x2)
@@ -147,6 +153,7 @@ Namespace('Labeling').ScoreCore = (function() {
 			let bullet = document.createElementNS("http://www.w3.org/2000/svg", "circle")
 			bullet.id = "bullet_"+question.mask
 			bullet.classList.add("bullet")
+			bullet.classList.add("final")
 			if(correct) bullet.classList.add("correct")
 			else bullet.classList.add("wrong")
 			bullet.setAttribute("cx", x1)
@@ -158,6 +165,7 @@ Namespace('Labeling').ScoreCore = (function() {
 			let core = document.createElementNS("http://www.w3.org/2000/svg", "image")
 			core.id = "core_"+question.mask
 			core.classList.add("core")
+			core.classList.add("final")
 			core.style.display = "block"
 			core.setAttribute("x", x1 - 8)
 			core.setAttribute("y", y1 - 16)
@@ -169,7 +177,7 @@ Namespace('Labeling').ScoreCore = (function() {
 
 			//////////////////////////
 
-			const clone = document.importNode(_pairTemp.content, true)
+			const clone = document.importNode(_pairTemp, true)
 			const header = clone.querySelector("h2")
 			header.innerHTML = `Question #${i+1}`
 
