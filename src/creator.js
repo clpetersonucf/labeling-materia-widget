@@ -493,6 +493,13 @@ Namespace('Labeling').Creator = (function() {
 			return _drawBoard();
 		};
 
+		// remove focus, thus deselecting it
+		term.childNodes[6].onclick = function(e) {
+			e.preventDefault()
+			e.stopPropagation()
+			term.childNodes.forEach((v)=>v.blur())
+		};
+
 		// make the term movable
 		$(term).draggable({
 			drag(event,ui) {
