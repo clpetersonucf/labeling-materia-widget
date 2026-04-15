@@ -181,7 +181,7 @@ Namespace('Labeling').Creator = (function() {
 		window.setTitle = function(title) {
 			if (title == null) { title = document.getElementById("title").textContent; }
 			title = title.replace(/</g, '').replace(/>/g, '');
-			$('#titlebox').removeClass('show');
+			$('#namebox').removeClass('show');
 			$('#titlechanger').removeClass('show');
 			$('#backgroundcover').removeClass('show');
 			return $('#title').html((title || 'My labeling widget'));
@@ -198,11 +198,16 @@ Namespace('Labeling').Creator = (function() {
 		document.getElementById('canvas').addEventListener('click', _addTerm, false);
 
 		// update background
-		return $('#colorpicker').spectrum({
+		$('#colorpicker').spectrum({
 			move: _updateColorFromSelector,
 			cancelText: '',
 			chooseText: 'Done'
 		});
+
+		document.getElementById("letsgo-btn").addEventListener("click", (e)=>{
+			document.getElementById("titlebox").classList.remove("show");
+			document.getElementById("namebox").classList.add("show");
+		})
 	};
 
 	var _showMiniTitleEditor = function() {
@@ -747,6 +752,9 @@ Namespace('Labeling').Creator = (function() {
 		$('#image').show();
 		$('#image').attr('src', url);
 		$('#image').attr('data-imgid', media[0].id);
+
+		$('#descimage').attr('src', url);
+		$('#descimage').attr('data-imgid', media[0].id);
 		_img.src = url;
 		_img.onload = function() {
 			let height, width;
