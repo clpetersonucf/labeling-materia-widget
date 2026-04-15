@@ -101,16 +101,20 @@
 
 			<div id='backgroundcover'></div>
 			<div id='controlcover'></div>
-			<input type='button' value='Cancel Move &amp; Resize' id='btnMoveResizeCancel' style='display:none'>
-			<input type='button' value='Save Changes' id='btnMoveResizeDone' style='display:none'>
+			<!-- <input type='button' value='Cancel Move &amp; Resize' id='btnMoveResizeCancel' style='display:none'>
+			<input type='button' value='Save Changes' id='btnMoveResizeDone' style='display:none'> -->
 
 			<div id="board" class="screen board">
 				<div id='boardcover'></div>
 				<div id='imagewrapper'>
-					<div id="chooseimage" style='display:none'>Click "Choose a different image" to select an image</div>
+					<!-- <div id="chooseimage" style='display:none'>Click "Choose a different image" to select an image</div> -->
 					<img id='image' alt=''>
 					<div id='inputwrapper'>
-						<div id='resizecontrols' style='display:none'></div>
+						<div id='resizecontrols'>
+							<button aria-label="Cancel Move & Resize" id="btnMoveResizeCancel"><img src="assets/x.svg"/></button>
+							<div style="background: #fff; width: 1px;"></div>
+							<button aria-label="Save Changes" id="btnMoveResizeDone"><img src="assets/check.svg"/></button>
+						</div>
 					</div>
 				</div>
 				<canvas id='canvas'></canvas>

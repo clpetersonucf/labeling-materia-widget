@@ -108,6 +108,11 @@ textarea {
 	bottom: 0px;
 	display: none;
 }
+
+#inputwrapper {
+	display: none;
+}
+
 #imagewrapper {
 	z-index: 0;
 	display: block;
@@ -135,24 +140,61 @@ textarea {
 		height: 100%;
 	}
 	&.resizable {
-		border: dashed 3px #fff;
-		box-shadow: 0px 0px 15px #000;
-		margin: -2px;
-		&.dark {
-			border: dashed 3px #2BB2DD;
-		}
-	}
-	#inputwrapper {
-		z-index: 9000;
-		position: absolute;
-		text-align: center;
-		top: 43%;
-		width: 100%;
-		input {
-			border: solid 2px #fff;
-		}
-	}
+		outline: dashed 2px #fff;
 
+		cursor: grab;
+		&:active {
+			cursor: grabbing;
+		}
+
+		&.dark {
+			outline: dashed 2px #333;
+		}
+
+		.ui-resizable-ne,
+		.ui-resizable-nw,
+		.ui-resizable-se,
+		.ui-resizable-sw {
+			width: 9px !important;
+			height: 9px !important;
+			border-radius: 5px;
+			background: #fff;
+		}
+
+		.ui-resizable-se {
+			right: -5px !important;
+			bottom: -5px !important;
+		}
+
+		#inputwrapper {
+			display: flex;
+			justify-content: space-around;
+			z-index: 9000;
+			position: absolute;
+			text-align: center;
+			bottom: -4px;
+			width: 100%;
+			input {
+				border: solid 2px #fff;
+			}
+
+			#resizecontrols {
+				color: white;
+				display: flex;
+				flex-direction: row;
+				gap: 2px;
+				padding: 4px;
+				background-color: #353436;
+				border-radius: 4px;
+
+				button {
+					border: none;
+					background: transparent;
+					cursor: pointer;
+				}
+			}
+		}
+	}
 }
 
 #canvas {
@@ -812,7 +854,7 @@ h1 {
 	-webkit-transition: all 0.5s ease;
 	&.show {
 		z-index: 1000;
-		opacity: 0.8;
+		opacity: 0.5;
 		-webkit-transition: opacity 0.5s ease;
 	}
 }
@@ -860,21 +902,21 @@ h1 {
 }
 
 
-#btnMoveResizeCancel {
-	background: #fff;
-	color: #000;
-	z-index: 90001;
-	position: absolute;
-	top: 55px;
-	left: 12px;
-}
+// #btnMoveResizeCancel {
+// 	background: #fff;
+// 	color: #000;
+// 	z-index: 90001;
+// 	position: absolute;
+// 	top: 55px;
+// 	left: 12px;
+// }
 
-#btnMoveResizeDone {
-	z-index: 90002;
-	position: absolute;
-	top: 105px;
-	left: 12px;
-}
+// #btnMoveResizeDone {
+// 	z-index: 90002;
+// 	position: absolute;
+// 	top: 105px;
+// 	left: 12px;
+// }
 
 
 #btnMoveResize,
@@ -891,6 +933,10 @@ h1 {
   cursor: pointer;
   padding: 0px;
 }
+
+#btnMoveResize {
+	background-image: url("../assets/resize.svg")
+} 
 
 #btnMoveCrop {
 	background-image: url("../assets/crop.svg")
@@ -1061,6 +1107,9 @@ h1 {
 	margin: auto;
 
 	&.fit {
+		p {
+			width: 300px;
+		}
 		width: fit-content;
 	}
 

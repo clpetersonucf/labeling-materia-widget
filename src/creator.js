@@ -216,22 +216,24 @@ Namespace('Labeling').Creator = (function() {
 		return $('#titletxt').val($('#title').html()).focus();
 	};
 
-	const _makeDraggable = () => // drag all sides of the image for resizing
-    $('#imagewrapper').draggable({
-        drag(event,ui) {
-            return ui;
-        }
-    }).resizable({
-        aspectRatio: true,
-        handles: 'n, e, s, w, ne, nw, se, sw'
-    });
+	const _makeDraggable = () => { // drag all sides of the image for resizing
+		$('#imagewrapper').draggable({
+			drag(event,ui) {
+				return ui;
+			}
+		}).resizable({
+			aspectRatio: true,
+			handles: 'n, e, s, w, ne, nw, se, sw',
+		});
+		$('.ui-resizable-se').removeClass('ui-icon ui-icon-gripsmall-diagonal-se');
+	}
 
 	// sets resize mode on and off, and sets UI accordingly
 	var _resizeMode = function(isOn) {
 		$('#terms').css('display', isOn ? 'none' : 'block');
 		$('#canvas').css('display', isOn ? 'none' : 'block');
 		$('#maincontrols').css('display', isOn ? 'none' : 'block');
-		$('#resizecontrols').css('display', isOn ? 'block' : 'none');
+		$('#resizecontrols').css('display', isOn ? 'flex' : 'none');
 		if (isOn) {
 			$('#imagewrapper').addClass('resizable');
 			$('#controlcover').addClass('show');
@@ -258,6 +260,7 @@ Namespace('Labeling').Creator = (function() {
 		$('.backgroundtile').removeClass('show');
 
 		// set background
+		_qset.options.backgroundTheme = ""
 		switch (_qset.options.backgroundTheme) {
 			case 'themeGraphPaper':
 				background = 'url(assets/labeling-graph-bg.png)';
