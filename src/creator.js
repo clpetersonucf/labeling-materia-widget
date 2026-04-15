@@ -454,40 +454,40 @@ Namespace('Labeling').Creator = (function() {
 
 		// edit on click
 		console.log(term.childNodes)
-		term.childNodes[1].onclick = function() {
-			term.childNodes[1].focus();
+		term.childNodes[2].onclick = function() {
+			term.childNodes[2].focus();
 			return document.execCommand('selectAll',false,null);
 		};
-		term.childNodes[3].onclick = function() {
-			term.childNodes[3].focus();
+		term.childNodes[4].onclick = function() {
+			term.childNodes[4].focus();
 			return document.execCommand('selectAll',false,null);
 		};
 
-		term.childNodes[1].onfocus = () => document.execCommand('selectAll',false,null);
+		term.childNodes[2].onfocus = () => document.execCommand('selectAll',false,null);
 
-		term.childNodes[3].onfocus = () => document.execCommand('selectAll',false,null);
+		term.childNodes[4].onfocus = () => document.execCommand('selectAll',false,null);
 
 		// // resize text on change
-		// term.childNodes[1].onkeyup = _termKeyUp;
-		// term.childNodes[3].onkeyup = _termKeyUp;
+		// term.childNodes[2].onkeyup = _termKeyUp;
+		// term.childNodes[4].onkeyup = _termKeyUp;
 		// // set initial font size
-		// term.childNodes[1].onkeyup({target: term.childNodes[1]});
-		// term.childNodes[3].onkeyup({target: term.childNodes[3]});
+		// term.childNodes[2].onkeyup({target: term.childNodes[2]});
+		// term.childNodes[4].onkeyup({target: term.childNodes[4]});
 
 		// enter key press should stop editing
-		term.childNodes[1].onkeydown = _termKeyDown;
-		term.childNodes[3].onkeydown = _termKeyDown;
+		term.childNodes[2].onkeydown = _termKeyDown;
+		term.childNodes[4].onkeydown = _termKeyDown;
 
 		// check if blank when the text is cleared
-		term.childNodes[1].onblur = e => _termBlurred(term.childNodes[1], 3);
-		term.childNodes[3].onblur = e => _termBlurred(term.childNodes[1], 3);
+		term.childNodes[2].onblur = e => _termBlurred(term.childNodes[2], 3);
+		term.childNodes[4].onblur = e => _termBlurred(term.childNodes[2], 3);
 
 		// clean up pasted content to make sure we don't accidentally get invisible html garbage
-		term.childNodes[1].onpaste = _termPaste;
-		term.childNodes[3].onpaste = _termPaste;
+		term.childNodes[2].onpaste = _termPaste;
+		term.childNodes[4].onpaste = _termPaste;
 
 		// make delete button remove it from the list
-		term.childNodes[4].onclick = function() {
+		term.childNodes[5].onclick = function() {
 			term.parentElement.removeChild(term);
 			dot.parentElement.removeChild(dot);
 			return _drawBoard();
@@ -517,7 +517,7 @@ Namespace('Labeling').Creator = (function() {
 			drag: _dotDragged
 		});
 		setTimeout(function() {
-			term.childNodes[3].focus();
+			term.childNodes[4].focus();
 			return document.execCommand('selectAll',false,null);
 		}
 		,10);

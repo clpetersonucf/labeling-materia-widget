@@ -668,7 +668,7 @@ div.term {
 	}
 
 	.delete:before {
-		content: '\00D7';
+		// content: '\00D7';
 		font-size: 18px;     /* size of the X */
     	line-height: 0.4;      /* removes extra vertical space */
     	display: inline-block; 
@@ -676,7 +676,7 @@ div.term {
 	}
 
 	.confirm:before {
-		content: '\2713';
+		// content: '\2713';
 		font-size: 8px;     /* size of the X */
     	line-height: 0.4;      /* removes extra vertical space */
     	display: inline-block; 
@@ -693,38 +693,54 @@ div.term {
 
 	.delete {
 		position: absolute;
-		top: 8px;
+		top: 12px;
 		right: 28px;
 		z-index: 100;
 		display:block;
 		background: #d44;
 		color: #fff;
-		padding: 0px 4.5px 0px;
 		border-radius: 50px;
-		border: solid 0.5px #c00;
+		// border: solid 0.5px #c00;
 		font-size: 14px;
 		visibility: hidden;
 		cursor: pointer;
 		-webkit-transition: all 0.1s ease;
 		transition: all 0.1s ease;
+
+		width: 12px;
+		height: 12px;
+		padding: 2px;
+
+		img {
+			width: 12px;
+			height: 12px;
+		}
 	}
 
 	.confirm {
 		position: absolute;
-		top: 8px;
+		top: 12px;
 		right: 8px;
 		z-index: 100;
 		display:block;
 		background: #76BB59;
 		color: #fff;
-		padding: 0px 4.5px 0px;
 		border-radius: 50px;
-		border: solid 0.5px #31813d;
+		// border: solid 0.5px #31813d;
 		font-size: 14px;
 		visibility: hidden;
 		cursor: pointer;
 		-webkit-transition: all 0.1s ease;
 		transition: all 0.1s ease;
+
+		width: 12px;
+		height: 12px;
+		padding: 2px;
+
+		img {
+			width: 12px;
+			height: 12px;
+		}
 	}	
 
 	.expand {
@@ -779,6 +795,10 @@ div.term {
 			display: block;
 			font-size: 12px;
 			margin-bottom: 4px;
+		}
+
+		h3.label-title-header {
+			margin-top: 0;
 		}
 
 		.alt-text-header {
