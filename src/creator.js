@@ -261,6 +261,7 @@ Namespace('Labeling').Creator = (function() {
 
 		// set background
 		_qset.options.backgroundTheme = ""
+		_qset.options.backgroundColor = "#333333"
 		switch (_qset.options.backgroundTheme) {
 			case 'themeGraphPaper':
 				background = 'url(assets/labeling-graph-bg.png)';
