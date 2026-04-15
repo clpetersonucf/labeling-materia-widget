@@ -214,7 +214,7 @@ textarea {
 	left: 0px;
 	right: 0px;
 	height: 34px;
-	background: #444;
+	background: #353436;
 	padding: 8px;
 	z-index: 100;
 	.logo {
@@ -578,8 +578,6 @@ textarea {
 	z-index: 100;
 }
 
-
-
 .label-input {
 	-moz-user-select: text;
 	-webkit-user-select: text;
@@ -595,9 +593,7 @@ textarea {
 	overflow-x: hidden;
 	overflow-y: auto;
 
-	&:focus {
-		border: solid 2px var(--custom-mid);
-	}
+	font-size: 14px;
 }
 
 .description-input {
@@ -618,18 +614,15 @@ textarea {
 	margin-top: 0.5em;
 	font-style: italic;
 
-	&:focus {
-		border: solid 2px var(--custom-mid);
-	}
+	font-size: 12px;
 }
-
 
 div.term {
 	font-family: 'Anybody', sans-serif;
 	width: 150px;
 	min-height: 20px;
 	display: inline-block;
-	color: #000;
+	color: #294A42;
 	position: absolute;
 	text-align: center;
 	left: 20px;
@@ -700,8 +693,8 @@ div.term {
 
 	.delete {
 		position: absolute;
-		top: 2px;
-		right: 20px;
+		top: 8px;
+		right: 28px;
 		z-index: 100;
 		display:block;
 		background: #d44;
@@ -718,8 +711,8 @@ div.term {
 
 	.confirm {
 		position: absolute;
-		top: 2px;
-		right: 2px;
+		top: 8px;
+		right: 8px;
 		z-index: 100;
 		display:block;
 		background: #76BB59;
@@ -758,12 +751,14 @@ div.term {
 		visibility: visible;
 	}
 
-	&:hover, &:focus {
-		border: solid 2px var(--custom-mid);
-		margin: -12px;
-		
+	transition: scale 200ms ease;
+	&:hover {
+		scale: 1.1;
 	}
+
 	&:focus-within {
+		cursor: default;
+		scale: 1;
 		text-align: left;
 		height: fit-content;
 		max-height: none;
@@ -773,14 +768,16 @@ div.term {
 		}
 
 		.label-input, .description-input {
+			cursor: pointer;
 			padding: 4px;
 			border-radius: 4px;
 			outline: 2px solid #EFDED0;
+			font-style: normal;
 		}
 
 		.label-title-header, .alt-text-header {
 			display: block;
-			font-size: 14px;
+			font-size: 12px;
 			margin-bottom: 4px;
 		}
 

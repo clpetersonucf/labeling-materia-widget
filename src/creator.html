@@ -120,7 +120,9 @@
 					</div>
 				</div>
 				<canvas id='canvas'></canvas>
-				<div id='terms'></div>
+				<div id='terms'>
+					<template id="term_template"><div><div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'></div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'></div><div class='delete'></div><div class='confirm'></div><div class='expand'></div></div></template>
+				</div>
 			</div>
 
 			<div id='titlechanger' class='box fade'>

@@ -261,7 +261,7 @@ Namespace('Labeling').Creator = (function() {
 
 		// set background
 		_qset.options.backgroundTheme = ""
-		_qset.options.backgroundColor = "#333333"
+		_qset.options.backgroundColor = "#294A42"
 		switch (_qset.options.backgroundTheme) {
 			case 'themeGraphPaper':
 				background = 'url(assets/labeling-graph-bg.png)';
@@ -379,13 +379,18 @@ Namespace('Labeling').Creator = (function() {
 		if (id == null) { id = ''; }
 		if (description == null) { description = _defaultDescription; }
 		const dotx = x;
-		const doty = y;
+		const doty = y;		
 
-		const term = document.createElement('div');
+		const term = document.importNode(document.getElementById("term_template").content.firstElementChild, true)
+		
 		term.id = 'term_' + Math.random(); // fake id for linking with dot
-		term.innerHTML = "<div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'>"+text+"</div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'>" + description + "</div><div class='delete'></div><div class='confirm'></div><div class='expand'></div>";
+		// term.innerHTML = "<div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'>"+text+"</div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'>" + description + "</div><div class='delete'></div><div class='confirm'></div><div class='expand'></div>";
 		term.className = 'term';
+		term.querySelector(".label-input").innerHTML = text
+		term.querySelector(".description-input").innerHTML = description
 
+		console.log(text)
+		
 		// if we're generating a generic one, decide on a position
 		if ((labelX === null) || (labelY === null)) {
 			y = (y - 200);
@@ -462,12 +467,12 @@ Namespace('Labeling').Creator = (function() {
 
 		term.childNodes[3].onfocus = () => document.execCommand('selectAll',false,null);
 
-		// resize text on change
-		term.childNodes[1].onkeyup = _termKeyUp;
-		term.childNodes[3].onkeyup = _termKeyUp;
-		// set initial font size
-		term.childNodes[1].onkeyup({target: term.childNodes[1]});
-		term.childNodes[3].onkeyup({target: term.childNodes[3]});
+		// // resize text on change
+		// term.childNodes[1].onkeyup = _termKeyUp;
+		// term.childNodes[3].onkeyup = _termKeyUp;
+		// // set initial font size
+		// term.childNodes[1].onkeyup({target: term.childNodes[1]});
+		// term.childNodes[3].onkeyup({target: term.childNodes[3]});
 
 		// enter key press should stop editing
 		term.childNodes[1].onkeydown = _termKeyDown;
