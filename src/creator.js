@@ -498,6 +498,7 @@ Namespace('Labeling').Creator = (function() {
 			e.preventDefault()
 			e.stopPropagation()
 			term.childNodes.forEach((v)=>v.blur())
+			window.getSelection().removeAllRanges();
 		};
 
 		// make the term movable
