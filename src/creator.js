@@ -29,6 +29,10 @@ Namespace('Labeling').Creator = (function() {
 	const _defaultLabel = 'Enter label title';
 	const _defaultDescription = 'Anchor point alt text';
 
+	const _distance = (x1, y1, x2, y2) => {
+		return Math.sqrt(((x1-x2)**2) + ((y1-y2)**2))
+	}
+
 	const initNewWidget = function(widget, baseUrl) {
 		$('#image').hide();
 		$('#chooseimage').show();
@@ -37,7 +41,7 @@ Namespace('Labeling').Creator = (function() {
 		$('#backgroundcover').addClass('show');
 
 		// hide the canvas so we can interact with it
-		$('#canvas').css('display','none');
+		// $('#canvas').css('display','none');
 
 		_gettingStarted = true;
 
@@ -56,10 +60,10 @@ Namespace('Labeling').Creator = (function() {
 		_setBackground();
 
 		// get canvas context
-		_canvas = document.getElementById('canvas');
-		_context = _canvas.getContext('2d');
-		_context.canvas.width = $("#canvas").width()
-		_context.canvas.height = $("#canvas").height()
+		// _canvas = document.getElementById('canvas');
+		// _context = _canvas.getContext('2d');
+		// _context.canvas.width = $("#canvas").width()
+		// _context.canvas.height = $("#canvas").height()
 
 		_img = new Image();
 
@@ -195,7 +199,7 @@ Namespace('Labeling').Creator = (function() {
 			return $('#image').attr('alt', alt);
 		};
 
-		document.getElementById('canvas').addEventListener('click', _addTerm, false);
+		document.getElementById('svglayer').addEventListener('click', _addTerm, false);
 
 		// update background
 		$('#colorpicker').spectrum({
@@ -231,7 +235,7 @@ Namespace('Labeling').Creator = (function() {
 	// sets resize mode on and off, and sets UI accordingly
 	var _resizeMode = function(isOn) {
 		$('#terms').css('display', isOn ? 'none' : 'block');
-		$('#canvas').css('display', isOn ? 'none' : 'block');
+		$('#svglayer').css('display', isOn ? 'none' : 'block');
 		$('#maincontrols').css('display', isOn ? 'none' : 'block');
 		$('#resizecontrols').css('display', isOn ? 'flex' : 'none');
 		if (isOn) {
@@ -332,27 +336,35 @@ Namespace('Labeling').Creator = (function() {
 
 	// draw lines on the board
 	const _drawBoard = function() {
-		// clear the board area
-		_context.clearRect(0,0,1000,1000);
-
 		// iterate every term and read dot attributes
-		return (() => {
-			const result = [];
-			for (var term of Array.from($('.term'))) {
-				var dotx = parseInt(term.getAttribute('data-x'));
-				var doty = parseInt(term.getAttribute('data-y'));
+		for (var term of Array.from($('.term'))) {
+			var dotx = parseInt(term.getAttribute('data-x'));
+			var doty = parseInt(term.getAttribute('data-y'));
 
-				// read label position from css
-				var labelx = parseInt(term.style.left);
-				var labely = parseInt(term.style.top);
+			// read label position from css
+			var labelx = parseInt(term.style.left);
+			var labely = parseInt(term.style.top);
 
-				// drawLine handles the curves and such; run it for inner
-				// and outer stroke
-				
-				result.push(Labeling.Draw.drawLine(_context, dotx + _offsetX, doty + _offsetY, labelx + _offsetX, labely + _offsetY, 4, '#fff'));
-			}
-			return result;
-		})();
+			let line = document.getElementById("line_"+term.id)
+			let grad = document.getElementById("grad_"+term.id)
+
+			let x1 = dotx + 2
+			let y1 = doty + 2
+			let x2 = labelx + 85
+			let y2 = labely + 30
+
+			let dist = _distance(x1, y1, x2, y2)
+
+			grad.setAttribute("x1", x1 < x2 ? 0 : Math.abs(x1-x2)/dist)
+			grad.setAttribute("y1", y1 < y2 ? 0 : Math.abs(y1-y2)/dist)
+			grad.setAttribute("x2", x2 < x1 ? 0 : Math.abs(x1-x2)/dist)
+			grad.setAttribute("y2", y2 < y1 ? 0 : Math.abs(y1-y2)/dist)
+
+			line.setAttribute("x1", x1)
+			line.setAttribute("y1", y1)
+			line.setAttribute("x2", x2)
+			line.setAttribute("y2", y2)
+		}
 	};
 
 	// Add term to the list, called by the click event
@@ -452,6 +464,34 @@ Namespace('Labeling').Creator = (function() {
 
 		$('#terms').append(dot);
 
+		let x1 = dotx + 2
+		let y1 = doty + 2
+		let x2 = x + 85
+		let y2 = y + 30
+
+		let dist = _distance(x1, y1, x2, y2)
+
+		let grad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient")
+		grad.id = "grad_"+term.id
+		grad.setAttribute("x1", x1 < x2 ? 0 : Math.abs(x1-x2)/dist)
+		grad.setAttribute("y1", y1 < y2 ? 0 : Math.abs(y1-y2)/dist)
+		grad.setAttribute("x2", x2 < x1 ? 0 : Math.abs(x1-x2)/dist)
+		grad.setAttribute("y2", y2 < y1 ? 0 : Math.abs(y1-y2)/dist)
+		grad.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
+		grad.setAttribute("href", "#core-gradient")
+
+		document.getElementById("defs").appendChild(grad)
+
+		let line = document.createElementNS("http://www.w3.org/2000/svg", "line")
+		line.id = "line_"+term.id
+		line.setAttribute("x1", x1)
+		line.setAttribute("y1", y1)
+		line.setAttribute("x2", x2)
+		line.setAttribute("y2", y2)
+		line.setAttribute("stroke", `url(#${grad.id})`)
+
+		document.getElementById("svglayer").appendChild(line)
+
 		// edit on click
 		console.log(term.childNodes)
 		term.childNodes[2].onclick = function() {
@@ -490,6 +530,8 @@ Namespace('Labeling').Creator = (function() {
 		term.childNodes[5].onclick = function() {
 			term.parentElement.removeChild(term);
 			dot.parentElement.removeChild(dot);
+			line.parentElement.removeChild(line)
+			grad.parentElement.removeChild(grad)
 			return _drawBoard();
 		};
 
@@ -762,7 +804,7 @@ Namespace('Labeling').Creator = (function() {
 	// called from Materia creator page
 	// loads and sets appropriate data for loading image
 	const onMediaImportComplete = function(media) {
-		$('#canvas').css('display','block');
+		$('#svglayer').css('display','block');
 
 		const url = Materia.CreatorCore.getMediaUrl(media[0].id);
 		$('#chooseimage').hide();

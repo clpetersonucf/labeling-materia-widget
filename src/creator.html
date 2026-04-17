@@ -119,7 +119,14 @@
 						</div>
 					</div>
 				</div>
-				<canvas id='canvas'></canvas>
+				<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">
+					<defs id="defs">
+						<linearGradient id="core-gradient">
+							<stop class="stop1" offset="0%" />
+							<stop class="stop2" offset="100%" />
+						</linearGradient>
+					</defs>
+				</svg>
 				<div id='terms'>
 					<template id="term_template"><div><h3 class="label-title-header">Create Label</h3><div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'></div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'></div><div class='delete'><img src="assets/x.svg"/></div><div class='confirm'><img src="assets/check.svg"/></div><div class='expand'></div></div></template>
 				</div>

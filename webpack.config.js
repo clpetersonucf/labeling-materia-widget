@@ -19,13 +19,11 @@ const entries = {
 		path.join(srcPath, 'creator.html'),
 		path.join(srcPath, 'creator.scss'),
 		path.join(srcPath, 'spectrum.custom.js'),
-		path.join(srcPath, 'draw.js'),
 		path.join(srcPath, 'creator.js'),
 	],
 	'player': [
 		path.join(srcPath, 'player.html'),
 		path.join(srcPath, 'player.scss'),
-		path.join(srcPath, 'draw.js'),
 		path.join(srcPath, 'player.js'),
 	],
 	'scoreScreen': [
