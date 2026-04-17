@@ -289,6 +289,11 @@ textarea {
 	width: 250px;
 	z-index: 1;
 
+	hr {
+		border-color: #ABC7AB40;
+		margin: 12px 0px 12px 0px;
+	}
+
 	h1 {
 		text-align: center;
 		font-size: 5px;
@@ -512,6 +517,7 @@ textarea {
 	.label-title {
 		display: block;
 		margin-left: 2px;
+		margin-bottom: 10px;
 		color: var(--custom-dark1);
 	  }
 	
@@ -556,7 +562,7 @@ textarea {
 			text-overflow: ellipsis;
 			overflow: hidden;
 			display: inline-block;
-			white-space: no;
+			white-space: nowrap;
 		}
 
 		button {
