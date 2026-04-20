@@ -265,6 +265,7 @@ Namespace('Labeling').Creator = (function() {
 		
 
 		$('#crop').draggable({
+			containment: "parent",
 			drag: (e ,ui) => {
 				const imgRect = document.getElementById("imagewrapper").getBoundingClientRect()
 				const rect = document.getElementById("crop").getBoundingClientRect()
@@ -274,6 +275,7 @@ Namespace('Labeling').Creator = (function() {
 		}).resizable({
 			aspectRatio: false,
 			handles: 'n, e, s, w, ne, nw, se, sw',
+			containment: "parent",
 			resize: (e, ui) => {
 				document.getElementById("image").style.clipPath = 
 				`rect(${ui.position.top+"px"} ${ui.size.width+ui.position.left+"px"} ${ui.size.height+ui.position.top+"px"} ${ui.position.left+"px"})`
