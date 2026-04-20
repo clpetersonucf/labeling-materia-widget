@@ -53,7 +53,7 @@ Namespace('Labeling').Creator = (function() {
 		_qset = {};
 		_qset.options = {};
 		_qset.options.backgroundTheme = 'themeGraphPaper';
-		_qset.options.backgroundColor = 2565927;
+		_qset.options.backgroundColor = "var(--custom-dark1)";
 
 		// set up the creator, shared between new and existing
 		return _setupCreator();
@@ -100,6 +100,15 @@ Namespace('Labeling').Creator = (function() {
 			});
 			return false;
 		});
+
+		document.querySelector(".background-options").querySelectorAll(".swatch").forEach((v)=>{
+			v.addEventListener("click", (e) => {
+				console.log(window.getComputedStyle(e.target).backgroundColor)
+				_qset.options.backgroundColor = window.getComputedStyle(e.target).backgroundColor
+				_setBackground()
+			})
+		})
+		
 
 		$('#opaque-toggle').change(function() {
 			_anchorOpacity = ' ';
@@ -373,7 +382,6 @@ Namespace('Labeling').Creator = (function() {
 
 		// set background
 		_qset.options.backgroundTheme = ""
-		_qset.options.backgroundColor = "#294A42"
 		switch (_qset.options.backgroundTheme) {
 			case 'themeGraphPaper':
 				background = 'url(assets/labeling-graph-bg.png)';
@@ -385,11 +393,13 @@ Namespace('Labeling').Creator = (function() {
 				break;
 			default:
 				// convert to hex and zero pad the background, which is stored as an integer
-				background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
+				// background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
+				background = _qset.options.backgroundColor
 				$('.color').addClass('show');
 				$('#curcolor').css('background',background);
 		}
 
+		console.log(background)
 		return $('#board').css('background',background);
 	};
 

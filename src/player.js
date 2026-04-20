@@ -129,10 +129,13 @@ Namespace('Labeling').Engine = (function() {
 				break;
 			default:
 				// convert to hex and zero pad the background, which is stored as an integer
-				background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
+				if(_qset.version !== "3")
+					background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
+				else
+					background = _qset.options.backgroundColor
 		}
 
-		background = "#294A42"
+		// background = "#294A42"
 
 		// set background and header title
 		_g('board').style.background = background;
