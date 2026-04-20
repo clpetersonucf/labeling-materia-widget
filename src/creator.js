@@ -921,6 +921,7 @@ Namespace('Labeling').Creator = (function() {
 		$('#descimage').attr('src', url);
 		$('#descimage').attr('data-imgid', media[0].id);
 		_img.src = url;
+		document.getElementById("imagewrapper").dataset.bg = `url(${url})`
 		_img.onload = function() {
 			let height, width;
 			const iw = $('#imagewrapper');
