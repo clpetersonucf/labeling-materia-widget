@@ -23,6 +23,10 @@ Namespace('Labeling').Creator = (function() {
 	// store image dimensions in case the user cancels the resize
 	let _lastImgDimensions = {};
 
+	// store crop dimensions as well
+	let _lastMask = ""
+	let _lastCropDimensions = {}
+
 	// track if the user is "getting started" or well on their way
 	let _gettingStarted = false;
 
@@ -148,11 +152,29 @@ Namespace('Labeling').Creator = (function() {
 				$('.resizable').removeClass('dark');
 			}
 
-			return _lastImgDimensions = {
+			_lastImgDimensions = {
 				width: $('#imagewrapper').width(),
 				height: $('#imagewrapper').height(),
 				left: $('#imagewrapper').position().left,
 				top: $('#imagewrapper').position().top
+			};
+		});
+
+		$('#btnMoveCrop').click(function() {
+			_cropMode(true);
+
+			if (_qset.options.backgroundTheme === "themeGraphPaper") {
+				$('.resizable').addClass('dark');
+			} else {
+				$('.resizable').removeClass('dark');
+			}
+
+			_lastMask = document.getElementById("image").style.clipPath
+			_lastCropDimensions = {
+				width: $('#crop').width(),
+				height: $('#crop').height(),
+				left: $('#crop').position().left,
+				top: $('#crop').position().top
 			};
 		});
 
@@ -161,10 +183,21 @@ Namespace('Labeling').Creator = (function() {
 			$('#imagewrapper').width(_lastImgDimensions.width);
 			$('#imagewrapper').height(_lastImgDimensions.height);
 			$('#imagewrapper').css('left', _lastImgDimensions.left + 'px');
-			return $('#imagewrapper').css('top', _lastImgDimensions.top + 'px');
+			$('#imagewrapper').css('top', _lastImgDimensions.top + 'px');
 		});
 
 		$('#btnMoveResizeDone').click(() => _resizeMode(false));
+
+		$('#btnCropCancel').click(function() {
+			_cropMode(false);
+			$('#crop').width(_lastCropDimensions.width);
+			$('#crop').height(_lastCropDimensions.height);
+			$('#crop').css('left', _lastCropDimensions.left + 'px');
+			$('#crop').css('top', _lastCropDimensions.top + 'px');
+			document.getElementById("image").style.clipPath = _lastMask
+		});
+
+		$('#btnCropDone').click(() => _cropMode(false));
 
 		$('#btnChangeDescription').click(function() {
 			$('#descriptionchanger').addClass('show');
@@ -229,7 +262,29 @@ Namespace('Labeling').Creator = (function() {
 			aspectRatio: true,
 			handles: 'n, e, s, w, ne, nw, se, sw',
 		});
+		
+
+		$('#crop').draggable({
+			drag: (e ,ui) => {
+				const imgRect = document.getElementById("imagewrapper").getBoundingClientRect()
+				const rect = document.getElementById("crop").getBoundingClientRect()
+				document.getElementById("image").style.clipPath = 
+				`rect(${ui.position.top+"px"} ${((rect.width+ui.position.left)/imgRect.width*100)+"%"} ${((rect.height+ui.position.top)/imgRect.height*100)+"%"} ${ui.position.left+"px"})`
+			}
+		}).resizable({
+			aspectRatio: false,
+			handles: 'n, e, s, w, ne, nw, se, sw',
+			resize: (e, ui) => {
+				document.getElementById("image").style.clipPath = 
+				`rect(${ui.position.top+"px"} ${ui.size.width+ui.position.left+"px"} ${ui.size.height+ui.position.top+"px"} ${ui.position.left+"px"})`
+			}
+		});
+		
 		$('.ui-resizable-se').removeClass('ui-icon ui-icon-gripsmall-diagonal-se');
+	}
+
+	const _enableCrop = () => {
+		
 	}
 
 	// sets resize mode on and off, and sets UI accordingly
@@ -238,16 +293,66 @@ Namespace('Labeling').Creator = (function() {
 		$('#svglayer').css('display', isOn ? 'none' : 'block');
 		$('#maincontrols').css('display', isOn ? 'none' : 'block');
 		$('#resizecontrols').css('display', isOn ? 'flex' : 'none');
+
+		$('#crop').resizable("option", "disabled", true)
+		$('#crop').draggable("option", "disabled", true)
+		$('#imagewrapper').resizable("option", "disabled", false)
+		$('#imagewrapper').draggable("option", "disabled", false)
+
+		$('#btnCropCancel').css('display', 'none');
+		$('#btnCropDone').css('display','none');
+
 		if (isOn) {
 			$('#imagewrapper').addClass('resizable');
 			$('#controlcover').addClass('show');
+			document.getElementById("crop").classList.add("ignore")
 			$('#btnMoveResizeCancel').css('display', 'block');
-			return $('#btnMoveResizeDone').css('display','block');
+			$('#btnMoveResizeDone').css('display','block');
 		} else {
 			$('#imagewrapper').removeClass('resizable');
 			$('#controlcover').removeClass('show');
+			document.getElementById("crop").classList.remove("ignore")
 			$('#btnMoveResizeCancel').css('display', 'none');
-			return $('#btnMoveResizeDone').css('display','none');
+			$('#btnMoveResizeDone').css('display','none');
+		}
+	};
+
+	// sets crop mode on and off, and sets UI accordingly
+	var _cropMode = function(isOn) {
+		const iw = document.getElementById("imagewrapper")
+
+		$('#terms').css('display', isOn ? 'none' : 'block');
+		$('#svglayer').css('display', isOn ? 'none' : 'block');
+		$('#maincontrols').css('display', isOn ? 'none' : 'block');
+		$('#resizecontrols').css('display', isOn ? 'flex' : 'none');
+
+		$('#crop').resizable("option", "disabled", false)
+		$('#crop').draggable("option", "disabled", false)
+		$('#imagewrapper').resizable("option", "disabled", true)
+		$('#imagewrapper').draggable("option", "disabled", true)
+
+		$('#btnMoveResizeCancel').css('display', 'none');
+		$('#btnMoveResizeDone').css('display','none');
+
+		if (isOn) {
+			$('#crop').addClass('resizable');
+			$('#controlcover').addClass('show');
+			document.getElementById("crop").classList.add("show")
+
+			$('#btnCropCancel').css('display', 'block');
+			$('#btnCropDone').css('display','block');
+
+			iw.style.backgroundImage = iw.dataset.bg
+			iw.classList.add("showimage")
+		} else {
+			$('#crop').removeClass('resizable');
+			$('#controlcover').removeClass('show');
+			document.getElementById("crop").classList.remove("show")
+			$('#btnCropCancel').css('display', 'none');
+			$('#btnCropDone').css('display','none');
+
+			iw.style.backgroundImage = ""
+			iw.classList.remove("showimage")
 		}
 	};
 
@@ -300,6 +405,7 @@ Namespace('Labeling').Creator = (function() {
 
 		// load the image resource via JavaScript for rendering later
 		_img.src = url;
+		document.getElementById("imagewrapper").dataset.bg = `url(${url})`
 		_img.onload = function() {
 			$('#imagewrapper').css('height', (_img.height * _qset.options.imageScale));
 			return $('#imagewrapper').css('width', (_img.width * _qset.options.imageScale));

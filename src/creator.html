@@ -108,14 +108,17 @@
 			<div id="board" class="screen board">
 				<div id='boardcover'></div>
 				<div id='imagewrapper'>
-					<!-- <div id="chooseimage" style='display:none'>Click "Choose a different image" to select an image</div> -->
 					<img id='image' alt=''>
-					<div id='inputwrapper'>
-						<div id='resizecontrols'>
-							<button aria-label="Cancel Move & Resize" id="btnMoveResizeCancel"><img src="assets/x.svg"/></button>
-							<div style="background: #fff; width: 1px;"></div>
-							<button aria-label="Save Changes" id="btnMoveResizeDone"><img src="assets/check.svg"/></button>
-						</div>
+					<div id="crop"></div>
+				</div>
+
+				<div id='inputwrapper'>
+					<div id='resizecontrols' style="display: none;">
+						<button aria-label="Cancel Move & Resize" id="btnMoveResizeCancel"><img src="assets/x.svg"/></button>
+						<button aria-label="Cancel Crop" id="btnCropCancel"><img src="assets/x.svg"/></button>
+						<div style="background: #fff; width: 1px;"></div>
+						<button aria-label="Save Changes" id="btnMoveResizeDone"><img src="assets/check.svg"/></button>
+						<button aria-label="Save Changes" id="btnCropDone"><img src="assets/check.svg"/></button>
 					</div>
 				</div>
 				<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">

@@ -118,6 +118,15 @@ textarea {
 	display: none;
 }
 
+.inner {
+	width: 50%;
+	height: 50%;
+	background: none;
+	left: 25%;
+	top: 25%;
+	position: absolute;
+}
+
 #imagewrapper {
 	z-index: 0;
 	display: block;
@@ -126,36 +135,88 @@ textarea {
 	position: absolute;
 	left: 80px;
 	top: 115px;
+	// background-color: var(--custom-dark1);
+
+	background-size: contain;
+
+	&.showimage {
+		background-color: #00000080;
+		background-blend-mode: multiply;
+	}
+
+	#crop {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+
+		&.show {
+			background-image:
+			repeating-linear-gradient(#fff 0 1px, transparent 1px 100%),
+			repeating-linear-gradient(90deg, #fff 0 1px, transparent 1px 100%);
+
+			background-size: 33.25% 33.25%;
+
+			.ui-resizable-handle {
+				display: block;
+			}
+		}
+		
+		&.ignore {
+			pointer-events: none;
+		}
+
+		&.resizable {		
+			cursor: grab;
+			&:active {
+				cursor: grabbing;
+			}
+		
+			.ui-resizable-ne,
+			.ui-resizable-nw,
+			.ui-resizable-se,
+			.ui-resizable-sw {
+				width: 9px !important;
+				height: 9px !important;
+				border-radius: 5px;
+				background: #fff;
+			}
+		
+			.ui-resizable-se {
+				right: -5px !important;
+				bottom: -5px !important;
+			}	
+		}
+	}
 
 	&.faded {
 		opacity: 0.8;
 	}
-	#chooseimage {
-		position: absolute;
-		font-size: 40px;
-		text-align: center;
-		font-family: Anybody;
-		color: #ffffff;
-		line-height: 300px;
-	}
+
 	#image {
 		top: 0px;
 		left: 0px;
 		width: 100%;
 		height: 100%;
+
+		// clip-path: rect(10% 100% 50% 0%);
 	}
+
 	&.resizable {
 		outline: dashed 2px #fff;
-
+	
 		cursor: grab;
 		&:active {
 			cursor: grabbing;
 		}
-
+	
 		&.dark {
 			outline: dashed 2px #333;
 		}
-
+	
 		.ui-resizable-ne,
 		.ui-resizable-nw,
 		.ui-resizable-se,
@@ -165,39 +226,39 @@ textarea {
 			border-radius: 5px;
 			background: #fff;
 		}
-
+	
 		.ui-resizable-se {
 			right: -5px !important;
 			bottom: -5px !important;
-		}
+		}	
+	}
+}
 
-		#inputwrapper {
-			display: flex;
-			justify-content: space-around;
-			z-index: 9000;
-			position: absolute;
-			text-align: center;
-			bottom: -4px;
-			width: 100%;
-			input {
-				border: solid 2px #fff;
-			}
+#inputwrapper {
+	display: flex;
+	justify-content: space-around;
+	z-index: 9000;
+	position: absolute;
+	text-align: center;
+	bottom: 4px;
+	width: 100%;
+	input {
+		border: solid 2px #fff;
+	}
 
-			#resizecontrols {
-				color: white;
-				display: flex;
-				flex-direction: row;
-				gap: 2px;
-				padding: 4px;
-				background-color: #353436;
-				border-radius: 4px;
+	#resizecontrols {
+		color: white;
+		display: flex;
+		flex-direction: row;
+		gap: 2px;
+		padding: 4px;
+		background-color: #353436;
+		border-radius: 4px;
 
-				button {
-					border: none;
-					background: transparent;
-					cursor: pointer;
-				}
-			}
+		button {
+			border: none;
+			background: transparent;
+			cursor: pointer;
 		}
 	}
 }
@@ -475,10 +536,9 @@ textarea {
 	  input[type='range']::-webkit-slider-runnable-track {
 		height: 20px;
 		width: 100%;
-		background-image: linear-gradient(to right, rgb(var( --custom-dark2-transparency) / 0), rgb(var( --custom-dark2-transparency) / 1));
+		background-image: linear-gradient(to right, rgb(var( --custom-dark2-transparency) / 0), var(--custom-dark2));
 		border-radius: 10px;
 		outline: 1px solid var(--custom-dark2);
-		
 		/* You can add other styles like box-shadow or border here */
 	  }
 	  
