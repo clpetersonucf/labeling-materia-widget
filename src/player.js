@@ -190,6 +190,11 @@ Namespace('Labeling').Engine = (function() {
 		// _canvas.setAttribute('aria-label', _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.");
 		
 		// store sidebar terms to be added later
+		
+		if(_qset.options.imageMask) {
+			_img.style.clipPath = _qset.options.imageMask
+		}
+
 		let addTerms = []
 	
 		// create term divs

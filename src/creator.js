@@ -277,8 +277,9 @@ Namespace('Labeling').Creator = (function() {
 			handles: 'n, e, s, w, ne, nw, se, sw',
 			containment: "parent",
 			resize: (e, ui) => {
+				const imgRect = document.getElementById("imagewrapper").getBoundingClientRect()
 				document.getElementById("image").style.clipPath = 
-				`rect(${ui.position.top+"px"} ${ui.size.width+ui.position.left+"px"} ${ui.size.height+ui.position.top+"px"} ${ui.position.left+"px"})`
+				`rect(${ui.position.top+"px"} ${((ui.size.width+ui.position.left)/imgRect.width*100)+"%"}${((ui.size.height+ui.position.top)/imgRect.height*100)+"%"} ${ui.position.left+"px"})`
 			}
 		});
 		
@@ -901,10 +902,11 @@ Namespace('Labeling').Creator = (function() {
 			},
 			imageX: $('#imagewrapper').position().left,
 			imageY: $('#imagewrapper').position().top,
+			imageMask: document.getElementById("image").style.clipPath,
 			opacity: _anchorOpacityValue
 		};
 
-		_qset.version = "2";
+		_qset.version = "3";
 
 		return _okToSave;
 	};
