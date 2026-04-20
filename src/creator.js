@@ -844,8 +844,8 @@ Namespace('Labeling').Creator = (function() {
 		const dots = $('.term');
 		for (var dot of Array.from(dots)) {
 			var item = {};
-			var label = dot.childNodes[0].innerHTML;
-			var description = dot.childNodes[2].innerHTML;
+			var label = dot.childNodes[2].innerHTML;
+			var description = dot.childNodes[4].innerHTML;
 			if (description === _defaultDescription) {
 				description = '';
 			}
