@@ -56,14 +56,14 @@
 					<label class="label-subtitle">Color Scheme</label>
 				  
 					<div class="label-options">
-					  <input type="radio" id="darktone-toggle" name="label-toggle" value="opaque" checked>
-					  <label for="darktone" class="label-box dark1">Aa</label>
+					  <input type="radio" id="darktone-labeltoggle" name="label-toggle" value="opaque" checked>
+					  <label for="darktone-labeltoggle" class="label-box dark1">Aa</label>
 				  
-					  <input type="radio" id="midtone-toggle" name="label-toggle" value="frosted">
-					  <label for="midtone" class="label-box mid">Aa</label>
+					  <input type="radio" id="midtone-labeltoggle" name="label-toggle" value="frosted">
+					  <label for="midtone-labeltoggle" class="label-box mid">Aa</label>
 				  
-					  <input type="radio" id="lighttone-toggle" name="label-toggle" value="transparent">
-					  <label for="lighttone" class="label-box light">Aa</label>
+					  <input type="radio" id="lighttone-labeltoggle" name="label-toggle" value="transparent">
+					  <label for="lighttone-labeltoggle" class="label-box light">Aa</label>
 					</div>
 				</div>
 				<hr>
@@ -85,65 +85,98 @@
 				<hr>
 				<div id="image-settings">
 					<label class="label-title">Image Settings</label>
-					<label class="label-subtitle">Edit Image</label>
 					<div id="edit-image">
 						<input type='button' value='Choose a different image' data-intro='Choose an image' id='btnChooseImage'>
-						<input type='button' id='btnMoveResize'>
 						<input type='button' id='btnMoveCrop'>
+						<input type='button' id='btnMoveResize'>
 					</div>
 					<label class="label-subtitle2">Image Description</label>
 					<div id="image-desc">
 						<p id="imagedescription"></p>
-						<input type='button' id='btnChangeDescription'>
+						<button id='btnChangeDescription'>
+							<img src="assets/pencil.svg"/>
+						</button>
 					</div>		
 				</div>
 			</div>
 
 			<div id='backgroundcover'></div>
 			<div id='controlcover'></div>
-			<input type='button' value='Cancel Move &amp; Resize' id='btnMoveResizeCancel' style='display:none'>
-			<input type='button' value='Save Changes' id='btnMoveResizeDone' style='display:none'>
+			<!-- <input type='button' value='Cancel Move &amp; Resize' id='btnMoveResizeCancel' style='display:none'>
+			<input type='button' value='Save Changes' id='btnMoveResizeDone' style='display:none'> -->
 
 			<div id="board" class="screen board">
 				<div id='boardcover'></div>
 				<div id='imagewrapper'>
-					<div id="chooseimage" style='display:none'>Click "Choose a different image" to select an image</div>
 					<img id='image' alt=''>
-					<div id='inputwrapper'>
-						<div id='resizecontrols' style='display:none'></div>
+					<div id="crop"></div>
+				</div>
+
+				<div id='inputwrapper'>
+					<div id='resizecontrols' style="display: none;">
+						<button aria-label="Cancel Move & Resize" id="btnMoveResizeCancel"><img src="assets/x.svg"/></button>
+						<button aria-label="Cancel Crop" id="btnCropCancel"><img src="assets/x.svg"/></button>
+						<div style="background: #fff; width: 1px;"></div>
+						<button aria-label="Save Changes" id="btnMoveResizeDone"><img src="assets/check.svg"/></button>
+						<button aria-label="Save Changes" id="btnCropDone"><img src="assets/check.svg"/></button>
 					</div>
 				</div>
-				<canvas id='canvas'></canvas>
-				<div id='terms'></div>
+				<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">
+					<defs id="defs">
+						<linearGradient id="core-gradient">
+							<stop class="stop1" offset="0%" />
+							<stop class="stop2" offset="100%" />
+						</linearGradient>
+					</defs>
+				</svg>
+				<div id='terms'>
+					<template id="term_template"><div><h3 class="label-title-header">Create Label</h3><div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'></div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'></div><div class='delete'><img src="assets/x.svg"/></div><div class='confirm'><img src="assets/check.svg"/></div><div class='expand'></div></div></template>
+				</div>
 			</div>
 
-			<div id='titlechanger' class='box fade'>
-				<b>Let's give your widget a title!</b>
+			<div id='titlechanger' class='box fade intro nubox fit'>
+				<!-- <b>Let's give your widget a title!</b>
 				<form onsubmit='setTitle(titletxt.value);return false;'>
 					<input type='text' id='titletxt' name='titletxt' placeholder='My Labeling widget' autofocus='1'>
 					<input type='submit' value='Done'>
+				</form> -->
+				<p>Let's give this Labeling Widget a title!</p>
+				<form class="btn-row sm" onsubmit='setTitle(titletxt.value);return false;'>
+					<input class="nutxt purple" type='text' id='titletxt' name='titletxt' placeholder='My New Widget' autofocus='1'>
+					<button type='submit' class="nubtn" id='btn-update-title'>
+						<img src="assets/arrow-right.svg"/>
+					</button>
 				</form>
 			</div>
 
-			<div id='descriptionchanger' class='box fade'>
-				<b>Add a description to this image.</b>
-				<form onsubmit='setImageDescription(alttxt.value);return false;'>
-					<input type='text' id='alttxt' required name='alttxt' placeholder='My image description' autofocus='1'>
-					<input type='submit' value='Done'>
+			<div id='descriptionchanger' class='box fade nubox fit'>
+				<img id="descimage"/>
+				<p>Add an Image Description.</p>
+				<form class="btn-row sm" onsubmit='setImageDescription(alttxt.value);return false;'>
+					<input type='text' id='alttxt' class="nutxt green" required name='alttxt' placeholder='My image description' autofocus='1'>
+					<button type='submit' class="nubtn" id='btn-enter-desc'>
+						<img src="assets/arrow-right.svg"/>
+					</button>
 				</form>
 			</div>
 
-			<div id='titlebox' class='box fade intro'>
-				<img src='assets/creator_example.jpg'>
-				<h1>Labeling</h1>
-				<p>Add endpoints with labels to an image that you upload.</p>
-				<p>Students match the labels to the endpoints.</p>
-				<p>Students receive a score equal to the percentage of labels that are placed correctly.</p>
-				<hr>
-				<b>Start by giving your Labeling widget a title</b><br>
-				<form onsubmit='setTitle(titletxt.value);return false;'>
-					<input type='text' name='titletxt' placeholder='My Labeling widget' autofocus='1'>
-					<input type='submit' value='Get Started' id='btn-enter-title'>
+			<div id='titlebox' class='box fade intro nubox'>
+				<h1>Welcome to Labeling</h1>
+				<div style="width: 350px; height: 200px; background:#444;"></div>	
+				<p>Upload an image, add labeled anchors, then let students match them for a percent accurate grade.</p>
+				<div class="btn-row">
+					<button type="button" id="tutorial-btn" class="nubtn">Tutorial</button>
+					<button type="button" id="letsgo-btn" class="nubtn">Let's go!</button>
+				</div>
+			</div>
+
+			<div id='namebox' class='box fade intro nubox fit'>
+				<p>Let's give this Labeling Widget a title!</p>
+				<form class="btn-row sm" onsubmit='setTitle(titletxt.value);return false;'>
+					<input class="nutxt purple" type='text' name='titletxt' placeholder='My New Widget' autofocus='1'>
+					<button type='submit' class="nubtn" id='btn-enter-title'>
+						<img src="assets/arrow-right.svg"/>
+					</button>
 				</form>
 			</div>
 		</div>
