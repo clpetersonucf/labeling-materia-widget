@@ -125,7 +125,8 @@ Namespace('Labeling').Engine = (function() {
 				background = 'url(assets/labeling-graph-bg.png)';
 				break;
 			case 'themeCorkBoard':
-				background = 'url(assets/labeling-cork-bg.jpg)';
+				// background = 'url(assets/labeling-cork-bg.jpg)';
+				background = "#294A42"
 				break;
 			default:
 				// convert to hex and zero pad the background, which is stored as an integer
@@ -198,6 +199,8 @@ Namespace('Labeling').Engine = (function() {
 			_img.style.clipPath = _qset.options.imageMask
 		}
 
+		_svg.style.opacity = _anchorOpacityValue
+
 		let addTerms = []
 	
 		// create term divs
@@ -213,7 +216,7 @@ Namespace('Labeling').Engine = (function() {
 
 			var term = document.createElement('div');
 			term.id = 'term_' + question.mask;
-			term.className = 'term unplaced';
+			term.className = `term unplaced ${_qset.options.labelStyle}`;
 			term.innerHTML = question.questions[0].text;
 			term.setAttribute('aria-label', "Now on label: " + question.questions[0].text + ", currently unplaced");
 			term.addEventListener('focus', _termFocus);
@@ -243,7 +246,7 @@ Namespace('Labeling').Engine = (function() {
 
 			let ghost = document.createElement('div');
 			ghost.id = "ghost_"+question.mask
-			ghost.className = 'term final ghost'
+			ghost.className = `term final ghost ${_qset.options.labelStyle}`
 			ghost.style.left = question.options.labelBoxX+"px"
 			ghost.style.top = question.options.labelBoxY+"px"
 			ghost.setAttribute("data-q_id", question.id)
@@ -701,7 +704,7 @@ Namespace('Labeling').Engine = (function() {
 			const delay = window.innerWidth < _mobilePx ? 0 : 600
 
 			let anim = document.createElement("div")
-			anim.className = "term animated"
+			anim.className = `term animated ${_qset.options.labelStyle}`
 			anim.innerHTML = v.innerHTML
 
 			// starting position

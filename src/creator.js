@@ -14,6 +14,9 @@ Namespace('Labeling').Creator = (function() {
 	// canvas, context, and image to render to it
 	let _canvas = (_context = (_img = null));
 
+	let _svg = null
+	let _activeLabelStyle = "mid"
+
 	// offset for legacy support
 	const _offsetX = (_offsetY = 0);
 
@@ -53,7 +56,7 @@ Namespace('Labeling').Creator = (function() {
 		_qset = {};
 		_qset.options = {};
 		_qset.options.backgroundTheme = 'themeGraphPaper';
-		_qset.options.backgroundColor = "var(--custom-dark1)";
+		_qset.options.backgroundColor = "#294A42";
 
 		// set up the creator, shared between new and existing
 		return _setupCreator();
@@ -63,94 +66,50 @@ Namespace('Labeling').Creator = (function() {
 		// set background and header title
 		_setBackground();
 
-		// get canvas context
-		// _canvas = document.getElementById('canvas');
-		// _context = _canvas.getContext('2d');
-		// _context.canvas.width = $("#canvas").width()
-		// _context.canvas.height = $("#canvas").height()
-
 		_img = new Image();
+		_svg = document.getElementById("svglayer")
 
-		// set up event handlers
-		$('.graph').click(function() {
-			_qset.options.backgroundTheme = 'themeGraphPaper';
-			return _setBackground();
-		});
-
-		$('.cork').click(function() {
-			_qset.options.backgroundTheme = 'themeCorkBoard';
-			return _setBackground();
-		});
-
-		$('.backgroundtile.color').click(function() {
-			if (_qset.options.backgroundTheme !== 'themeSolidColor') {
-				_qset.options.backgroundTheme = 'themeSolidColor';
-				_setBackground();
-			}
-
-			$("#colorpicker").spectrum("show");
-			$('.sp-coloropt').click(function(e) {
-				if ((e != null) && (e.target != null)) {
-					let color = e.target.style.backgroundColor.split(',');
-					color = parseInt(parseInt(color[0].substring(4)).toString(16) + parseInt(color[1]).toString(16) + parseInt(color[2]).toString(16), 16);
-					_qset.options.backgroundTheme = 'themeSolidColor';
-					_qset.options.backgroundColor = color;
-					return _setBackground();
-				}
-			});
-			return false;
-		});
+		// 	$("#colorpicker").spectrum("show");
+		// 	$('.sp-coloropt').click(function(e) {
+		// 		if ((e != null) && (e.target != null)) {
+		// 			let color = e.target.style.backgroundColor.split(',');
+		// 			color = parseInt(parseInt(color[0].substring(4)).toString(16) + parseInt(color[1]).toString(16) + parseInt(color[2]).toString(16), 16);
+		// 			_qset.options.backgroundTheme = 'themeSolidColor';
+		// 			_qset.options.backgroundColor = color;
+		// 			return _setBackground();
+		// 		}
+		// 	});
+		// 	return false;
+		// });
 
 		document.querySelector(".background-options").querySelectorAll(".swatch").forEach((v)=>{
 			v.addEventListener("click", (e) => {
-				console.log(window.getComputedStyle(e.target).backgroundColor)
 				_qset.options.backgroundColor = window.getComputedStyle(e.target).backgroundColor
 				_setBackground()
 			})
 		})
-		
 
-		$('#opaque-toggle').change(function() {
-			_anchorOpacity = ' ';
-			const dots = $(document).find('.dot');
-			let i = 0;
-			return (() => {
-				const result = [];
-				while (i < dots.length) {
-					$(dots[i]).removeClass('frosted transparent');
-					result.push(i++);
-				}
-				return result;
-			})();
-		});
+		document.getElementById("darktone-labeltoggle").addEventListener("click", ()=>{
+			_activeLabelStyle = "dark"
+			_applyLabelStyle()
+		})
 
-		$('#frosted-toggle').change(function() {
-			_anchorOpacity = ' frosted';
-			const dots = $(document).find('.dot');
-			let i = 0;
-			return (() => {
-				const result = [];
-				while (i < dots.length) {
-					$(dots[i]).removeClass('transparent').addClass('frosted');
-					result.push(i++);
-				}
-				return result;
-			})();
-		});
+		document.getElementById("midtone-labeltoggle").addEventListener("click", ()=>{
+			_activeLabelStyle = "mid"
+			_applyLabelStyle()
+		})
 
-		$('#transparent-toggle').change(function() {
-			_anchorOpacity = ' transparent';
-			const dots = $(document).find('.dot');
-			let i = 0;
-			return (() => {
-				const result = [];
-				while (i < dots.length) {
-					$(dots[i]).removeClass('frosted').addClass('transparent');
-					result.push(i++);
-				}
-				return result;
-			})();
-		});
+		document.getElementById("lighttone-labeltoggle").addEventListener("click", ()=>{
+			_activeLabelStyle = "light"
+			_applyLabelStyle()
+		})
+
+		document.getElementById("opacity-slider").addEventListener("input", (e)=>{
+			const v = parseInt(e.target.value)
+
+			_svg.style.opacity = v/100
+			document.getElementById("opacity-value").innerHTML = ` ${v}%`
+		})
 
 		$('#btnMoveResize').click(function() {
 			_resizeMode(true);
@@ -295,10 +254,6 @@ Namespace('Labeling').Creator = (function() {
 		$('.ui-resizable-se').removeClass('ui-icon ui-icon-gripsmall-diagonal-se');
 	}
 
-	const _enableCrop = () => {
-		
-	}
-
 	// sets resize mode on and off, and sets UI accordingly
 	var _resizeMode = function(isOn) {
 		$('#terms').css('display', isOn ? 'none' : 'block');
@@ -375,6 +330,27 @@ Namespace('Labeling').Creator = (function() {
 		return _setBackground();
 	};
 
+	// sets label style from qset
+	const _applyLabelStyle = () => {
+		console.log(_activeLabelStyle)
+		document.querySelectorAll(".term").forEach((v)=>{
+			switch(_activeLabelStyle) {
+				case "dark":
+					v.classList.remove("mid", "light")
+					v.classList.add("dark")
+					break
+				case "mid":
+					v.classList.remove("dark", "light")
+					v.classList.add("mid")
+					break
+				case "light":
+					v.classList.remove("dark", "mid")
+					v.classList.add("light")
+					break
+			}
+		})
+	}
+
 	// sets background from the qset
 	var _setBackground = function() {
 		let background;
@@ -408,6 +384,11 @@ Namespace('Labeling').Creator = (function() {
 
 		_setupCreator();
 		_makeDraggable();
+
+		if(_qset.options.labelStyle) {
+			_activeLabelStyle = _qset.options.labelStyle
+			_applyLabelStyle()
+		}
 
 		// get asset url from Materia API (baseUrl and all)
 		const url = Materia.CreatorCore.getMediaUrl(_qset.options.image.id);
@@ -516,7 +497,7 @@ Namespace('Labeling').Creator = (function() {
 		
 		term.id = 'term_' + Math.random(); // fake id for linking with dot
 		// term.innerHTML = "<div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'>"+text+"</div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'>" + description + "</div><div class='delete'></div><div class='confirm'></div><div class='expand'></div>";
-		term.className = 'term';
+		term.className = `term ${_activeLabelStyle}`;
 		term.querySelector(".label-input").innerHTML = text
 		term.querySelector(".description-input").innerHTML = description
 
@@ -890,12 +871,7 @@ Namespace('Labeling').Creator = (function() {
 			_okToSave = false;
 		}
 
-		let _anchorOpacityValue = 1.0;
-		if (_anchorOpacity.indexOf('frosted') > -1) {
-			_anchorOpacityValue = 0.5;
-		} else if (_anchorOpacity.indexOf('transparent') > -1) {
-			_anchorOpacityValue = 0.0;
-		}
+		let _anchorOpacityValue = parseFloat(document.getElementById("svglayer").style.opacity)
 
 		if ($('#image').attr('alt') === '') {
 			_okToSave = false;
@@ -913,6 +889,7 @@ Namespace('Labeling').Creator = (function() {
 			imageX: $('#imagewrapper').position().left,
 			imageY: $('#imagewrapper').position().top,
 			imageMask: document.getElementById("image").style.clipPath,
+			labelStyle: _activeLabelStyle,
 			opacity: _anchorOpacityValue
 		};
 

@@ -9,15 +9,12 @@ $inputmaxheight: 100px;
 
 html,
 body {
-	// --custom-dark1: #222;
-	--custom-dark1: #294A42;
-	// --custom-dark2: #444;
-	--custom-dark2: #313262;
+	--custom-dark1: rgb(41, 74, 66);
+	--custom-dark1-transparency: 41 74 66;
+	--custom-dark2: rgb(49, 50, 98);
 	--custom-dark2-transparency: 68 68 68;
-	// --custom-mid: #888;
-	--custom-mid: #EFDED0;
-	// --custom-light: #ddd;
-	--custom-light: #FFF9F9;
+	--custom-mid: rgb(239, 222, 208);
+	--custom-light: rgb(255, 249, 249);
 
 	cursor: default;
 	background: var(--custom-dark2);
@@ -416,7 +413,10 @@ textarea {
 			&.dark1 { background: var(--custom-dark1); }
 			&.dark2 { background: var(--custom-dark2); }
 			&.mid   { background: var(--custom-mid); }
-			&.light { background: var(--custom-light); }
+			&.light { 
+				background: var(--custom-light); 
+				outline: 1px solid var(--custom-mid);
+			}
 	
 			&:hover {
 			transform: scale(1.05);
@@ -876,6 +876,44 @@ div.term {
 			margin-top: 8px;
 		}
 
+	}
+
+	&.dark {
+		background-color: var(--custom-dark1);
+		color: var(--custom-light);
+
+		&:focus-within {
+			.label-input, .description-input {
+				outline: none;
+				background-color: var(--custom-mid);
+				color: var(--custom-dark1);
+			}
+		}
+		
+	}
+
+	&.mid {
+		background-color: var(--custom-mid);
+		color: var(--custom-dark1);
+
+		&:focus-within {
+			.label-input, .description-input {
+				outline: none;
+				background-color: var(--custom-light);
+			}
+		}
+	}
+
+	&.light {
+		background-color: var(--custom-light);
+		color: var(--custom-dark1);
+		outline: 1px solid rgb(var(--custom-dark1-transparency) / 0.3);
+
+		&:focus-within {
+			.label-input, .description-input {
+				outline: 1px solid var(--custom-mid);
+			}
+		}
 	}
 }
 
