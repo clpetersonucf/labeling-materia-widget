@@ -134,11 +134,18 @@
 				</div>
 			</div>
 
-			<div id='titlechanger' class='box fade'>
-				<b>Let's give your widget a title!</b>
+			<div id='titlechanger' class='box fade intro nubox fit'>
+				<!-- <b>Let's give your widget a title!</b>
 				<form onsubmit='setTitle(titletxt.value);return false;'>
 					<input type='text' id='titletxt' name='titletxt' placeholder='My Labeling widget' autofocus='1'>
 					<input type='submit' value='Done'>
+				</form> -->
+				<p>Let's give this Labeling Widget a title!</p>
+				<form class="btn-row sm" onsubmit='setTitle(titletxt.value);return false;'>
+					<input class="nutxt purple" type='text' id='titletxt' name='titletxt' placeholder='My New Widget' autofocus='1'>
+					<button type='submit' class="nubtn" id='btn-update-title'>
+						<img src="assets/arrow-right.svg"/>
+					</button>
 				</form>
 			</div>
 
@@ -161,11 +168,6 @@
 					<button type="button" id="tutorial-btn" class="nubtn">Tutorial</button>
 					<button type="button" id="letsgo-btn" class="nubtn">Let's go!</button>
 				</div>
-				<!-- <b>Start by giving your Labeling widget a title</b><br>
-				<form onsubmit='setTitle(titletxt.value);return false;'>
-					<input type='text' name='titletxt' placeholder='My Labeling widget' autofocus='1'>
-					<input type='submit' value='Get Started' id='btn-enter-title'>
-				</form> -->
 			</div>
 
 			<div id='namebox' class='box fade intro nubox fit'>
