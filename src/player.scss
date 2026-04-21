@@ -442,8 +442,10 @@ div.term {
 	}
 
 	td {
+		box-sizing: border-box;
 		border: 1px solid gray;
 		font-size: 14px;
+		height: 55px;
 	}
 
 	th, td {
