@@ -34,6 +34,8 @@ html, body {
 	--custom-dark2-transparency: 68 68 68;
 	--custom-mid: rgb(239, 222, 208);
 	--custom-light: rgb(255, 249, 249);
+
+	--anchor-opacity: 1;
 }
 
 #game {
@@ -93,13 +95,27 @@ html, body {
 			display: block;
 			// filter: drop-shadow(2px 2px 4px #444444);
 		}
+
+		stroke-linecap: round;
 	}
 	.bullet {
 		fill: white;
 		filter: drop-shadow(0px 2px 2px #294A4240);
+
+		opacity: var(--anchor-opacity);
+
+		&.target, &.placed {
+			opacity: 1;
+		}
 	}
 	.core {
 		fill: #294A42;
+
+		opacity: 0;
+
+		&.target, &.placed {
+			opacity: 1;
+		}
 	}
 }
 

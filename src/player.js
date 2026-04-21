@@ -119,6 +119,8 @@ Namespace('Labeling').Engine = (function() {
 			_anchorOpacityValue = 1.0;
 		}
 
+		document.querySelector("body").style.setProperty("--anchor-opacity", _anchorOpacityValue)
+
 		// set background
 		switch (_qset.options.backgroundTheme) {
 			case 'themeGraphPaper':
@@ -198,8 +200,6 @@ Namespace('Labeling').Engine = (function() {
 		if(_qset.options.imageMask) {
 			_img.style.clipPath = _qset.options.imageMask
 		}
-
-		_svg.style.opacity = _anchorOpacityValue
 
 		let addTerms = []
 	
@@ -307,7 +307,6 @@ Namespace('Labeling').Engine = (function() {
 			let core = document.createElementNS("http://www.w3.org/2000/svg", "circle")
 			core.id = "core_"+question.mask
 			core.classList.add("core")
-			core.style.display = "none"
 			core.setAttribute("cx", x1)
 			core.setAttribute("cy", y1)
 			core.setAttribute("r", 5)
@@ -361,12 +360,14 @@ Namespace('Labeling').Engine = (function() {
 		if(_curMatch) {
 			_curMatch.classList.remove("target")
 			document.getElementById(_curMatch.id.replace("ghost", "line")).classList.remove("target")
+			document.getElementById(_curMatch.id.replace("ghost", "bullet")).classList.remove("target")
 			_curMatch = null
 		}
 
 		if(found) {
 			found.classList.add("target")
 			document.getElementById(found.id.replace("ghost", "line")).classList.add("target")
+			document.getElementById(found.id.replace("ghost", "bullet")).classList.add("target")
 			_curMatch = found
 		}
 
@@ -400,6 +401,7 @@ Namespace('Labeling').Engine = (function() {
 				_finals.forEach((v)=>{
 					v.classList.remove("target")
 					document.getElementById(v.id.replace("ghost", "line")).classList.remove("target")
+					document.getElementById(v.id.replace("ghost", "bullet")).classList.remove("target")
 				})
 				break;
 			default:
@@ -448,6 +450,7 @@ Namespace('Labeling').Engine = (function() {
 		_curSelectTarget = t
 		_curSelectTarget.classList.add("target")
 		document.getElementById(_curSelectTarget.id.replace("ghost", "line")).classList.add("target")
+		document.getElementById(_curSelectTarget.id.replace("ghost", "bullet")).classList.add("target")
 
 		let ariaString = `Placing: Destination ${_curSelectTarget.getAttribute("data-i")} is currently empty. Description: ${_curSelectTarget.getAttribute("alt")}`
 		if(_curSelectTarget.innerHTML != "")
@@ -461,6 +464,7 @@ Namespace('Labeling').Engine = (function() {
 
 		_curSelectTarget.classList.remove("target")
 		document.getElementById(_curSelectTarget.id.replace("ghost", "line")).classList.remove("target")
+		document.getElementById(_curSelectTarget.id.replace("ghost", "bullet")).classList.remove("target")
 		_curSelectTarget = null
 	}
 
@@ -476,7 +480,8 @@ Namespace('Labeling').Engine = (function() {
 		const labelId = v.getAttribute("data-label_id")
 		if (labelId) {
 			// reset svg graphics for label being placed
-			document.getElementById(v.id.replace("ghost","core")).style.display = "none"
+			document.getElementById(v.id.replace("ghost","core")).classList.remove("placed")
+			document.getElementById(v.id.replace("ghost","bullet")).classList.remove("placed")
 			document.getElementById(v.id.replace("ghost", "line")).classList.remove("placed")
 
 			// reset state of ghost label itself
@@ -538,7 +543,8 @@ Namespace('Labeling').Engine = (function() {
 		v.setAttribute("tabindex", 0)
 
 		// set svg graphic state
-		document.getElementById(v.id.replace("ghost","core")).style.display = "block"
+		document.getElementById(v.id.replace("ghost","core")).classList.add("placed")
+		document.getElementById(v.id.replace("ghost","bullet")).classList.add("placed")
 		document.getElementById(v.id.replace("ghost","line")).classList.add("placed")
 
 		_pushAlert(`Label "${data}" has been placed at destination ${v.getAttribute("data-i")}.`)
@@ -556,6 +562,7 @@ Namespace('Labeling').Engine = (function() {
 			// remove targeting effects
 			_curMatch.classList.remove("target")
 			document.getElementById(_curMatch.id.replace("ghost", "line")).classList.remove("target")
+			document.getElementById(_curMatch.id.replace("ghost", "bullet")).classList.remove("target")
 
 			// do nothing if you're dragging a label onto itself
 			if(_curMatch.innerHTML == e.target.innerHTML) return
@@ -613,6 +620,7 @@ Namespace('Labeling').Engine = (function() {
 		_finals.forEach((v)=>{
 			v.classList.remove("target")
 			document.getElementById(v.id.replace("ghost", "line")).classList.remove("target")
+			document.getElementById(v.id.replace("ghost", "bullet")).classList.remove("target")
 
 			if (window.innerWidth < _mobilePx) {
 				_resetGhost(v)
@@ -644,6 +652,7 @@ Namespace('Labeling').Engine = (function() {
 				_finals.forEach((f)=>{
 					f.classList.add("target")
 					document.getElementById(f.id.replace("ghost", "line")).classList.add("target")
+					document.getElementById(f.id.replace("ghost", "bullet")).classList.add("target")
 				})
 			}
 		} else {
@@ -653,6 +662,7 @@ Namespace('Labeling').Engine = (function() {
 				_finals.forEach((f)=>{
 					f.classList.remove("target")
 					document.getElementById(f.id.replace("ghost", "line")).classList.remove("target")
+					document.getElementById(f.id.replace("ghost", "bullet")).classList.remove("target")
 				})
 			} else if(v.className.includes("final")) {
 				_placeIntoGhost(_curSelectSource, v)
@@ -661,6 +671,7 @@ Namespace('Labeling').Engine = (function() {
 				_finals.forEach((f)=>{
 					f.classList.remove("target")
 					document.getElementById(f.id.replace("ghost", "line")).classList.remove("target")
+					document.getElementById(f.id.replace("ghost", "bullet")).classList.remove("target")
 				})
 			}
 		}

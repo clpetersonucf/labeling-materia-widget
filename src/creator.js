@@ -107,7 +107,10 @@ Namespace('Labeling').Creator = (function() {
 		document.getElementById("opacity-slider").addEventListener("input", (e)=>{
 			const v = parseInt(e.target.value)
 
-			_svg.style.opacity = v/100
+			document.querySelectorAll(".dot").forEach((el)=>{
+				el.style.opacity = v/100
+			})
+
 			document.getElementById("opacity-value").innerHTML = ` ${v}%`
 		})
 
@@ -871,7 +874,7 @@ Namespace('Labeling').Creator = (function() {
 			_okToSave = false;
 		}
 
-		let _anchorOpacityValue = parseFloat(document.getElementById("svglayer").style.opacity)
+		let _anchorOpacityValue = parseFloat(document.getElementById("opacity-slider").value) / 100
 
 		if ($('#image').attr('alt') === '') {
 			_okToSave = false;
