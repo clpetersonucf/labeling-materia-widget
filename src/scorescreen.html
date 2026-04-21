@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Labeling Scorescreen</title>
+		<meta charset="utf-8" />
+		<meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, target-densitydpi=device-dpi'>
+
+		<!-- STYLESHEETS -->
+		<link rel="stylesheet" type="text/css" href="scoreScreen.css">
+		<link href='//fonts.googleapis.com/css?family=Anybody:100,200,300,400,500,600,700|' rel='stylesheet' type='text/css'>
+
+		<!-- REQUIRED MATERIA JAVASCRIPT -->
+		<script src="materia.scorecore.js"></script>
+
+		<!-- MAIN SCORE SCRIPT -->
+		<script src="scoreScreen.js"></script>
+	</head>
+    <body>
+        <!-- <div role="application" id="game" aria-hidden="true" inert="true"> -->
+			<div id="board" class="screen board">
+				<div id="image">
+					<img id="imgsrc" draggable="false"/>
+					<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">
+						<defs id="defs">
+							<linearGradient id="core-gradient">
+								<stop class="stop1" offset="0%" />
+								<stop class="stop2" offset="100%" />
+							</linearGradient>
+						</defs>
+					</svg>
+				</div>
+			</div>
+		<!-- </div> -->
+        <div id="questions" aria-hidden="true">
+			<template id="template-pair">
+				<section class="pair">
+					<h2></h2>
+					<hr/>
+					<!-- <div class="row">
+						<p>Option</p>
+						<p>Correct</p>
+					</div> -->
+					<div class="qrow">
+						<div class="term unplaced"></div>
+						<div class="term unplaced answer"></div>
+					</div>
+				</section>
+			</template>
+        </div>
+        <script>
+            Materia.ScoreCore.start(Labeling.ScoreCore);
+        </script>
+    </body>
+</html>

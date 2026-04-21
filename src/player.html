@@ -18,87 +18,122 @@
 	<body>
 		<div id='assistive-alert' aria-live='assertive'></div>
 		<div id='header'>
-			<div class='logo'></div>
-			<h1 id='title'></h1>
-			<button id='instructionsBtn' aria-label="Instructions; Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To reset a selected label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">Tutorial</button>
-			<button id='checkBtn'>Submit</button>
+			<div id="title-cont">
+				<div class='logo'></div>
+				<h1 id='title'></h1>
+			</div>
+			<div id="button-cont">
+				<button id='instructionsBtn' aria-label="Instructions; Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To reset a selected label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">Tutorial</button>
+				<button id='checkBtn' aria-label="Submit Answers">Submit</button>
+			</div>
 		</div>
 		<div role="application" id="game" aria-hidden="true" inert="true">
 			<h1 id="unplaced-header">Unplaced Labels</h1>
 			<div id='unplaced-terms'>
-				<div id='prevbtn' class='arrow icon-arrow-up2'></div>
-				<div id='nextbtn' class='arrow icon-arrow-down2'></div>
-				<div class='block bottom' id='blockbottom'></div>
-				<div class='block top' id='blocktop'></div>
+
+				<h2 class="unplaced-instructions">
+					Place the labels onto their correct anchor.
+					<hr/>
+				</h2>
+				
+				<div id="unplaced-cont">
+					<h3 id="empty-notice">No labels remaining.</h3>
+				</div>
 			</div>
 			<div id="board" class="screen board">
-				<canvas id='image' width="605" height="550"></canvas>
+				<h1 id="placed-header" aria-label="Placed labels. There are no placed labels">Placed Labels</h1>
 				<div id='ripple'></div>
+				<div id="image">
+					<img id="imgsrc" draggable="false"/>
+					<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">
+						<defs id="defs">
+							<linearGradient id="core-gradient">
+								<stop class="stop1" offset="0%" />
+								<stop class="stop2" offset="100%" />
+							</linearGradient>
+						</defs>
+					</svg>
+				</div>
+				<button id="reset" aria-label="Press Enter to reset the position of all labels.">
+					<img id="reset-icon" src="assets/rotate-cw-white.svg" role="presentation"/>
+				</button>
 			</div>
-			<h1 id="placed-header" aria-label="Placed labels. There are no placed labels">Placed Labels</h1>
-			<div id='placed-terms'>
-			</div>
+			
 		</div>
 		<div id='backgroundcover' class='fade'></div>
 		<div id='alertbox' class='box fade' aria-describedby="alertcaption" aria-role="alertdialog" inert="true" aria-hidden="true" role="dialog">
-			<span id='alertcaption'>You haven't placed all the labels yet! Are you sure you want to submit?</span><br>
-			<input id='cancelbtn' type='button' value='Let me finish!'>
-			<input id='confirmbtn' class='green' type='button' value='Submit Anyway'>
+			<h2>Woah!</h2>
+			<p id='alertcaption'>You haven't placed all the labels yet! Are you sure you want to submit?</p>
+			<div class="btn-row">
+				<button id='cancelbtn' type='button' class="green">Let me finish!</button>
+				<button id='confirmbtn' class='green important' type='button'>Submit Anyway</button>
+			</div>
+			
 		</div>
-		<div class='box preview show' id='previewbox' aria-hidden="false" role="alertdialog" aria-describedby="controls_header">
+		<div class='box preview show fade' id='previewbox' aria-hidden="false" role="alertdialog" aria-describedby="controls_header">
 			<h2 id="instructions-header">How to Play</h2>
-			<p id="instructions">Drag labels to their corresponding destinations.</p>
+			<div id="instructions-selector-box">
+				<button id="pointer-sel" type="button" class="selected">Pointer Controls</button>
+				<button id="keyboard-sel" type="button">Keyboard Controls</button>
+			</div>
 			<div class="instructions-content">
-				<div class='board' aria-hidden="true">
-					<div class='terms'>
-						<div class='term first'></div>
-						<div class='term second'></div>
-						<div class='term third'></div>
+				<figure id="pointer_instructions">
+					<div class="instruction-row pointer">
+						<div style="width: 200px; height: 125px; flex-shrink: 0; background: #bbb;"></div>	
+						<div class="row-label">
+							<h3>Drag and Drop</h3>
+							<p>Drag and drop labels onto their destinations.</p>
+							<p>Return a label to the bank by clicking it, or by dragging it back to the bank.</p>
+						</div>
 					</div>
-					<canvas id='previewimg0' class='previewimg' width=300 height=150></canvas>
-					<canvas id='previewimg1' class='previewimg' width=300 height=150></canvas>
-					<canvas id='previewimg2' class='previewimg' width=300 height=150></canvas>
-					<canvas id='previewimg3' class='previewimg' width=300 height=150></canvas>
-					<div class='img'></div>
-					<div class='cursor'>
-						<img src='assets/cursor.svg'>
+					<hr/>
+					<div class="instruction-row keyboard">
+						<div style="width: 200px; height: 125px; flex-shrink: 0; background: #444;"></div>	
+						<div class="row-label">
+							<h3>Tap / Click</h3>
+							<p>Tap / click a label <i>once</i> to select it / return it to the bank.</p>
+							<p>When a label is selected, tap / click <i>again</i> to place it into its destination.</p>
+						</div>
 					</div>
-				</div>
-				<figure id="keyboard_instructions">
-					<figcaption id="controls_header">Keyboard Controls</figcaption>
+					
+				</figure>
+				<figure id="keyboard_instructions" class="hidden">
 					<table>
 						<tr>
-						  <th>Shortcut</th>
+						  <th class="shortcut">Shortcut</th>
 						  <th>Description</th>
 						</tr>
 						<tr>
-						  <td><strong>Tab</strong></td>
-						  <td>Use the 'Tab' key to navigate to labels.</td>
+						  <td class="shortcut"><strong class="key">Tab</strong></td>
+						  <td>Navigate between labels on the screen.</td>
 						</tr>
 						<tr>
-						  <td><strong>Arrow keys</strong></td>
+							<td class="shortcut"><strong class="key">Enter</strong></td>
+							<td>
+							  Press <i>once</i> to select a source label.<br/>
+							  Press <i>again</i> to place it into its destination.
+							</td>
+						  </tr>
+						<tr>
+						  <td class="shortcut"><strong><span class="key">←</span> / <span class="key">→</span></strong></td>
 						  <td>With a label selected, use the arrow keys to cycle through destinations.</td>
 						</tr>
 						<tr>
-						  <td><strong>Enter/Space</strong></td>
-						  <td>Select a destination</td>
-						</tr>
-						<tr>
-						  <td><strong>H</strong></td>
+						  <td class="shortcut"><strong class="key">H</strong></td>
 						  <td>Open or close instructions.</td>
 						</tr>
 						<tr>
-						  <td><strong>R</strong></td>
+						  <td class="shortcut"><strong class="key">R</strong></td>
 						  <td>Reset selected label.</td>
 						</tr>
 						<tr>
-						  <td><strong>Ctrl+R</strong></td>
+						  <td class="shortcut"><strong><span class="key">Ctrl</span> + <span class="key">R</span></strong></td>
 						  <td>Reset all labels.</td>
 						</tr>
 					  </table>
 				</figure>
 			</div>
-			<input class='green' type='button' id='gotitbtn' value='Got it!' aria-label="Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To remove a label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">
+			<button class='green important' type='button' id='gotitbtn' aria-label="Use Tab and Shift+Tab to navigate between labels. With a label selected, use the arrow keys or the 'A' and 'D' keys to cycle through destinations. Press Enter or Space to choose a destination. To remove a label, press the 'R' key. To completely reset all labels, press Ctrl+R. To open the instructions, press the 'H' key.">Got it!</button>
 		</div>
 		<div aria-hidden="true" id='ghost' class='term' style='opacity:0'>&nbsp;</div>
 		<div id='donearrow' aria-hidden="true"><b>Click to finish</b></div>
