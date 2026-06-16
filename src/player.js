@@ -159,7 +159,10 @@ Namespace('Labeling').Engine = (function() {
 		_g('backgroundcover').classList.add('show');
 		_g('gotitbtn').addEventListener('click', _hideDialogs);
 		
-		document.getElementById("board").addEventListener("dragover", (e)=>e.preventDefault())
+		document.getElementById("board").addEventListener("dragover", (e)=>{
+			e.preventDefault()
+			_dragWhileHandler(e)
+		})
 		document.getElementById("unplaced-terms").addEventListener("dragover", (e)=>e.preventDefault())
 
 		_g('keyboard-sel').addEventListener("click", (e) => {
@@ -227,7 +230,6 @@ Namespace('Labeling').Engine = (function() {
 				_isDragging = true
 				setTimeout(()=>e.target.classList.add("empty"), 10)
 			})
-			term.addEventListener("drag", _dragWhileHandler)
 			term.addEventListener("dragend", _dragEndHandler)
 			term.setAttribute('draggable', true)
 			term.setAttribute("tabindex", 0);
@@ -257,7 +259,6 @@ Namespace('Labeling').Engine = (function() {
 				_isDragging = true
 				// setTimeout(()=>e.target.classList.add("empty"), 10)
 			})
-			ghost.addEventListener("drag", _dragWhileHandler)
 			ghost.addEventListener("dragend", _dragEndHandler)
 			ghost.addEventListener("mouseup", _mouseUpEvent)
 			ghost.addEventListener("keydown", _termKeyHandler)
