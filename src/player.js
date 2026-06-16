@@ -345,6 +345,11 @@ Namespace('Labeling').Engine = (function() {
 	}
 
 	const _dragWhileHandler = (e) => {
+		// really stupid solution but there is no other way
+		// to determine what the dragged object is in dragover
+		// the labels have no stored data really so this will work
+		if(e.dataTransfer.types.length > 0) return
+
 		let minDist = 200
 		let found = null
 
