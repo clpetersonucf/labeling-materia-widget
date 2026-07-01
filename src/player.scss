@@ -39,51 +39,78 @@ html, body {
 }
 
 #game {
-	height: 100%;
+	height: calc(100% - 56px);
 	width: 100%;
 	display: flex;
 	flex-direction: row;
 	position: relative;
 }
 
-#board {
+#content-container {
 	position: relative;
 	display: flex;
-	flex-grow: 1;
+	flex-direction: column;
+	justify-content: center;
 	height: 100%;
-	top: 0px;
-	padding-top: 56px;
-	box-sizing: border-box;
-	#image {
-		position: relative;
-		display: flex;
-		
-		// background-color: #5fbc4b;
-		// I dont like this either but it matches the creator size exactly
-		width: 605px;
-		height: 550px;
-		margin: auto;
-		#imgsrc {
-			display: flex;
-			flex-grow: 1;
-			max-width: calc(605px * 0.93);
-			max-height: calc(550px * 0.93);
-			box-shadow: #33333366 0px 0px 4px 4px;
-		}
+	flex-grow: 2;
+	margin: 0;
+	padding: 0;
 
-		
+	&:after {
+		position: absolute;
+		content: '';
+		z-index: 0;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.3);
+		pointer-events: none;
 	}
 }
 
-#image {
-	scale: unquote("min(calc(min(100vw, 110vh) / 605px), 1)");
-	transform-origin: top center;
+#board {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	width: 605px;
+	height: 550px;
+	box-sizing: border-box;
+	margin: 0 auto;
+
+	border: dotted 2px rgba(255,255,255,0.25);
+	border-radius: 0.5rem;
+
+	overflow: hidden;
+
+	#image {
+		position: relative;
+		z-index: 5;
+		display: flex;
+		width: 605px;
+		height: 550px;
+		margin: auto;
+
+		#imgsrc {
+			position: absolute;
+			width: auto;
+			height: auto;
+			box-shadow: #33333366 0px 0px 4px 4px;
+		}
+	}
+}
+
+#ghosts, #svglayer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 605px;
+	height: 550px;
+}
+
+#ghosts {
+	z-index: 20;
 }
 
 #svglayer {
-	position: absolute;
-	width: 100%;
-	height: 100%;
+	z-index: 10;
 	pointer-events: none;
 	line {
 		// stroke: url("#line-gradient");
@@ -160,18 +187,14 @@ html, body {
 }
 
 #header {
-	position: absolute;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	top: 0px;
-	left: 0px;
-	right: 0px;
+	width: 100%;
 	height: 56px;
 	background: #353436;
 	padding: 8px;
 	box-sizing: border-box;
-	z-index: 1000;
 
 	#title-cont {
 		display: flex;
@@ -220,7 +243,7 @@ html, body {
 
 #placed-terms, #unplaced-terms {
 	position: absolute;
-	top: 56px;
+	top: 0px;
 	bottom: 0px;
 	padding: 0px;
 }
@@ -243,8 +266,6 @@ html, body {
 	flex-direction: column;
 	align-items: center;
 	gap: 8px;
-	//50+32
-	margin-top: 56px;
 }
 
 #unplaced-cont {
@@ -288,7 +309,6 @@ div.term {
 	background: #EFDED0;
 
 	border-radius: 5px;
-	// border: solid 1px rgba(0,0,0,0.2);
 	
 	font-size: 14px;
 	font-family: 'Anybody';
@@ -875,47 +895,47 @@ div.arrow {
 	}
 }
 
-#ripple {
-	display:block;
-	width: 25px;
-	height: 25px;
-	opacity: 0;
-	z-index: 9999;
-	position:absolute;
-	left: -13px;
-	top: -12px;
-	border-radius: 60px;
+// #ripple {
+// 	display:block;
+// 	width: 25px;
+// 	height: 25px;
+// 	opacity: 0;
+// 	z-index: 9999;
+// 	position:absolute;
+// 	left: -13px;
+// 	top: -12px;
+// 	border-radius: 60px;
 
-	&.play {
-		animation: ripple 0.25s;
-	}
-}
+// 	&.play {
+// 		animation: ripple 0.25s;
+// 	}
+// }
 
-@keyframes ripple {
-	0% {
-		opacity: 1;
-		box-shadow: 0px 0px 20px #fff;
-	}
-	50% {
-		box-shadow: 0px 0px 100px #fff, inset 0px 0px 50px #fff;
-		opacity: 1;
-	}
-	75% {
-		opacity: 1;
-		width: 50px;
-		height: 50px;
-		left: -25px;
-		top: -25px;
-	}
-	100% {
-		box-shadow: 0px 0px 250px #fff;
-		opacity: 0;
-		width: 50px;
-		height: 50px;
-		left: -25px;
-		top: -25px;
-	}
-}
+// @keyframes ripple {
+// 	0% {
+// 		opacity: 1;
+// 		box-shadow: 0px 0px 20px #fff;
+// 	}
+// 	50% {
+// 		box-shadow: 0px 0px 100px #fff, inset 0px 0px 50px #fff;
+// 		opacity: 1;
+// 	}
+// 	75% {
+// 		opacity: 1;
+// 		width: 50px;
+// 		height: 50px;
+// 		left: -25px;
+// 		top: -25px;
+// 	}
+// 	100% {
+// 		box-shadow: 0px 0px 250px #fff;
+// 		opacity: 0;
+// 		width: 50px;
+// 		height: 50px;
+// 		left: -25px;
+// 		top: -25px;
+// 	}
+// }
 
 #assistive-alert {
 	height: 0;
@@ -1093,13 +1113,13 @@ div.arrow {
 
 	#image {
 		// SCSS thinks vw and px are incompatible which is wrong
-		scale: unquote("calc(min(100vw, 80vh) / 605px)");
-		transform-origin: top left;
+		// scale: unquote("calc(min(100vw, 80vh) / 605px)");
+		// transform-origin: top left;
 	}
 
-	#board #image {
-		position: absolute;
-	}
+	// #board #image {
+	// 	position: absolute;
+	// }
 
 	#header {
 		h1 {
@@ -1159,28 +1179,28 @@ div.arrow {
 
 // the scaling method i used for the image works in every single browser but firefox
 // do this as a fallback to retain mobile compatibility
-@-moz-document url-prefix() {
-	@media (width < $mobile_w_px) {
-		#image {
-			scale: 0.8;
-		}
-	}
+// @-moz-document url-prefix() {
+// 	@media (width < $mobile_w_px) {
+// 		#image {
+// 			scale: 0.8;
+// 		}
+// 	}
 	
-	@media (width < 576px) {
-		#image {
-			scale: 0.6;
-		}
-	}
+// 	@media (width < 576px) {
+// 		#image {
+// 			scale: 0.6;
+// 		}
+// 	}
 
-	@media (width < 450px) {
-		#image {
-			scale: 0.5;
-		}
-	}
+// 	@media (width < 450px) {
+// 		#image {
+// 			scale: 0.5;
+// 		}
+// 	}
 
-	@media (height < 500px) {
-		#image {
-			scale: 0.5;
-		}
-	}
-}
+// 	@media (height < 500px) {
+// 		#image {
+// 			scale: 0.5;
+// 		}
+// 	}
+// }

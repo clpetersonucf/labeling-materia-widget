@@ -1,11 +1,7 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
+import { Poline, positionFunctions } from 'poline'
+import { FastAverageColor } from 'fast-average-color'
+import convert from 'color-convert'
+
 Namespace('Labeling').Creator = (function() {
 	// variables for local use
 	let _context, _img, _offsetY, _qset;
@@ -16,6 +12,8 @@ Namespace('Labeling').Creator = (function() {
 
 	let _svg = null
 	let _activeLabelStyle = "mid"
+
+	const MAX_IMG_LEN = 570
 
 	// offset for legacy support
 	const _offsetX = (_offsetY = 0);
@@ -32,6 +30,13 @@ Namespace('Labeling').Creator = (function() {
 
 	// track if the user is "getting started" or well on their way
 	let _gettingStarted = false;
+
+	const _defaultBackgroundSwatches = [
+		'rgb(41, 74, 66)',
+		'rgb(49, 50, 98)',
+		'rgb(239, 222, 208)',
+		'rgb(255, 249, 249)'
+	]
 
 	const _defaultLabel = 'Enter label title';
 	const _defaultDescription = 'Anchor point alt text';
@@ -54,9 +59,13 @@ Namespace('Labeling').Creator = (function() {
 
 		// make a scaffold qset object
 		_qset = {};
-		_qset.options = {};
-		_qset.options.backgroundTheme = 'themeGraphPaper';
-		_qset.options.backgroundColor = "#294A42";
+		_qset.options = {
+			backgroundTheme: 'themeSolidColor',
+			backgroundColor: '#294A42',
+			imageScale: 1,
+			imageX: 0,
+			imageY: 0
+		};
 
 		// set up the creator, shared between new and existing
 		return _setupCreator();
@@ -69,18 +78,20 @@ Namespace('Labeling').Creator = (function() {
 		_img = new Image();
 		_svg = document.getElementById("svglayer")
 
-		// 	$("#colorpicker").spectrum("show");
-		// 	$('.sp-coloropt').click(function(e) {
-		// 		if ((e != null) && (e.target != null)) {
-		// 			let color = e.target.style.backgroundColor.split(',');
-		// 			color = parseInt(parseInt(color[0].substring(4)).toString(16) + parseInt(color[1]).toString(16) + parseInt(color[2]).toString(16), 16);
-		// 			_qset.options.backgroundTheme = 'themeSolidColor';
-		// 			_qset.options.backgroundColor = color;
-		// 			return _setBackground();
-		// 		}
-		// 	});
-		// 	return false;
-		// });
+		document.querySelector(".background-swatch-preferences").querySelectorAll("input").forEach((radio) => {
+			radio.addEventListener("click", (e) => {
+				switch (e.target.id) {
+					case "default-color":
+						_qset.options.backgroundTheme = "themeSolidColor"
+						_applyDefaultBackgroundColors()
+						break
+					case "dynamic-color":
+						_qset.options.backgroundTheme = "themeDynamicColor"
+						calculateDynamicBackgroundColor()
+						break
+				}
+			})
+		})
 
 		document.querySelector(".background-options").querySelectorAll(".swatch").forEach((v)=>{
 			v.addEventListener("click", (e) => {
@@ -224,6 +235,55 @@ Namespace('Labeling').Creator = (function() {
 		return $('#titletxt').val($('#title').html()).focus();
 	};
 
+	const calculateDynamicBackgroundColor = () => {
+
+		const fac = new FastAverageColor()
+		const img = document.getElementById('image')
+
+		if (!img || !img.getAttribute('src')) return false
+
+		fac.getColorAsync(img)
+			.then((color) => {
+				_qset.options.backgroundColor = color.hex
+
+				fac.getColorAsync(img, {
+					ignoredColor: [...color.value, 125]
+				}).then((colorTwo) => {
+
+					const firstHSL = convert.rgb.hsl(color.value[0], color.value[1], color.value[2])
+					const secondHSL = convert.rgb.hsl(colorTwo.value[0], colorTwo.value[1], colorTwo.value[2])
+
+					const poline = new Poline({
+						anchorColors: [
+							[...firstHSL],
+							[...secondHSL]
+						],
+						numPoints: 4,
+						positionFunctionX: 
+							positionFunctions['smoothStepPosition'],
+						positionFunctionY: 
+							positionFunctions['cubicPosition'],
+					})
+
+					_applyDynamicBackgroundColor(poline.colors)
+				})
+			})
+	}
+
+	const _applyDynamicBackgroundColor = (colors) => {
+		document.querySelector(".background-options").querySelectorAll(".swatch").forEach((swatch, index)=>{
+			const hex = convert.hsl.hex(colors[index])
+			const rgb = convert.hsl.rgb(colors[index])
+			swatch.style.backgroundColor = `#${hex}`
+		})
+	}
+
+	const _applyDefaultBackgroundColors = () => {
+		document.querySelector(".background-options").querySelectorAll(".swatch").forEach((swatch, index)=>{
+			swatch.style.backgroundColor = _defaultBackgroundSwatches[index]
+		})
+	}
+
 	const _makeDraggable = () => { // drag all sides of the image for resizing
 		$('#imagewrapper').draggable({
 			drag(event,ui) {
@@ -335,7 +395,6 @@ Namespace('Labeling').Creator = (function() {
 
 	// sets label style from qset
 	const _applyLabelStyle = () => {
-		console.log(_activeLabelStyle)
 		document.querySelectorAll(".term").forEach((v)=>{
 			switch(_activeLabelStyle) {
 				case "dark":
@@ -360,26 +419,27 @@ Namespace('Labeling').Creator = (function() {
 		$('.backgroundtile').removeClass('show');
 
 		// set background
-		_qset.options.backgroundTheme = ""
-		switch (_qset.options.backgroundTheme) {
-			case 'themeGraphPaper':
-				background = 'url(assets/labeling-graph-bg.png)';
-				$('.graph').addClass('show');
-				break;
-			case 'themeCorkBoard':
-				background = 'url(assets/labeling-cork-bg.jpg)';
-				$('.cork').addClass('show');
-				break;
-			default:
-				// convert to hex and zero pad the background, which is stored as an integer
-				// background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
-				background = _qset.options.backgroundColor
-				$('.color').addClass('show');
-				$('#curcolor').css('background',background);
-		}
+		// _qset.options.backgroundTheme = ""
+		// switch (_qset.options.backgroundTheme) {
+		// 	case 'themeGraphPaper':
+		// 		background = 'url(assets/labeling-graph-bg.png)';
+		// 		$('.graph').addClass('show');
+		// 		break;
+		// 	case 'themeCorkBoard':
+		// 		background = 'url(assets/labeling-cork-bg.jpg)';
+		// 		$('.cork').addClass('show');
+		// 		break;
+		// 	default:
+		// 		// convert to hex and zero pad the background, which is stored as an integer
+		// 		// background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
+		background = _qset.options.backgroundColor
+		$('.color').addClass('show')
+		$('#curcolor').css('background',background)
+		// }
+		document.body.style.backgroundColor = _qset.options.backgroundColor
 
-		console.log(background)
-		return $('#board').css('background',background);
+		$('#board').css('background', background)
+		$('#boardwrapper').css('background', background)
 	};
 
 	const initExistingWidget = function(title,widget,qset,version,baseUrl) {
@@ -404,8 +464,7 @@ Namespace('Labeling').Creator = (function() {
 		_img.src = url;
 		document.getElementById("imagewrapper").dataset.bg = `url(${url})`
 		_img.onload = function() {
-			$('#imagewrapper').css('height', (_img.height * _qset.options.imageScale));
-			return $('#imagewrapper').css('width', (_img.width * _qset.options.imageScale));
+			_positionImageResources(false)
 		};
 		_img.alt = _qset.options.image.alt || '';
 
@@ -419,10 +478,6 @@ Namespace('Labeling').Creator = (function() {
 			$('.arrow_box').removeClass('hide');
 		}
 
-		// set the resizable image wrapper to the size and pos from qset
-		$('#imagewrapper').css('left', (_qset.options.imageX));
-		$('#imagewrapper').css('top', (_qset.options.imageY));
-
 		// set the title from the qset
 		$('#title').html(title);
 		_title = title;
@@ -433,9 +488,50 @@ Namespace('Labeling').Creator = (function() {
 		if ((questions[0] != null) && questions[0].items) {
 			questions = questions[0].items;
 		}
+
+		if (_qset.options.backgroundTheme) {
+			if (_qset.options.backgroundTheme == 'themeDynamicColor') {
+				calculateDynamicBackgroundColor()
+				document.getElementById('dynamic-color').checked = true
+				document.getElementById('default-color').checked = false
+			}
+		}
+
 		return Array.from(questions).map((item) =>
 			_makeTerm(item.options.endPointX, item.options.endPointY, item.questions[0].text, item.options.labelBoxX, item.options.labelBoxY, item.id, item.options.description || _defaultDescription));
 	};
+
+	const _positionImageResources = function(initialPlacement = false) {
+
+		let height, width
+		const iw = $('#imagewrapper')
+		const board = $('#board')
+
+		if (_img.width > _img.height) {
+			width = initialPlacement ? MAX_IMG_LEN : _img.width * _qset.options.imageScale
+			iw.css('width', width)
+
+			height = ((_img.height * iw.width()) / _img.width)
+			iw.css('height', height)
+		} else {
+			height = initialPlacement ? MAX_IMG_LEN : _img.height * _qset.options.imageScale
+			iw.css('height', height)
+
+			width = ((_img.width * iw.height()) / _img.height)
+			iw.css('width', width)
+		}
+
+		if (_qset.options.imageMask != "") {
+			document.getElementById("image").style.clipPath = _qset.options.imageMask
+		}
+
+		// for initial placement, center the scaled image
+		const leftPlacement = initialPlacement ? (board.width() - iw.width()) / 2 : _qset.options.imageX
+		const topPlacement = initialPlacement ? (board.height() - iw.height()) / 2 : _qset.options.imageY
+
+		iw.css('left', leftPlacement)
+		iw.css('top', topPlacement)
+	}
 
 	// draw lines on the board
 	const _drawBoard = function() {
@@ -473,8 +569,8 @@ Namespace('Labeling').Creator = (function() {
 	// Add term to the list, called by the click event
 	var _addTerm = function(e) {
 		// draw a dot on the canvas for the question location
-		let topMargin = ($("body").height() - $("#frame").outerHeight()) / 2
-		_makeTerm(e.pageX-document.getElementById('frame').offsetLeft-document.getElementById('board').offsetLeft, e.pageY-50-topMargin);
+		const boardRect = document.getElementById('board').getBoundingClientRect()
+		_makeTerm(e.pageX - boardRect.left, e.pageY - boardRect.top)
 
 		$('#help_adding').css('display','none');
 		$('#boardcover').css('display','none');
@@ -499,12 +595,9 @@ Namespace('Labeling').Creator = (function() {
 		const term = document.importNode(document.getElementById("term_template").content.firstElementChild, true)
 		
 		term.id = 'term_' + Math.random(); // fake id for linking with dot
-		// term.innerHTML = "<div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'>"+text+"</div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'>" + description + "</div><div class='delete'></div><div class='confirm'></div><div class='expand'></div>";
 		term.className = `term ${_activeLabelStyle}`;
 		term.querySelector(".label-input").innerHTML = text
 		term.querySelector(".description-input").innerHTML = description
-
-		console.log(text)
 		
 		// if we're generating a generic one, decide on a position
 		if ((labelX === null) || (labelY === null)) {
@@ -706,7 +799,6 @@ Namespace('Labeling').Creator = (function() {
 			return false;
 		}
 
-
 		// Escape
 		if (e.keyCode === 27) {
 			if (e.target.innerHTML.length < 1) {
@@ -807,19 +899,18 @@ Namespace('Labeling').Creator = (function() {
 
 	// called from Materia creator page
 	const onSaveClicked = function(mode) {
+
 		if (mode == null) { mode = 'save'; }
 		if (!_buildSaveData()) {
 			return Materia.CreatorCore.cancelSave('Widget needs a title, at least one term, and a description of the image.');
 		}
-		return Materia.CreatorCore.save(_title, _qset);
-	};
+		return Materia.CreatorCore.save(_title, _qset, 2)
+	}
 
-	const onSaveComplete = (title, widget, qset, version) => true;
+	const onSaveComplete = (title, widget, qset, version) => true
 
-	// called from Materia creator page
-	// place the questions in an arbitrary location to be moved
-	const onQuestionImportComplete = items => Array.from(items).map((item) =>
-        _makeTerm(150,300,item.questions[0].text,null,null,item.id,item.options.description || _defaultDescription));
+	// Question imports are no longer supported
+	const onQuestionImportComplete = items => console.warn("This method is no longer implemented.")
 
 	// generate the qset
 	var _buildSaveData = function() {
@@ -896,8 +987,6 @@ Namespace('Labeling').Creator = (function() {
 			opacity: _anchorOpacityValue
 		};
 
-		_qset.version = "3";
-
 		return _okToSave;
 	};
 
@@ -917,20 +1006,7 @@ Namespace('Labeling').Creator = (function() {
 		_img.src = url;
 		document.getElementById("imagewrapper").dataset.bg = `url(${url})`
 		_img.onload = function() {
-			let height, width;
-			const iw = $('#imagewrapper');
-			if (_img.width > _img.height) {
-				width = 570;
-				iw.css('width', width);
-				iw.css('height', ((_img.height * iw.width()) / _img.width));
-			} else {
-				height = 470;
-				iw.css('height', height);
-				iw.css('width', ((_img.width * iw.height()) / _img.height));
-			}
-
-			$('#imagewrapper').css('left', (600 / 2) - (iw.width() / 2));
-			return $('#imagewrapper').css('top', (550 / 2) - (iw.height() / 2));
+			_positionImageResources(true)
 		};
 		_img.alt = "";
 
@@ -939,6 +1015,10 @@ Namespace('Labeling').Creator = (function() {
 		$('#backgroundcover').addClass('show');
 
 		_makeDraggable();
+
+		if (_qset.options.backgroundTheme == 'themeDynamicColor') {
+			calculateDynamicBackgroundColor()
+		}
 
 		return true;
 	};

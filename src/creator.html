@@ -24,18 +24,23 @@
 		<div class='sidepanel right'></div> -->
 
 		<div class='frame' id='frame'>
-			<div id='header'>
-				<div class='logo'></div>
-				<h1 id='title'></h1>
-				<div class="link">
-					<img src="../assets/pencil.png" alt="Edit widget name" class="link-icon"></div>
-			</div>
+			<header id='header'>
+				<h1 id='title' role='textbox' tabindex='0'>
+				</h1>
+			</header>
 
 			<div class="arrow_box hide">Add Image Description</div>
 
 			<div id='controls'>
 				<div id="background-settings" class="color-picker">
 					<label class="label-title">Background Settings</label>
+					<div class="background-swatch-preferences">
+						<input type="radio" id="default-color" name="background-preference" checked />
+						<label for="default-color" class="bg-preference">Default Colors</label>
+
+						<input type="radio" id="dynamic-color" name="background-preference" />
+						<label for="dynamic-color" class="bg-preference">Dynamic Colors</label>
+					</div>
 					<div class="background-options">
 						<input type="radio" id="darktone-toggle" name="background-tone" checked>
 						<label for="darktone-toggle" class="swatch dark1"></label>
@@ -96,7 +101,7 @@
 						<button id='btnChangeDescription'>
 							<img src="assets/pencil.svg"/>
 						</button>
-					</div>		
+					</div>
 				</div>
 			</div>
 
@@ -105,32 +110,34 @@
 			<!-- <input type='button' value='Cancel Move &amp; Resize' id='btnMoveResizeCancel' style='display:none'>
 			<input type='button' value='Save Changes' id='btnMoveResizeDone' style='display:none'> -->
 
-			<div id="board" class="screen board">
-				<div id='boardcover'></div>
-				<div id='imagewrapper'>
-					<img id='image' alt=''>
-					<div id="crop"></div>
-				</div>
-
-				<div id='inputwrapper'>
-					<div id='resizecontrols' style="display: none;">
-						<button aria-label="Cancel Move & Resize" id="btnMoveResizeCancel"><img src="assets/x.svg"/></button>
-						<button aria-label="Cancel Crop" id="btnCropCancel"><img src="assets/x.svg"/></button>
-						<div style="background: #fff; width: 1px;"></div>
-						<button aria-label="Save Changes" id="btnMoveResizeDone"><img src="assets/check.svg"/></button>
-						<button aria-label="Save Changes" id="btnCropDone"><img src="assets/check.svg"/></button>
+			<div id="boardwrapper">
+				<div id="board" class="screen board">
+					<div id='boardcover'></div>
+					<div id='imagewrapper'>
+						<img id='image' crossorigin="anonymous" alt=''>
+						<div id="crop"></div>
 					</div>
-				</div>
-				<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">
-					<defs id="defs">
-						<linearGradient id="core-gradient">
-							<stop class="stop1" offset="0%" />
-							<stop class="stop2" offset="100%" />
-						</linearGradient>
-					</defs>
-				</svg>
-				<div id='terms'>
-					<template id="term_template"><div><h3 class="label-title-header">Create Label</h3><div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'></div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'></div><div class='delete'><img src="assets/x.svg"/></div><div class='confirm'><img src="assets/check.svg"/></div><div class='expand'></div></div></template>
+
+					<div id='inputwrapper'>
+						<div id='resizecontrols' style="display: none;">
+							<button aria-label="Cancel Move & Resize" id="btnMoveResizeCancel"><img src="assets/x.svg"/></button>
+							<button aria-label="Cancel Crop" id="btnCropCancel"><img src="assets/x.svg"/></button>
+							<div style="background: #fff; width: 1px;"></div>
+							<button aria-label="Save Changes" id="btnMoveResizeDone"><img src="assets/check.svg"/></button>
+							<button aria-label="Save Changes" id="btnCropDone"><img src="assets/check.svg"/></button>
+						</div>
+					</div>
+					<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">
+						<defs id="defs">
+							<linearGradient id="core-gradient">
+								<stop class="stop1" offset="0%" />
+								<stop class="stop2" offset="100%" />
+							</linearGradient>
+						</defs>
+					</svg>
+					<div id='terms'>
+						<template id="term_template"><div><h3 class="label-title-header">Create Label</h3><div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'></div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'></div><div class='delete'><img src="assets/x.svg"/></div><div class='confirm'><img src="assets/check.svg"/></div><div class='expand'></div></div></template>
+					</div>
 				</div>
 			</div>
 
