@@ -89,24 +89,41 @@ Namespace('Labeling').ScoreCore = (function() {
 		_img.alt = _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.";
 
 		_img.onload = function() {
+			let width = 0
+			let height = 0
+
 			_img.style.marginLeft = _qset.options.imageX+"px"
 			_img.style.marginTop = _qset.options.imageY+"px"
 
 			const originalWidth = _img.naturalWidth || _img.width
 			const originalHeight = _img.naturalHeight || _img.height
 
-			if (_img.width > _img.height) {
+			if (originalWidth > originalHeight) {
+
 				width = originalWidth * _qset.options.imageScale
 				height = ((originalHeight * width) / originalWidth)
+
 				_img.style.width = `${width}px`
 				_img.style.height = `${height}px`
+
 			} else {
+
 				height = originalHeight * _qset.options.imageScale
 				width = ((originalWidth * height) / originalHeight)
 
 				_img.style.width = `${width}px`
 				_img.style.height = `${height}px`
 			}
+
+			// scale the entire #image element (which contains the image and terms)
+			// to ensure it's constrained by the 605x550 px dimensions of the board 
+			const imageWrapper = document.getElementById('image')
+			const maxWidth = 605
+			const maxHeight = 550
+			const wrapperScale = Math.min(maxWidth / width, maxHeight / height, 1)
+
+			imageWrapper.style.transformOrigin = '50% 50%'
+			imageWrapper.style.transform = `scale(${wrapperScale})`
 
 			for (let i = 0; i < _questions.length; i++) {
 				let question = _questions[i]

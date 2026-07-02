@@ -34,31 +34,22 @@ html, body {
 	height: 550px;
 	top: 0px;
 	box-sizing: border-box;
+	overflow: hidden;
+
 	#image {
 		position: relative;
 		display: flex;
-		
-		// background-color: #5fbc4b;
-		// I dont like this either but it matches the creator size exactly
 		width: 605px;
 		height: 550px;
 		margin: auto;
 		margin-top: 0;
+
 		#imgsrc {
-			display: flex;
-			flex-grow: 1;
-			max-width: calc(605px * 0.93);
-			max-height: calc(550px * 0.93);
 			box-shadow: #33333366 0px 0px 4px 4px;
 		}
 
 		
 	}
-}
-
-#image {
-	scale: unquote("min(calc(min(100vw, 110vh) / 605px), 1)");
-	transform-origin: top center;
 }
 
 #svglayer {
