@@ -68,6 +68,11 @@ Namespace('Labeling').Engine = (function() {
 
 	// mobile breakpoint pxs
 	const _mobilePx = 840
+	const _boardWidth = 605
+	const _boardHeight = 550
+
+	let _boardScaleObserver = null
+	let _boardResizeBound = false
 
 	let _nextAlert = ""
 
@@ -85,6 +90,19 @@ Namespace('Labeling').Engine = (function() {
 
 	const _imageXMargin = () => parseInt(window.getComputedStyle(document.getElementById('image')).marginLeft.replace("px",""))
 	const _imageYMargin = () => parseInt(window.getComputedStyle(document.getElementById('image')).marginTop.replace("px",""))
+
+	const _resizeBoardForViewport = () => {
+		const board = _g('board')
+		const wrap = _g('board-scale-wrap')
+		if (!board || !wrap) return
+
+		const wrapWidth = wrap.clientWidth
+		if (!wrapWidth) return
+
+		const scale = Math.min(1, wrapWidth / _boardWidth)
+		board.style.transform = `scale(${scale})`
+		wrap.style.height = `${Math.round(_boardHeight * scale)}px`
+	}
 
 	// Called by Materia.Engine when your widget Engine should start the user experience.
 	const start = function(instance, qset, version) {
@@ -183,6 +201,20 @@ Namespace('Labeling').Engine = (function() {
 		_svg = document.getElementById("svglayer")
 		_defs = document.getElementById("defs")
 		_ghosts = document.getElementById("ghosts")
+
+		_resizeBoardForViewport()
+		if (typeof ResizeObserver !== 'undefined') {
+			if (_boardScaleObserver) {
+				_boardScaleObserver.disconnect()
+			}
+			_boardScaleObserver = new ResizeObserver(_resizeBoardForViewport)
+			_boardScaleObserver.observe(_g('board-scale-wrap'))
+		}
+		if (!_boardResizeBound) {
+			window.addEventListener('resize', _resizeBoardForViewport)
+			_boardResizeBound = true
+		}
+
 		// load the image asset
 		// when done, render the board
 		_img = document.getElementById("imgsrc")
@@ -240,6 +272,7 @@ Namespace('Labeling').Engine = (function() {
 			term.addEventListener("mouseup", _mouseUpEvent)
 			term.addEventListener("dragstart", (e) => {
 				_isDragging = true
+				e.dataTransfer.setData('application/x-label', '')
 				setTimeout(()=>e.target.classList.add("empty"), 10)
 			})
 			term.addEventListener("dragend", _dragEndHandler)
@@ -269,6 +302,7 @@ Namespace('Labeling').Engine = (function() {
 			ghost.setAttribute('data-i', termNum)
 			ghost.addEventListener("dragstart", (e) => {
 				_isDragging = true
+				e.dataTransfer.setData('application/x-label', '')
 				// setTimeout(()=>e.target.classList.add("empty"), 10)
 			})
 			ghost.addEventListener("dragend", _dragEndHandler)
@@ -360,7 +394,7 @@ Namespace('Labeling').Engine = (function() {
 		// really stupid solution but there is no other way
 		// to determine what the dragged object is in dragover
 		// the labels have no stored data really so this will work
-		if(e.dataTransfer.types.length > 0) return
+		if(!e.dataTransfer.types.includes('application/x-label')) return
 
 		let minDist = 200
 		let found = null
