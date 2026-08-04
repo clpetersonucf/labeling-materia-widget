@@ -132,16 +132,15 @@ Namespace('Labeling').Engine = (function() {
 				break;
 			default:
 				// convert to hex and zero pad the background, which is stored as an integer
-				if(_qset.version !== "3")
+				if(parseInt(version) !== 2)
 					background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
 				else
 					background = _qset.options.backgroundColor
 		}
 
-		// background = "#294A42"
-
 		// set background and header title
 		_g('board').style.background = background;
+		_g('content-container').style.background = background;
 		if ((instance.name === undefined) || null) {
 			instance.name = "Widget Title Goes Here";
 		}
@@ -183,25 +182,38 @@ Namespace('Labeling').Engine = (function() {
 
 		_svg = document.getElementById("svglayer")
 		_defs = document.getElementById("defs")
+		_ghosts = document.getElementById("ghosts")
 		// load the image asset
 		// when done, render the board
 		_img = document.getElementById("imgsrc")
-		// _img.onload = _drawBoard;
-
 		_img.src = Materia.Engine.getImageAssetUrl((
 			_qset.options.image ? _qset.options.image.id : _qset.assets[0]));
 		_img.alt = _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.";
-		
-		_img.style.marginLeft = _qset.options.imageX+"px"
-		_img.style.marginTop = _qset.options.imageY+"px"
-		_img.style.width = (605 * _qset.options.imageScale) + "px"
-		_img.style.height = (550 * _qset.options.imageScale) + "px"
-		// _canvas.setAttribute('aria-label', _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.");
-		
-		// store sidebar terms to be added later
-		
-		if(_qset.options.imageMask) {
-			_img.style.clipPath = _qset.options.imageMask
+
+		_img.onload = function() {
+			const originalWidth = _img.naturalWidth || _img.width
+			const originalHeight = _img.naturalHeight || _img.height
+
+			if (_img.width > _img.height) {
+				width = originalWidth * _qset.options.imageScale
+				height = ((originalHeight * width) / originalWidth)
+				_img.style.width = `${width}px`
+				_img.style.height = `${height}px`
+			} else {
+				height = originalHeight * _qset.options.imageScale
+				width = ((originalWidth * height) / originalHeight)
+
+				_img.style.width = `${width}px`
+				_img.style.height = `${height}px`
+			}
+			_img.style.left = `${_qset.options.imageX}px`
+			_img.style.top = `${_qset.options.imageY}px`
+
+			// _canvas.setAttribute('aria-label', _qset.options.image && _qset.options.image.alt ? _qset.options.image.alt : "No description provided. Please contact author of this widget for an image description.");
+
+			if(_qset.options.imageMask) {
+				_img.style.clipPath = _qset.options.imageMask
+			}
 		}
 
 		let addTerms = []
@@ -265,7 +277,7 @@ Namespace('Labeling').Engine = (function() {
 			ghost.addEventListener('focus', _termFocus);
 			ghost.addEventListener('blur', _termBlur);
 
-			document.getElementById('image').appendChild(ghost)
+			_ghosts.appendChild(ghost)
 
 			let x1 = question.options.endPointX
 			let y1 = question.options.endPointY
@@ -736,7 +748,8 @@ Namespace('Labeling').Engine = (function() {
 			game.appendChild(anim)
 
 			// ending position
-			setTimeout(()=>anim.style.transform = `translate(${posT.left}px, ${posT.top}px)`, 0)
+			// subtract 56 from posT top to accommodate header
+			setTimeout(()=>anim.style.transform = `translate(${posT.left}px, ${(posT.top - 56)}px)`, 0)
 			_resetGhost(v, delay) // this should match sum length of transitions in css
 		}	
 	}

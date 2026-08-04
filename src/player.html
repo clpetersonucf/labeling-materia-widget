@@ -40,11 +40,10 @@
 					<h3 id="empty-notice">No labels remaining.</h3>
 				</div>
 			</div>
-			<div id="board" class="screen board">
+			<section id="content-container">
 				<h1 id="placed-header" aria-label="Placed labels. There are no placed labels">Placed Labels</h1>
-				<div id='ripple'></div>
-				<div id="image">
-					<img id="imgsrc" draggable="false"/>
+				<div id="board">
+					<div id="ghosts"></div>
 					<svg id="svglayer" viewBox="0 0 605 550" xmlns="http://www.w3.org/2000/svg" x1="0" x2="0" y1="0" y2="1">
 						<defs id="defs">
 							<linearGradient id="core-gradient">
@@ -53,11 +52,14 @@
 							</linearGradient>
 						</defs>
 					</svg>
+					<div id="image">
+						<img id="imgsrc" draggable="false"/>
+					</div>
 				</div>
 				<button id="reset" aria-label="Press Enter to reset the position of all labels.">
 					<img id="reset-icon" src="assets/rotate-cw-white.svg" role="presentation"/>
 				</button>
-			</div>
+			</section>
 			
 		</div>
 		<div id='backgroundcover' class='fade'></div>
