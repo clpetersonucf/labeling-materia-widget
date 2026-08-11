@@ -78,20 +78,20 @@ Namespace('Labeling').Creator = (function() {
 		_img = new Image();
 		_svg = document.getElementById("svglayer")
 
-		document.querySelector(".background-swatch-preferences").querySelectorAll("input").forEach((radio) => {
-			radio.addEventListener("click", (e) => {
-				switch (e.target.id) {
-					case "default-color":
-						_qset.options.backgroundTheme = "themeSolidColor"
-						_applyDefaultBackgroundColors()
-						break
-					case "dynamic-color":
-						_qset.options.backgroundTheme = "themeDynamicColor"
-						calculateDynamicBackgroundColor()
-						break
-				}
-			})
-		})
+		// document.querySelector(".background-swatch-preferences").querySelectorAll("input").forEach((radio) => {
+		// 	radio.addEventListener("click", (e) => {
+		// 		switch (e.target.id) {
+		// 			case "default-color":
+		// 				_qset.options.backgroundTheme = "themeSolidColor"
+		// 				_applyDefaultBackgroundColors()
+		// 				break
+		// 			case "dynamic-color":
+		// 				_qset.options.backgroundTheme = "themeDynamicColor"
+		// 				calculateDynamicBackgroundColor()
+		// 				break
+		// 		}
+		// 	})
+		// })
 
 		document.querySelector(".background-options").querySelectorAll(".swatch").forEach((v)=>{
 			v.addEventListener("click", (e) => {
