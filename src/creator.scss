@@ -385,7 +385,8 @@ textarea {
 #controls {
 	position: relative;
 	order: 3;
-	width: 325px;
+	height: calc(100% - 48px);
+	box-sizing: border-box;
 	background: #FCFCFC;
 	padding: 18px 48px 24px 24px;
 
