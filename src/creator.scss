@@ -1156,6 +1156,8 @@ div.dot {
 	position: absolute;
 	margin: -6px;
 
+	outline: 2px solid var(--custom-dark1);
+
 	filter: drop-shadow(0px 2px 2px #294A4240);
 
 	&:hover {
@@ -1660,6 +1662,8 @@ h1 {
 	.bullet {
 		fill: white;
 		filter: drop-shadow(0px 2px 2px #294A4240);
+		stroke: var(--custom-dark1);
+    	stroke-width: 2px;
 	}
 	.core {
 		fill: #294A42;
