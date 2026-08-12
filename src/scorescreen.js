@@ -58,6 +58,9 @@ Namespace('Labeling').ScoreCore = (function() {
 			_anchorOpacityValue = 1.0;
 		}
 
+		if(!_qset.options.labelStyle)
+			_qset.options.labelStyle = "mid"
+
 		switch (_qset.options.backgroundTheme) {
 			case 'themeGraphPaper':
 				background = 'url(assets/labeling-graph-bg.png)';
@@ -147,7 +150,7 @@ Namespace('Labeling').ScoreCore = (function() {
 
 				let ghost = document.createElement('div');
 				ghost.id = "ghost_"+question.mask
-				ghost.className = `term final placed ${!isPlaced && "target"}`
+				ghost.className = `term final placed ${!isPlaced && "target"} ${_qset.options.labelStyle ? _qset.options.labelStyle : "mid"}`
 				ghost.innerHTML = isPlaced ? scoreEntry.data[0] : "No Answer";
 				ghost.style.left = question.options.labelBoxX+"px"
 				ghost.style.top = question.options.labelBoxY+"px"
@@ -224,9 +227,10 @@ Namespace('Labeling').ScoreCore = (function() {
 
 				const rowLabels = clone.querySelector(".qrow").querySelectorAll("div")
 				rowLabels[0].innerHTML = isPlaced ? scoreEntry.data[0] : "No Answer"
-				rowLabels[0].classList.add(correct ? "correct" : "wrong")
+				rowLabels[0].classList.add(correct ? "correct" : "wrong", _qset.options.labelStyle ? _qset.options.labelStyle : "mid")
 				if(!isPlaced) rowLabels[0].classList.add("target")
 				rowLabels[1].innerHTML = scoreEntry.data[1]
+				rowLabels[1].classList.add(_qset.options.labelStyle ? _qset.options.labelStyle : "mid")
 
 				_qDiv.appendChild(clone)
 			}

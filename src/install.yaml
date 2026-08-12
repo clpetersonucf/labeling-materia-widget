@@ -1,7 +1,6 @@
 ---
 general:
   name: Labeling
-  group: Materia
   height: 0
   width: 0
   in_catalog: Yes
