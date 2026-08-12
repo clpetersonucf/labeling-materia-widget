@@ -206,7 +206,7 @@ Namespace('Labeling').Creator = (function() {
 			document.getElementById("namebox").inert = true
 			document.getElementById("titlechanger").inert = true
 			$('#backgroundcover').removeClass('show');
-			$('#title').html((title || 'My labeling widget'));
+			$('#title').html((title || 'My Labeling Widget'));
 		};
 
 		window.setImageDescription = function(alt) {
@@ -214,7 +214,7 @@ Namespace('Labeling').Creator = (function() {
 			$('#descriptionchanger').removeClass('show');
 			document.getElementById("descriptionchanger").inert = true
 			$('#backgroundcover').removeClass('show');
-			$('#imagedescription').html((alt||'My labeling widget'));
+			$('#imagedescription').html((alt||'Add an image description!'));
 			$('#image').attr('alt', alt);
 		};
 
