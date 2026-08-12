@@ -177,6 +177,7 @@ Namespace('Labeling').Creator = (function() {
 
 		$('#btnChangeDescription').click(function() {
 			$('#descriptionchanger').addClass('show');
+			document.getElementById("descriptionchanger").inert = false
 			$('#backgroundcover').addClass('show');
 			return $('.arrow_box').addClass('hide');
 		});
@@ -189,6 +190,12 @@ Namespace('Labeling').Creator = (function() {
 		});
 
 		$('#title').click(_showMiniTitleEditor);
+		$('#title').on('keydown', (e) => {
+			if(e.key === "Enter") {
+				e.preventDefault()
+				_showMiniTitleEditor()
+			}
+		});
 		$('#header .link').click(_showMiniTitleEditor);
 
 		window.setTitle = function(title) {
@@ -196,16 +203,19 @@ Namespace('Labeling').Creator = (function() {
 			title = title.replace(/</g, '').replace(/>/g, '');
 			$('#namebox').removeClass('show');
 			$('#titlechanger').removeClass('show');
+			document.getElementById("namebox").inert = true
+			document.getElementById("titlechanger").inert = true
 			$('#backgroundcover').removeClass('show');
-			return $('#title').html((title || 'My labeling widget'));
+			$('#title').html((title || 'My labeling widget'));
 		};
 
 		window.setImageDescription = function(alt) {
 			if (alt == null) { alt = document.getElementById("alttext"); }
 			$('#descriptionchanger').removeClass('show');
+			document.getElementById("descriptionchanger").inert = true
 			$('#backgroundcover').removeClass('show');
 			$('#imagedescription').html((alt||'My labeling widget'));
-			return $('#image').attr('alt', alt);
+			$('#image').attr('alt', alt);
 		};
 
 		document.getElementById('svglayer').addEventListener('click', _addTerm, false);
@@ -219,12 +229,17 @@ Namespace('Labeling').Creator = (function() {
 
 		document.getElementById("letsgo-btn").addEventListener("click", (e)=>{
 			document.getElementById("titlebox").classList.remove("show");
+			document.getElementById("titlebox").inert = true
 			document.getElementById("namebox").classList.add("show");
+			document.getElementById("namebox").inert = false
+			document.querySelector("#namebox input").focus()
 		})
 	};
 
 	var _showMiniTitleEditor = function() {
 		$('#titlechanger').addClass('show');
+		$('#titlechanger').attr('inert', false)
+		document.getElementById("titlechanger").inert = false
 		$('#backgroundcover').addClass('show');
 		return $('#titletxt').val($('#title').html()).focus();
 	};
@@ -580,6 +595,8 @@ Namespace('Labeling').Creator = (function() {
 		term.className = `term ${_activeLabelStyle}`;
 		term.querySelector(".label-input").innerHTML = text
 		term.querySelector(".description-input").innerHTML = description
+
+		term.ariaLabel = `Placed label.`
 		
 		// if we're generating a generic one, decide on a position
 		if ((labelX === null) || (labelY === null)) {
@@ -994,6 +1011,8 @@ Namespace('Labeling').Creator = (function() {
 
 		// add image description dialog
 		$('#descriptionchanger').addClass('show');
+		document.getElementById("descriptionchanger").inert = false
+		document.querySelector("#descriptionchanger input").focus()
 		$('#backgroundcover').addClass('show');
 
 		_makeDraggable();

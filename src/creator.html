@@ -24,8 +24,8 @@
 		<div class='sidepanel right'></div> -->
 
 		<div class='frame' id='frame'>
-			<header id='header'>
-				<h1 id='title' role='textbox' tabindex='0'>
+			<header id='header' aria-label="Header">
+				<h1 id='title' role='textbox' tabindex='0' aria-label="Edit title">
 				</h1>
 			</header>
 
@@ -41,29 +41,29 @@
 						<input type="radio" id="dynamic-color" name="background-preference" />
 						<label for="dynamic-color" class="bg-preference">Dynamic Colors</label>
 					</div> -->
-					<div class="background-options">
-						<input type="radio" id="a-toggle" name="background-tone" checked>
+					<div class="background-options" aria-label="Background color settings">
+						<input type="radio" id="a-toggle" name="background-tone" aria-label="Dark green" checked>
 						<label for="a-toggle" class="swatch dark1"></label>
 					
-						<input type="radio" id="b-toggle" name="background-tone">
+						<input type="radio" id="b-toggle" name="background-tone" aria-label="Dark blue">
 						<label for="b-toggle" class="swatch dark2"></label>
 			
-						<input type="radio" id="c-toggle" name="background-tone">
+						<input type="radio" id="c-toggle" name="background-tone" aria-label="Mahogany red">
 						<label for="c-toggle" class="swatch dark3"></label>
 				
-						<input type="radio" id="d-toggle" name="background-tone">
+						<input type="radio" id="d-toggle" name="background-tone" aria-label="Brick red">
 						<label for="d-toggle" class="swatch dark4"></label>
 						
-						<input type="radio" id="f-toggle" name="background-tone">
+						<input type="radio" id="f-toggle" name="background-tone" aria-label="Grey">
 						<label for="f-toggle" class="swatch mid2"></label>
 
-						<input type="radio" id="j-toggle" name="background-tone">
+						<input type="radio" id="j-toggle" name="background-tone" aria-label="Light grey">
 						<label for="j-toggle" class="swatch light2"></label>
 
-						<input type="radio" id="e-toggle" name="background-tone">
+						<input type="radio" id="e-toggle" name="background-tone" aria-label="Sand">
 						<label for="e-toggle" class="swatch mid"></label>
 					
-						<input type="radio" id="i-toggle" name="background-tone">
+						<input type="radio" id="i-toggle" name="background-tone" aria-label="Light sand">
 						<label for="i-toggle" class="swatch light"></label>
 					</div>
 				</div>
@@ -72,29 +72,29 @@
 					<label class="label-title">Label Settings</label>
 					<label class="label-subtitle">Color Scheme</label>
 				  
-					<div class="label-options">
-						<input type="radio" id="a-labeltoggle" name="label-toggle" value="opaque" checked>
+					<div class="label-options" aria-label="Label color scheme settings">
+						<input type="radio" id="a-labeltoggle" name="label-toggle" aria-label="Dark green with white text" checked>
 						<label for="a-labeltoggle" class="label-box dark1" data-style="dark1">Aa</label>
 						
-						<input type="radio" id="b-labeltoggle" name="label-toggle" value="opaque">
+						<input type="radio" id="b-labeltoggle" name="label-toggle" aria-label="Dark blue with white text">
 						<label for="b-labeltoggle" class="label-box dark2" data-style="dark2">Aa</label>
 						
-						<input type="radio" id="c-labeltoggle" name="label-toggle" value="opaque">
+						<input type="radio" id="c-labeltoggle" name="label-toggle" aria-label="Mahogany red with white text">
 						<label for="c-labeltoggle" class="label-box dark3" data-style="dark3">Aa</label>
 
-						<input type="radio" id="d-labeltoggle" name="label-toggle" value="opaque">
+						<input type="radio" id="d-labeltoggle" name="label-toggle" aria-label="Brick red with white text">
 						<label for="d-labeltoggle" class="label-box dark4" data-style="dark4">Aa</label>
 					  
-						<input type="radio" id="g-labeltoggle" name="label-toggle" value="frosted">
+						<input type="radio" id="g-labeltoggle" name="label-toggle" aria-label="Grey with black text">
 						<label for="g-labeltoggle" class="label-box mid2" data-style="mid2">Aa</label>
 					
-						<input type="radio" id="h-labeltoggle" name="label-toggle" value="transparent">
+						<input type="radio" id="h-labeltoggle" name="label-toggle" aria-label="Light grey with dark green text">
 						<label for="h-labeltoggle" class="label-box light2" data-style="light2">Aa</label>
 				  
-						<input type="radio" id="e-labeltoggle" name="label-toggle" value="frosted">
+						<input type="radio" id="e-labeltoggle" name="label-toggle" aria-label="Sand with dark green text">
 						<label for="e-labeltoggle" class="label-box mid" data-style="mid">Aa</label>
 					
-						<input type="radio" id="f-labeltoggle" name="label-toggle" value="transparent">
+						<input type="radio" id="f-labeltoggle" name="label-toggle" aria-label="Light sand with dark green text">
 						<label for="f-labeltoggle" class="label-box light" data-style="light">Aa</label>
 					</div>
 				</div>
@@ -112,21 +112,22 @@
 						max="100"
 						step="1"
 						value="100"
+						aria-label="Anchor opacity percentage"
 					>
 				</div>
 				<hr>
 				<div id="image-settings">
 					<label class="label-title">Image Settings</label>
-					<div id="edit-image">
+					<div id="edit-image" aria-label="Image display settings">
 						<input type='button' value='Choose a different image' data-intro='Choose an image' id='btnChooseImage'>
-						<input type='button' id='btnMoveCrop'>
-						<input type='button' id='btnMoveResize'>
+						<input type='button' id='btnMoveCrop' aria-label="Crop Image">
+						<input type='button' id='btnMoveResize' aria-label="Resize Image">
 					</div>
 					<hr/>
 					<label class="label-title">Image Description</label>
-					<div id="image-desc">
+					<div id="image-desc" aria-label="Image Description Settings">
 						<p id="imagedescription"></p>
-						<button id='btnChangeDescription'>
+						<button id='btnChangeDescription' aria-label="Change Description">
 							<img src="assets/pencil.svg"/>
 						</button>
 					</div>
@@ -164,38 +165,34 @@
 						</defs>
 					</svg>
 					<div id='terms'>
-						<template id="term_template"><div><h3 class="label-title-header">Create Label</h3><div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'></div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' tabindex='0' onkeypress='return (this.innerText.length <= 400)'></div><div class='delete'><img src="assets/x.svg"/></div><div class='confirm'><img src="assets/check.svg"/></div><div class='expand'></div></div></template>
+						<!-- for some evil reason this breaks if it is not a single line -->
+						<template id="term_template"><div><h3 class="label-title-header">Create Label</h3><div class='label-title-header'>Label Title</div><div class='label-input' id='text-input' aria-label="Label Title" tabindex='0' contenteditable='true' onkeypress='return (this.innerText.length <= 400)'></div><div class='alt-text-header'>Label Description</div><div class='description-input' id='text-input' contenteditable='true' aria-label="Label Description" tabindex='0' onkeypress='return (this.innerText.length <= 400)'></div><button type="button" class='delete' aria-label="Delete Term"><img aria-hidden src="assets/x.svg"/></button><button type="button" class='confirm' aria-label="Confirm Term Changes"><img aria-hidden src="assets/check.svg"/></button></div></template>
 					</div>
 				</div>
 			</div>
 
-			<div id='titlechanger' class='box fade intro nubox fit'>
-				<!-- <b>Let's give your widget a title!</b>
-				<form onsubmit='setTitle(titletxt.value);return false;'>
-					<input type='text' id='titletxt' name='titletxt' placeholder='My Labeling widget' autofocus='1'>
-					<input type='submit' value='Done'>
-				</form> -->
+			<div id='titlechanger' class='box fade intro nubox fit' aria-label="Widget title editor" inert>
 				<p>Let's give this Labeling Widget a title!</p>
 				<form class="btn-row sm" onsubmit='setTitle(titletxt.value);return false;'>
-					<input class="nutxt purple" type='text' id='titletxt' name='titletxt' placeholder='My New Widget' autofocus='1'>
-					<button type='submit' class="nubtn" id='btn-update-title'>
+					<input class="nutxt purple" type='text' id='titletxt' name='titletxt' aria-label="Title input" placeholder='My New Widget' autofocus='1'>
+					<button type='submit' class="nubtn" id='btn-update-title' aria-label="Update title">
 						<img src="assets/arrow-right.svg"/>
 					</button>
 				</form>
 			</div>
 
-			<div id='descriptionchanger' class='box fade nubox fit'>
+			<div id='descriptionchanger' class='box fade nubox fit' aria-label="Widget description editor" inert>
 				<img id="descimage"/>
 				<p>Add an Image Description.</p>
 				<form class="btn-row sm" onsubmit='setImageDescription(alttxt.value);return false;'>
-					<input type='text' id='alttxt' class="nutxt green" required name='alttxt' placeholder='My image description' autofocus='1'>
-					<button type='submit' class="nubtn" id='btn-enter-desc'>
+					<input type='text' id='alttxt' class="nutxt green" required name='alttxt' aria-label="Description input" placeholder='My image description' autofocus='1'>
+					<button type='submit' class="nubtn" id='btn-enter-desc' aria-label="Update description">
 						<img src="assets/arrow-right.svg"/>
 					</button>
 				</form>
 			</div>
 
-			<div id='titlebox' class='box fade intro nubox'>
+			<div id='titlebox' class='box fade intro nubox' aria-label="Labeling intro">
 				<h1>Welcome to Labeling</h1>
 				<div style="width: 350px; height: 200px; background:#444;"></div>	
 				<p>Upload an image, add labeled anchors, then let students match them for a percent accurate grade.</p>
@@ -205,11 +202,11 @@
 				</div>
 			</div>
 
-			<div id='namebox' class='box fade intro nubox fit'>
+			<div id='namebox' class='box fade intro nubox fit' aria-label="Widget title editor" inert>
 				<p>Let's give this Labeling Widget a title!</p>
 				<form class="btn-row sm" onsubmit='setTitle(titletxt.value);return false;'>
-					<input class="nutxt purple" type='text' name='titletxt' placeholder='My New Widget' autofocus='1'>
-					<button type='submit' class="nubtn" id='btn-enter-title'>
+					<input class="nutxt purple" type='text' name='titletxt' aria-label="Title input" placeholder='My New Widget' autofocus='1'>
+					<button type='submit' class="nubtn" id='btn-enter-title' aria-label="Update title">
 						<img src="assets/arrow-right.svg"/>
 					</button>
 				</form>

@@ -929,13 +929,19 @@ div.term {
 		-webkit-transition: all 0.1s ease;
 		transition: all 0.1s ease;
 
-		width: 12px;
-		height: 12px;
+		width: 16px;
+		height: 16px;
 		padding: 2px;
+		border: none;
 
 		img {
 			width: 12px;
 			height: 12px;
+		}
+
+		&:focus-visible {
+			outline-offset: 2px;
+			outline: 2px solid rgb(85, 214, 206);
 		}
 	}
 
@@ -955,13 +961,19 @@ div.term {
 		-webkit-transition: all 0.1s ease;
 		transition: all 0.1s ease;
 
-		width: 12px;
-		height: 12px;
+		width: 16px;
+		height: 16px;
 		padding: 2px;
+		border: none;
 
 		img {
 			width: 12px;
 			height: 12px;
+		}
+
+		&:focus-visible {
+			outline-offset: 2px;
+			outline: 2px solid rgb(85, 214, 206);
 		}
 	}	
 
