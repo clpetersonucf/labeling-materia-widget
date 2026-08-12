@@ -9,12 +9,20 @@ $inputmaxheight: 100px;
 
 html,
 body {
-	--custom-dark1: rgb(41, 74, 66);
 	--custom-dark1-transparency: 41 74 66;
-	--custom-dark2: rgb(49, 50, 98);
 	--custom-dark2-transparency: 68 68 68;
-	--custom-mid: rgb(239, 222, 208);
-	--custom-light: rgb(255, 249, 249);
+
+	--base-dark: #333333;
+	--base-dark-transparency: 51 51 51;
+
+	--custom-dark1: #314942;
+	--custom-dark2: #31325F;
+	--custom-dark3: #483232;
+	--custom-dark4: #825655;
+	--custom-mid: #ECDFD2;
+	--custom-mid2: #A3A9AF;
+	--custom-light: #FEF9F9;
+	--custom-light2: #D8DADF;
 
 	cursor: default;
 	background: var(--custom-dark2);
@@ -97,6 +105,7 @@ textarea {
 	align-items: stretch;
 	min-width: 1010px;
 	width: 80%;
+	border-radius: 8px;
 	// width: 953px;
 	// height: 600px;
 	margin: 1rem auto;
@@ -341,6 +350,7 @@ textarea {
 		max-width: 600px;
 		height: 2rem;
 		margin: 0;
+		border-radius: 4px;
 
 		font-family: 'Anybody', sans-serif;
 		font-weight: 500;
@@ -361,8 +371,13 @@ textarea {
 			filter: invert(1);
 		}
 		
-		&:hover, &:focus {
+		&:hover, &:focus-within {
 			text-decoration: underline;
+		}
+
+		&:focus-visible {
+			outline-offset: 2px;
+			outline: 2px solid rgb(85, 214, 206);
 		}
 
 	}
@@ -385,6 +400,7 @@ textarea {
 #controls {
 	position: relative;
 	order: 3;
+	min-height: fit-content; // 550px + 4px border
 	height: calc(100% - 48px);
 	box-sizing: border-box;
 	background: #FCFCFC;
@@ -418,7 +434,7 @@ textarea {
 		display: block;
 		margin-bottom: 10px;
 		margin-left: 2px;
-		color: var(--custom-dark1);
+		color: var(--base-dark);
 	}	
 
 	.label-subtitle {
@@ -426,7 +442,7 @@ textarea {
 		font-size: 6px;
 		margin-bottom: 8px;
 		margin-left: 2px;
-		color: var(--custom-dark1);
+		color: var(--base-dark);
 	}
 
 	.background-swatch-preferences {
@@ -453,8 +469,14 @@ textarea {
 	.background-options {
 	  	display: grid;
 		margin-left: 0px;
-	  	grid-template-columns: repeat(2, 1fr);
+	  	grid-template-columns: repeat(4, 1fr);
 	  	gap: 8px;
+		border-radius: 4px;
+
+		&:has(:focus-visible) {
+			outline-offset: 4px;
+			outline: 2px dotted var(--base-dark)
+		}
   
 	  	input[type="radio"] {
 			position: absolute;
@@ -471,20 +493,37 @@ textarea {
 			cursor: pointer;
 			border: 1px solid transparent;
 			box-sizing: border-box;
-			transition: border-color 0.15s ease, transform 0.1s ease;
+			transition: border-color 0.15s ease, outline 0.15s ease, transform 0.1s ease;
 			transform-origin: center;
 			will-change: transform;
 	
 			&.dark1 { background: var(--custom-dark1); }
 			&.dark2 { background: var(--custom-dark2); }
+			&.dark3 { background: var(--custom-dark3); }
+			&.dark4 { background: var(--custom-dark4); }
 			&.mid   { background: var(--custom-mid); }
+			&.mid2   { background: var(--custom-mid2); }
+			&.mid3   { background: var(--custom-mid3); }
+			&.mid4   { background: var(--custom-mid4); }
 			&.light { 
 				background: var(--custom-light); 
 				outline: 1px solid var(--custom-mid);
 			}
+			&.light2 { 
+				background: var(--custom-light2); 
+				outline: 1px solid var(--custom-mid2);
+			}
+			&.light3 { 
+				background: var(--custom-light3); 
+				outline: 1px solid var(--custom-mid3);
+			}
+			&.light4 { 
+				background: var(--custom-light4); 
+				outline: 1px solid var(--custom-mid4);
+			}
 	
-			&:hover {
-			transform: scale(1.05);
+			&:hover, &:focus-visible {
+				transform: scale(1.05);
 			}
 		}
 	
@@ -493,9 +532,9 @@ textarea {
 			transform: scale(1.05);
 		}
 	
-		input[type="radio"]:focus + .swatch {
-			outline: 1px solid rgb(218, 218, 218);
-			outline-offset: 1px;
+		input[type="radio"]:focus-visible + .swatch {
+			outline-offset: 2px;
+			outline: 2px solid rgb(85, 214, 206);
 		}
 	}
 }
@@ -507,7 +546,7 @@ textarea {
   .label-title {
     display: block;
 	margin-left: 2px;
-	color: var(--custom-dark1);
+	color: var(--base-dark);
   }
 
   .label-subtitle {
@@ -515,37 +554,63 @@ textarea {
     margin-bottom: 10px;
 	margin-left: 2px;
 	font-size: 12px;
-	color: var(--custom-dark1);
+	color: var(--base-dark);
   }
 
   .label-options {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
+	border-radius: 4px;
+
+	&:has(:focus-visible) {
+		outline-offset: 4px;
+		outline: 2px dotted var(--base-dark)
+	}
 
     input[type="radio"] {
-      display: none;
-    }
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
 
     .label-box {
       aspect-ratio: 1 / 1;
       border-radius: 12px;
-      border: 2px solid #ccc;
+      border: 1px solid #ccc;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       cursor: pointer;
       user-select: none;
-      transition: all 0.2s ease;
+      transition: border-color 0.15s ease, outline 0.15s ease, transform 0.1s ease;
 	  
 	  	&.dark1 { 
 			background: var(--custom-dark1);
 			color: var(--custom-light);
 		}
+		&.dark2 { 
+			background: var(--custom-dark2);
+			color: var(--custom-light);
+		}
+		&.dark3 { 
+			background: var(--custom-dark3);
+			color: var(--custom-light);
+		}
+		&.dark4 { 
+			background: var(--custom-dark4);
+			color: var(--custom-light);
+		}
 	  	&.mid   { background: var(--custom-mid); }
 		&.light { background: var(--custom-light);
 		border: 1px solid var(--custom-mid/0.5);}
+		&.mid2   { 
+			background: var(--custom-mid2); 
+			color: var(--base-dark);
+		}
+		&.light2 { background: var(--custom-light2);
+		border: 1px solid var(--custom-mid2/0.5);}
 
       &:hover {
         border-color: #999;
@@ -553,14 +618,14 @@ textarea {
       }
     }
 
-	input[type="radio"]:checked + .swatch {
+	input[type="radio"]:checked + .label-box {
 	  border-color: #fff;
 	  transform: scale(1.05);
 	}
 
-	input[type="radio"]:focus + .swatch {
-	  outline: 1px solid rgb(218, 218, 218);
-	  outline-offset: 1px;
+	input[type="radio"]:focus-visible + .label-box {
+	  outline-offset: 2px;
+	  outline: 2px solid rgb(85, 214, 206);
 	}
   }
 }
@@ -570,7 +635,7 @@ textarea {
 	.label-title {
 		display: block;
 		margin-left: 2px;
-		color: var(--custom-dark1);
+		color: var(--base-dark);
 	  }
 	
 	  .label-subtitle {
@@ -578,7 +643,7 @@ textarea {
 		margin-bottom: 10px;
 		margin-left: 2px;
 		font-size: 12px;
-		color: var(--custom-dark1);
+		color: var(--base-dark);
 	  }
 
 	  #opacity-value {
@@ -596,14 +661,20 @@ textarea {
 	  input[type='range'] {
 		width: 100%;
 		margin: 0px;
+		border-radius: 10px;
+
+		&:focus-visible {
+			outline-offset: 2px;
+			outline: 2px solid rgb(85, 214, 206);
+		}
 	  }
 
 	  input[type='range']::-webkit-slider-runnable-track {
 		height: 20px;
 		width: 100%;
-		background-image: linear-gradient(to right, rgb(var( --custom-dark2-transparency) / 0), var(--custom-dark2));
+		background-image: linear-gradient(to right, rgb(var( --base-dark-transparency) / 0), var(--base-dark));
 		border-radius: 10px;
-		outline: 1px solid var(--custom-dark2);
+		outline: 1px solid var(--custom-mid2);
 		/* You can add other styles like box-shadow or border here */
 	  }
 	  
@@ -643,7 +714,7 @@ textarea {
 		display: block;
 		margin-left: 2px;
 		margin-bottom: 10px;
-		color: var(--custom-dark1);
+		color: var(--base-dark);
 	  }
 	
 	  .label-subtitle {
@@ -651,7 +722,7 @@ textarea {
 		margin-bottom: 10px;
 		margin-left: 2px;
 		font-size: 12px;
-		color: var(--custom-dark1);
+		color: var(--base-dark);
 	  }
 
 	  .label-subtitle2 {
@@ -659,7 +730,7 @@ textarea {
 		margin-bottom: 0px;
 		margin-left: 2px;
 		font-size: 12px;
-		color: var(--custom-dark1);
+		color: var(--base-dark);
 	  }
 
 	  #edit-image {
@@ -674,22 +745,30 @@ textarea {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		justify-content: flex-start;
+		justify-content: space-between;
 		gap: 14px;
 
 		#imagedescription {
 			font-size: 12px;
 			font-style: italic;
 			margin: 4px 0px 0px 0px;
-			color: var(--custom-dark1);
+			color: var(--base-dark);
 			width: fit-content;
-			max-width: 80%;
+			max-width: 200px;
 			max-height: 24px;
 			text-overflow: ellipsis;
 			overflow: hidden;
 			padding-right: 0.5em;
 			display: inline-block;
 			white-space: nowrap;
+
+			&:empty {
+				&:after {
+					font-size: 12px;
+					color: #777777;
+					content: "Add a description...";
+				}
+			}
 		}
 
 		button {
@@ -892,7 +971,7 @@ div.term {
 		right: 2px;
 		z-index: 100;
 		display:block;
-		color: var(--custom-dark1);
+		color: var(--base-dark);
 		padding: 0px 4.5px 0px;
 		border-radius: 50px;
 		font-size: 14px;
@@ -950,7 +1029,7 @@ div.term {
 
 	}
 
-	&.dark {
+	&.dark1 {
 		background-color: var(--custom-dark1);
 		color: var(--custom-light);
 
@@ -959,6 +1038,48 @@ div.term {
 				outline: none;
 				background-color: var(--custom-mid);
 				color: var(--custom-dark1);
+			}
+		}
+		
+	}
+
+	&.dark2 {
+		background-color: var(--custom-dark2);
+		color: var(--custom-light);
+
+		&:focus-within {
+			.label-input, .description-input {
+				outline: none;
+				background-color: var(--custom-mid);
+				color: var(--custom-dark2);
+			}
+		}
+		
+	}
+
+	&.dark3 {
+		background-color: var(--custom-dark3);
+		color: var(--custom-light);
+
+		&:focus-within {
+			.label-input, .description-input {
+				outline: none;
+				background-color: var(--custom-mid);
+				color: var(--custom-dark3);
+			}
+		}
+		
+	}
+
+	&.dark4 {
+		background-color: var(--custom-dark4);
+		color: var(--custom-light);
+
+		&:focus-within {
+			.label-input, .description-input {
+				outline: none;
+				background-color: var(--custom-mid);
+				color: var(--custom-dark4);
 			}
 		}
 		
@@ -979,11 +1100,35 @@ div.term {
 	&.light {
 		background-color: var(--custom-light);
 		color: var(--custom-dark1);
-		outline: 1px solid rgb(var(--custom-dark1-transparency) / 0.3);
+		// outline: 1px solid rgb(var(--custom-dark1-transparency) / 0.3);
 
 		&:focus-within {
 			.label-input, .description-input {
 				outline: 1px solid var(--custom-mid);
+			}
+		}
+	}
+
+	&.mid2 {
+		background-color: var(--custom-mid2);
+		color: var(--base-dark);
+
+		&:focus-within {
+			.label-input, .description-input {
+				outline: none;
+				background-color: var(--custom-light2);
+			}
+		}
+	}
+
+	&.light2 {
+		background-color: var(--custom-light2);
+		color: var(--custom-dark1);
+		// outline: 1px solid rgb(var(--custom-dark1-transparency) / 0.3);
+
+		&:focus-within {
+			.label-input, .description-input {
+				outline: 1px solid var(--custom-mid2);
 			}
 		}
 	}
@@ -1003,7 +1148,7 @@ div.dot {
 
 	&:hover {
 		cursor: move;
-		background: var(--custom-dark1);
+		background: var(--base-dark);
 	}
 
 	&.frosted {
@@ -1145,16 +1290,22 @@ h1 {
 #btnMoveResize,
 #btnChangeDescription,
 #btnMoveCrop {
-  width: 24px;
-  height: 24px;
-  color: var(--custom-dark1);
-  border: none;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  cursor: pointer;
-  padding: 0px;
+	width: 24px;
+	height: 24px;
+	color: var(--base-dark);
+	border: none;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	cursor: pointer;
+	padding: 4px;
+	border-radius: 4px;
+
+	&:focus-visible {
+		outline-offset: 2px;
+		outline: 2px solid rgb(85, 214, 206);
+	}
 }
 
 #btnMoveResize {
@@ -1170,7 +1321,7 @@ h1 {
 }
 
 #btnChooseImage {
-	background-color: var(--custom-dark1);
+	background-color: var(--base-dark);
 	font-family: "Anybody";
 	color: var(--custom-light);
 	font-size: 12px;
@@ -1179,6 +1330,11 @@ h1 {
 	border: none;
 	padding: 6px 12px;
 	cursor: pointer;
+
+	&:focus-visible {
+		outline-offset: 2px;
+		outline: 2px solid rgb(85, 214, 206);
+	}
 }
 
 .helpbox {

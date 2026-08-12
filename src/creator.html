@@ -42,17 +42,29 @@
 						<label for="dynamic-color" class="bg-preference">Dynamic Colors</label>
 					</div> -->
 					<div class="background-options">
-						<input type="radio" id="darktone-toggle" name="background-tone" checked>
-						<label for="darktone-toggle" class="swatch dark1"></label>
+						<input type="radio" id="a-toggle" name="background-tone" checked>
+						<label for="a-toggle" class="swatch dark1"></label>
 					
-						<input type="radio" id="darktone2-toggle" name="background-tone">
-						<label for="darktone2-toggle" class="swatch dark2"></label>
+						<input type="radio" id="b-toggle" name="background-tone">
+						<label for="b-toggle" class="swatch dark2"></label>
 			
-						<input type="radio" id="midtone-toggle" name="background-tone">
-						<label for="midtone-toggle" class="swatch mid"></label>
+						<input type="radio" id="c-toggle" name="background-tone">
+						<label for="c-toggle" class="swatch dark3"></label>
 				
-						<input type="radio" id="lighttone-toggle" name="background-tone">
-						<label for="lighttone-toggle" class="swatch light"></label>
+						<input type="radio" id="d-toggle" name="background-tone">
+						<label for="d-toggle" class="swatch dark4"></label>
+						
+						<input type="radio" id="f-toggle" name="background-tone">
+						<label for="f-toggle" class="swatch mid2"></label>
+
+						<input type="radio" id="j-toggle" name="background-tone">
+						<label for="j-toggle" class="swatch light2"></label>
+
+						<input type="radio" id="e-toggle" name="background-tone">
+						<label for="e-toggle" class="swatch mid"></label>
+					
+						<input type="radio" id="i-toggle" name="background-tone">
+						<label for="i-toggle" class="swatch light"></label>
 					</div>
 				</div>
 				<hr>
@@ -61,14 +73,29 @@
 					<label class="label-subtitle">Color Scheme</label>
 				  
 					<div class="label-options">
-					  <input type="radio" id="darktone-labeltoggle" name="label-toggle" value="opaque" checked>
-					  <label for="darktone-labeltoggle" class="label-box dark1">Aa</label>
+						<input type="radio" id="a-labeltoggle" name="label-toggle" value="opaque" checked>
+						<label for="a-labeltoggle" class="label-box dark1" data-style="dark1">Aa</label>
+						
+						<input type="radio" id="b-labeltoggle" name="label-toggle" value="opaque">
+						<label for="b-labeltoggle" class="label-box dark2" data-style="dark2">Aa</label>
+						
+						<input type="radio" id="c-labeltoggle" name="label-toggle" value="opaque">
+						<label for="c-labeltoggle" class="label-box dark3" data-style="dark3">Aa</label>
+
+						<input type="radio" id="d-labeltoggle" name="label-toggle" value="opaque">
+						<label for="d-labeltoggle" class="label-box dark4" data-style="dark4">Aa</label>
+					  
+						<input type="radio" id="g-labeltoggle" name="label-toggle" value="frosted">
+						<label for="g-labeltoggle" class="label-box mid2" data-style="mid2">Aa</label>
+					
+						<input type="radio" id="h-labeltoggle" name="label-toggle" value="transparent">
+						<label for="h-labeltoggle" class="label-box light2" data-style="light2">Aa</label>
 				  
-					  <input type="radio" id="midtone-labeltoggle" name="label-toggle" value="frosted">
-					  <label for="midtone-labeltoggle" class="label-box mid">Aa</label>
-				  
-					  <input type="radio" id="lighttone-labeltoggle" name="label-toggle" value="transparent">
-					  <label for="lighttone-labeltoggle" class="label-box light">Aa</label>
+						<input type="radio" id="e-labeltoggle" name="label-toggle" value="frosted">
+						<label for="e-labeltoggle" class="label-box mid" data-style="mid">Aa</label>
+					
+						<input type="radio" id="f-labeltoggle" name="label-toggle" value="transparent">
+						<label for="f-labeltoggle" class="label-box light" data-style="light">Aa</label>
 					</div>
 				</div>
 				<hr>
@@ -95,7 +122,8 @@
 						<input type='button' id='btnMoveCrop'>
 						<input type='button' id='btnMoveResize'>
 					</div>
-					<label class="label-subtitle2">Image Description</label>
+					<hr/>
+					<label class="label-title">Image Description</label>
 					<div id="image-desc">
 						<p id="imagedescription"></p>
 						<button id='btnChangeDescription'>

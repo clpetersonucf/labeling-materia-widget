@@ -38,6 +38,8 @@ Namespace('Labeling').Creator = (function() {
 		'rgb(255, 249, 249)'
 	]
 
+	const _labelStyles = ["dark1", "dark2", "dark3", "dark4", "mid", "light", "mid2", "light2"]
+
 	const _defaultLabel = 'Enter label title';
 	const _defaultDescription = 'Anchor point alt text';
 
@@ -93,26 +95,18 @@ Namespace('Labeling').Creator = (function() {
 		// 	})
 		// })
 
-		document.querySelector(".background-options").querySelectorAll(".swatch").forEach((v)=>{
+		document.querySelector(".background-options").querySelectorAll("input").forEach((v)=>{
 			v.addEventListener("click", (e) => {
-				_qset.options.backgroundColor = window.getComputedStyle(e.target).backgroundColor
+				_qset.options.backgroundColor = window.getComputedStyle(e.target.labels[0]).backgroundColor
 				_setBackground()
 			})
 		})
 
-		document.getElementById("darktone-labeltoggle").addEventListener("click", ()=>{
-			_activeLabelStyle = "dark"
-			_applyLabelStyle()
-		})
-
-		document.getElementById("midtone-labeltoggle").addEventListener("click", ()=>{
-			_activeLabelStyle = "mid"
-			_applyLabelStyle()
-		})
-
-		document.getElementById("lighttone-labeltoggle").addEventListener("click", ()=>{
-			_activeLabelStyle = "light"
-			_applyLabelStyle()
+		document.querySelector("#label-settings").querySelectorAll("input").forEach((v)=>{
+			v.addEventListener("click", (e) => {
+				_activeLabelStyle = e.target.labels[0].dataset.style
+				_applyLabelStyle()
+			})
 		})
 
 		document.getElementById("opacity-slider").addEventListener("input", (e)=>{
@@ -396,20 +390,8 @@ Namespace('Labeling').Creator = (function() {
 	// sets label style from qset
 	const _applyLabelStyle = () => {
 		document.querySelectorAll(".term").forEach((v)=>{
-			switch(_activeLabelStyle) {
-				case "dark":
-					v.classList.remove("mid", "light")
-					v.classList.add("dark")
-					break
-				case "mid":
-					v.classList.remove("dark", "light")
-					v.classList.add("mid")
-					break
-				case "light":
-					v.classList.remove("dark", "mid")
-					v.classList.add("light")
-					break
-			}
+			v.classList.remove(..._labelStyles)
+			v.classList.add(_activeLabelStyle)
 		})
 	}
 

@@ -28,12 +28,20 @@ html, body {
 	// This is an IE thing, it prevents panning the page
 	touch-action: none;
 
-	--custom-dark1: rgb(41, 74, 66);
 	--custom-dark1-transparency: 41 74 66;
-	--custom-dark2: rgb(49, 50, 98);
 	--custom-dark2-transparency: 68 68 68;
-	--custom-mid: rgb(239, 222, 208);
-	--custom-light: rgb(255, 249, 249);
+
+	--base-dark: #333333;
+	--base-dark-transparency: 51 51 51;
+
+	--custom-dark1: #314942;
+	--custom-dark2: #31325F;
+	--custom-dark3: #483232;
+	--custom-dark4: #825655;
+	--custom-mid: #ECDFD2;
+	--custom-mid2: #A3A9AF;
+	--custom-light: #FEF9F9;
+	--custom-light2: #D8DADF;
 
 	--anchor-opacity: 1;
 }
@@ -334,8 +342,23 @@ div.term {
 
 	transition: scale 200ms ease;
 
-	&.dark {
+	&.dark1 {
 		background-color: var(--custom-dark1);
+		color: var(--custom-light);
+	}
+
+	&.dark2 {
+		background-color: var(--custom-dark2);
+		color: var(--custom-light);
+	}
+
+	&.dark3 {
+		background-color: var(--custom-dark3);
+		color: var(--custom-light);
+	}
+
+	&.dark4 {
+		background-color: var(--custom-dark4);
 		color: var(--custom-light);
 	}
 
@@ -346,6 +369,17 @@ div.term {
 
 	&.light {
 		background-color: var(--custom-light);
+		color: var(--custom-dark1);
+		outline: 1px solid rgb(var(--custom-dark1-transparency) / 0.3);
+	}
+
+	&.mid2 {
+		background-color: var(--custom-mid2);
+		color: var(--base-dark);
+	}
+
+	&.light2 {
+		background-color: var(--custom-light2);
 		color: var(--custom-dark1);
 		outline: 1px solid rgb(var(--custom-dark1-transparency) / 0.3);
 	}
