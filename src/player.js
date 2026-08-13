@@ -560,15 +560,38 @@ Namespace('Labeling').Engine = (function() {
 		}
 	}
 
+	// a, b: placed labels
+	const _swapPlaced = (a, b) => {
+		let data = a.innerHTML
+		let labelId = a.getAttribute("data-label_id")
+
+		a.innerHTML = b.innerHTML
+		b.innerHTML = data
+
+		a.setAttribute("data-label_id", b.getAttribute("data-label_id"))
+		b.setAttribute("data-label_id", labelId)
+
+		_labelTextsByQuestionId[a.getAttribute("data-q_id")] = a.innerHTML
+		_labelTextsByQuestionId[b.getAttribute("data-q_id")] = b.innerHTML
+		
+		a.setAttribute("aria-label", `Now on label: ${a.innerHTML}. Placed at destination ${a.getAttribute("data-i")}.`)
+		b.setAttribute("aria-label", `Now on label: ${b.innerHTML}. Placed at destination ${b.getAttribute("data-i")}.`)
+	}
+
 	// s: source term
 	// v: ghost/target term
 	const _placeIntoGhost = (s, v) => {
 		let data = s.innerHTML
 		let sourceId = s.id
 
-		// if the target ghost already contains data from a label, reset it
+		// if the target ghost already contains data from a label, swap them
 		if(v.getAttribute("data-label_id")) {
-			_animateResetGhost(v)
+			if(s.className.includes("final")) {
+				_swapPlaced(s, v)
+				return
+			} else {
+				_animateResetGhost(v)
+			}
 		}
 
 		// handle if data is coming from unplaced label or other final label

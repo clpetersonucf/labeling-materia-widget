@@ -61,20 +61,14 @@ Namespace('Labeling').ScoreCore = (function() {
 		if(!_qset.options.labelStyle)
 			_qset.options.labelStyle = "mid"
 
-		switch (_qset.options.backgroundTheme) {
-			case 'themeGraphPaper':
-				background = 'url(assets/labeling-graph-bg.png)';
-				break;
-			case 'themeCorkBoard':
-				background = 'url(assets/labeling-cork-bg.jpg)';
-				break;
-			default:
-				if (_qset.options.backgroundColor.toString().length === 6) {
-					// convert to hex and zero pad the background, which is stored as an integer
-					background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
-				} else {
-					background = _qset.options.backgroundColor;
-				}
+		if(!_qset.options.backgroundColor)
+			_qset.options.backgroundColor = "#314942";
+
+		if (_qset.options.backgroundColor.toString().length === 6) {
+			// convert to hex and zero pad the background, which is stored as an integer
+			background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
+		} else {
+			background = _qset.options.backgroundColor;
 		}
 
 		// set background and header title
