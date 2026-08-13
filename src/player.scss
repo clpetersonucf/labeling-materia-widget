@@ -64,15 +64,6 @@ html, body {
 	flex-grow: 2;
 	margin: 0;
 	padding: 0;
-
-	&:after {
-		position: absolute;
-		content: '';
-		z-index: 0;
-		inset: 0;
-		background: rgba(0, 0, 0, 0.3);
-		pointer-events: none;
-	}
 }
 
 #board-scale-wrap {
@@ -94,7 +85,6 @@ html, body {
 	margin: 0;
 	transform-origin: top left;
 
-	border: dotted 2px rgba(255,255,255,0.25);
 	border-radius: 0.5rem;
 
 	#image {
