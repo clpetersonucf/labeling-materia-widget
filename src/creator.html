@@ -7,7 +7,7 @@
 		<!-- STYLESHEETS -->
 		<link rel='stylesheet' type='text/css' href='creator.css'>
 		<link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/css/jquery.ui.resizable.min.css'>
-		<link href='//fonts.googleapis.com/css?family=Anybody:300,400,700|Roboto+Slab' rel='stylesheet' type='text/css'>
+		<link href='//fonts.googleapis.com/css?family=Anybody:300,400,600,700|Roboto+Slab' rel='stylesheet' type='text/css'>
 
 		<!-- REQUIRED MATERIA JAVASCRIPT -->
 		<script src="materia.creatorcore.js"></script>
@@ -34,7 +34,14 @@
 
 			<div id='controls'>
 				<div id="background-settings" class="color-picker">
-					<label class="label-title">Background Settings</label>
+					<div class="label-title">
+						<span>Background Color</span>
+						<div class="overlay-options" aria-label="Background overlay settings">
+							<input type="radio" name="overlay" id="normal-overlay" data-type="" checked aria-label="No overlay" title="No overlay"></input>
+							<input type="radio" name="overlay"  id="dotted-overlay" data-type="dotted" aria-label="Dotted overlay" title="Dotted overlay"></input>
+							<input type="radio" name="overlay"  id="graph-overlay" data-type="graph" aria-label="Grid overlay" title="Grid overlay"></input>
+						</div>
+					</div>
 					<!-- <div class="background-swatch-preferences">
 						<input type="radio" id="default-color" name="background-preference" checked />
 						<label for="default-color" class="bg-preference">Default Colors</label>
@@ -70,8 +77,7 @@
 				</div>
 				<hr>
 				<div id="label-settings">
-					<label class="label-title">Label Settings</label>
-					<label class="label-subtitle">Color Scheme</label>
+					<label class="label-title">Label Color</label>
 				  
 					<div class="label-options" aria-label="Label color scheme settings">
 						<input type="radio" id="a-labeltoggle" name="label-toggle" aria-label="Dark green with white text" checked>
@@ -194,8 +200,8 @@
 			</div>
 
 			<div id='titlebox' class='box fade intro nubox' aria-label="Labeling intro">
-				<h1>Welcome to Labeling</h1>
 				<img src="assets/new_creator_example.png" alt="Image of an example Labeling widget"/>
+				<h1>Welcome to Labeling!</h1>
 				<p>Upload an image, add labeled anchors, then let students match them for a percent accurate grade.</p>
 				<div class="btn-row">
 					<button type="button" id="letsgo-btn" class="nubtn">Let's go!</button>

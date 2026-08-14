@@ -114,7 +114,7 @@ Namespace('Labeling').Engine = (function() {
 		//	e.preventDefault() if e and e.preventDefault
 		//	false
 
-		let background;
+		let background = "#314942";
 		if (version == null) { version = '1'; }
 		_qset = qset;
 
@@ -139,26 +139,30 @@ Namespace('Labeling').Engine = (function() {
 
 		document.querySelector("body").style.setProperty("--anchor-opacity", _anchorOpacityValue)
 
+		let backgroundOverlay = ""
+
 		// set background
 		switch (_qset.options.backgroundTheme) {
 			case 'themeGraphPaper':
-				background = 'url(assets/labeling-graph-bg.png)';
+				backgroundOverlay = "graph"
 				break;
 			case 'themeCorkBoard':
-				// background = 'url(assets/labeling-cork-bg.jpg)';
-				background = "#294A42"
+				backgroundOverlay = "dotted"
 				break;
-			default:
-				// convert to hex and zero pad the background, which is stored as an integer
-				if(parseInt(version) !== 2)
-					background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
-				else
-					background = _qset.options.backgroundColor
+		}
+
+		// convert to hex and zero pad the background, which is stored as an integer
+		if(_qset.options.backgroundColor) {
+			if(parseInt(version) !== 2)
+				background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
+			else
+				background = _qset.options.backgroundColor
 		}
 
 		// set background and header title
-		_g('board').style.background = background;
-		_g('content-container').style.background = background;
+		_g('content-container').style.backgroundColor = background;
+		if(backgroundOverlay != "")
+			_g('content-container').classList.add(backgroundOverlay)
 		if ((instance.name === undefined) || null) {
 			instance.name = "Widget Title Goes Here";
 		}

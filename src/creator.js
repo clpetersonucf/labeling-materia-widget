@@ -21,6 +21,8 @@ Namespace('Labeling').Creator = (function() {
 	//Anchor tag opacity class modifier
 	let _anchorOpacity = ' ';
 
+	let _activeOverlay = ""
+
 	// store image dimensions in case the user cancels the resize
 	let _lastImgDimensions = {};
 
@@ -75,7 +77,15 @@ Namespace('Labeling').Creator = (function() {
 
 	var _setupCreator = function() {
 		// set background and header title
+		
 		_setBackground();
+		
+		document.querySelectorAll(".overlay-options input").forEach((v) => {
+			if(_activeOverlay === v.dataset.type)
+				v.checked = true
+			else
+				v.checked = false
+		})
 
 		_img = new Image();
 		_svg = document.getElementById("svglayer")
@@ -94,6 +104,22 @@ Namespace('Labeling').Creator = (function() {
 		// 		}
 		// 	})
 		// })
+
+
+		document.getElementById("normal-overlay").addEventListener("click", () => {
+			_qset.options.backgroundTheme = ""
+			_setBackground()
+		})
+
+		document.getElementById("dotted-overlay").addEventListener("click", () => {
+			_qset.options.backgroundTheme = "themeCorkBoard"
+			_setBackground()
+		})
+
+		document.getElementById("graph-overlay").addEventListener("click", () => {
+			_qset.options.backgroundTheme = "themeGraphPaper"
+			_setBackground()
+		})
 
 		document.querySelector(".background-options").querySelectorAll("input").forEach((v)=>{
 			v.addEventListener("click", (e) => {
@@ -413,30 +439,30 @@ Namespace('Labeling').Creator = (function() {
 	// sets background from the qset
 	var _setBackground = function() {
 		let background;
+		_activeOverlay = ""
 		$('.backgroundtile').removeClass('show');
 
-		// set background
-		// _qset.options.backgroundTheme = ""
-		// switch (_qset.options.backgroundTheme) {
-		// 	case 'themeGraphPaper':
-		// 		background = 'url(assets/labeling-graph-bg.png)';
-		// 		$('.graph').addClass('show');
-		// 		break;
-		// 	case 'themeCorkBoard':
-		// 		background = 'url(assets/labeling-cork-bg.jpg)';
-		// 		$('.cork').addClass('show');
-		// 		break;
-		// 	default:
-		// 		// convert to hex and zero pad the background, which is stored as an integer
-		// 		// background = '#' + ('000000' + _qset.options.backgroundColor.toString(16)).substr(-6);
+		switch (_qset.options.backgroundTheme) {
+			case 'themeGraphPaper':
+				_activeOverlay = "graph";
+				break;
+			case 'themeCorkBoard':
+				_activeOverlay = "dotted";
+				break;
+		}
+			
 		background = _qset.options.backgroundColor
 		$('.color').addClass('show')
 		$('#curcolor').css('background',background)
 		// }
 		document.body.style.backgroundColor = _qset.options.backgroundColor
 
-		$('#board').css('background', background)
-		$('#boardwrapper').css('background', background)
+		$('#board').css('background-color', background)
+		$('#boardwrapper').css('background-color', background)
+
+		document.getElementById("boardwrapper").classList.remove("dotted", "graph")
+		if(_activeOverlay != "") 
+			document.getElementById("boardwrapper").classList.add(_activeOverlay)
 	};
 
 	const initExistingWidget = function(title,widget,qset,version,baseUrl) {
@@ -870,6 +896,19 @@ Namespace('Labeling').Creator = (function() {
 	var _dotDragged = function(event,ui) {
 		let minDist = 9999;
 		let minDistEle = null;
+
+		if (ui.position.left < 10) {
+			ui.position.left = 10;
+		}
+		if (ui.position.left > 590) {
+			ui.position.left = 590;
+		}
+		if (ui.position.top > 535) {
+			ui.position.top = 535;
+		}
+		if (ui.position.top < 10) {
+			ui.position.top = 10;
+		}
 
 		for (var dot of Array.from($('.dot'))) {
 			if (dot === event.target) {
